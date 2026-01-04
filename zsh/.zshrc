@@ -193,18 +193,66 @@ alias all-update='sudo pacman -Syu && yay -Syu && flatpak update'
 # Permite rodar comandos git das dots de qualquer lugar
 alias dots='git -C ~/.arch-dots'
 
-# Adicionamos tudo, commita com mensagem e dá push em um comando só
+# Function dots-save: Verbose, colorful, step-by-step with Nerd Fonts
 function dots-save() {
+    # Color Definitions
+    local GREEN='\033[1;32m'
+    local BLUE='\033[1;34m'
+    local YELLOW='\033[1;33m'
+    local RED='\033[0;31m'
+    local NC='\033[0m' # No Color
+
+    # 1. Validation
     if [ -z "$1" ]; then
-        echo "Erro: Você precisa digitar uma mensagem de commit."
+        echo "${RED} Error: You must provide a commit message.${NC}"
+        echo "   Usage: dots-save \"Your message here\""
         return 1
     fi
 
-    echo "󰏔 Salvando alterações no arch-dots..."
-    git -C ~/.arch-dots add .
-    git -C ~/.arch-dots commit -m "$1"
-    git -C ~/.arch-dots push
-    echo " Tudo salvo e sinconizado!"
+    local DOTS_DIR="$HOME/.arch-dots"
+
+    echo ""
+    echo "${BLUE}󰏔  Starting DOTFILES synchronization...${NC}"
+    echo "----------------------------------------"
+
+    # 2. Staging Files
+    echo "${YELLOW}1. Checking changes and staging files...${NC}"
+    
+    # Check for changes
+    if [[ -n $(git -C "$DOTS_DIR" status --porcelain) ]]; then
+        # Show changes (M = Modified, ?? = New, D = Deleted)
+        git -C "$DOTS_DIR" status --short | sed 's/^/   /' 
+        
+        git -C "$DOTS_DIR" add .
+        echo "${GREEN}    Files staged successfully.${NC}"
+    else
+        echo "${GREEN}    Directory clean (no new changes found).${NC}"
+    fi
+
+    # 3. Commit (if changes exist in stage)
+    if ! git -C "$DOTS_DIR" diff --cached --quiet; then
+        echo ""
+        echo "${YELLOW}2. Creating commit...${NC}"
+        git -C "$DOTS_DIR" commit -m "$1" | sed 's/^/   /' 
+        echo "${GREEN}    Commit created: '$1'${NC}"
+    else
+        echo ""
+        echo "${YELLOW}2. Skipping commit (nothing new to commit).${NC}"
+    fi
+
+    # 4. Push
+    echo ""
+    echo "${YELLOW}3. Pushing to remote repository...${NC}"
+    if git -C "$DOTS_DIR" push; then
+        echo ""
+        echo "----------------------------------------"
+        echo "${GREEN}󰄬 SUCCESS! Dotfiles are synced and secure.${NC}"
+        echo ""
+    else
+        echo ""
+        echo "${RED} FAILED to push. Check network or conflicts.${NC}"
+        return 1
+    fi
 }
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
