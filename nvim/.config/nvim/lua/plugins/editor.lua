@@ -2,7 +2,7 @@ return {
 	-- Neo Tree (Árvore de arquivos)
 	{
 		"nvim-neo-tree/neo-tree.nvim",
-		branch = "v3.x",
+		--- branch = "v3.x",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"nvim-tree/nvim-web-devicons",
@@ -16,7 +16,6 @@ return {
 				window = {
 					width = 30, -- Largura da janela lateral
 					mappings = {
-						-- AQUI ESTÁ O TRUQUE:
 						["l"] = "open", -- l: Abre pasta ou arquivo
 						["h"] = "close_node", -- h: Fecha a pasta (colapsa)
 					},
@@ -36,23 +35,30 @@ return {
 	-- Telescope (Buscador Fuzzy)
 	{
 		"nvim-telescope/telescope.nvim",
-		tag = "0.1.6",
+		--- tag = "0.1.6",
 		dependencies = { "nvim-lua/plenary.nvim" },
 		keys = {
 			{ "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Buscar Arquivos" },
 			{ "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Buscar Texto" },
 			{ "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Arquivos Abertos" },
 		},
+
+		config = function()
+			require("telescope").setup({
+				defaults = {
+					path_display = { "tail" },
+				},
+			})
+		end,
 	},
 
 	-- Treesitter (Highlighting Inteligente)
 	{
 		"nvim-treesitter/nvim-treesitter",
-		-- A ESTRATÉGIA DELE: Travamos na versão estável para não quebrar nunca mais
 		tag = "v0.9.2",
 		build = ":TSUpdate",
 
-		-- A OTIMIZAÇÃO DELE: Só carrega quando ler um arquivo (Deixa o boot rápido)
+		-- Só carrega quando ler um arquivo
 		event = { "BufReadPost", "BufNewFile" },
 
 		config = function()
