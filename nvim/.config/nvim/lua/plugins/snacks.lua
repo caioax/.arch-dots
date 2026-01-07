@@ -13,8 +13,6 @@ return {
 		scroll = { enabled = false },
 		statuscolumn = { enabled = true },
 		words = { enabled = true },
-
-		-- Adicionei estes 3 que faltavam para os atalhos funcionarem:
 		lazygit = { enabled = true },
 		scratch = { enabled = true },
 		terminal = { enabled = true },
@@ -81,7 +79,51 @@ return {
 			sections = {
 				{ section = "header" },
 				{ section = "keys", gap = 1, padding = 1 },
-				{ section = "startup" },
+				{
+					{
+						function()
+							-- 1. Dados do Lazy (Plugins e Tempo)
+							local stats = require("lazy").stats()
+							local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+
+							-- 2. Dados de Versão do Neovim
+							local v = vim.version()
+							local version = "v" .. v.major .. "." .. v.minor .. "." .. v.patch
+
+							-- 3. Data Atual
+							local date = os.date("%d/%m - %H:%M")
+
+							-- 4. Checagem de Updates
+							-- Precisa requerer o status do lazy
+							local plugin_updates = ""
+							local lazy_status = require("lazy.status")
+							if lazy_status.has_updates() then
+								plugin_updates = "  󰮯 " .. lazy_status.updates() .. " updates"
+							end
+
+							return {
+								align = "center",
+								text = {
+									-- Linha 1: Versão e Data
+									{ "  ", hl = "SnacksDashboardIcon" }, -- Ícone Azul
+									{ version, hl = "SnacksDashboardKey" }, -- Versão Amarela
+									{ "     ", hl = "SnacksDashboardIcon" },
+									{ date, hl = "SnacksDashboardDesc" }, -- Data Branca
+									{ "\n\n", hl = "Normal" }, -- Pula linha
+
+									-- Linha 2: Performance e Plugins
+									{ "Neovim loaded ", hl = "SnacksDashboardDesc" },
+									{ stats.loaded .. "/" .. stats.count, hl = "SnacksDashboardKey" },
+									{ " plugins in ", hl = "SnacksDashboardDesc" },
+									{ ms .. "ms", hl = "SnacksDashboardSpecial" },
+
+									-- Linha 3 (Só aparece se tiver updates)
+									{ plugin_updates, hl = "DiagnosticError" }, -- Vermelho se tiver update
+								},
+							}
+						end,
+					},
+				},
 			},
 		},
 	},

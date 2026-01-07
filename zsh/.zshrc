@@ -1,3 +1,29 @@
+# === SMART TMUX START ===
+# Verifica se o tmux está instalado e se não estamos já dentro de uma sessão
+if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+    # Define o nome da sessão principal
+    SESSION_NAME="main"
+
+    # Verifica se a sessão 'main' existe
+    if tmux has-session -t $SESSION_NAME 2>/dev/null; then
+        # Verifica se a sessão 'main' já tem alguém conectado (attached)
+        if tmux list-sessions | grep -q "^$SESSION_NAME.*(attached)"; then
+            # Se já está aberta em outro lugar, cria uma nova sessão independente
+            ID=1
+            while tmux has-session -t $ID 2>/dev/null; do
+                ((ID++))
+            done 
+            exec tmux new-session -s $ID
+        else
+            # Se existe mas ninguém está usando, conecta nela
+            exec tmux attach-session -t $SESSION_NAME
+        fi
+    else
+        # Se a sessão 'main' não existe, cria ela
+        exec tmux new-session -s $SESSION_NAME
+    fi
+fi
+
 # === POWERLEVEL10K INSTANT PROMPT ===
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
@@ -8,13 +34,13 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # --- Tmux Plugin Settings ---
-ZSH_TMUX_AUTOSTART=true
-ZSH_TMUX_AUTOCONNECT=true
+ZSH_TMUX_AUTOSTART=false
+ZSH_TMUX_AUTOCONNECT=false
 ZSH_TMUX_DEFAULT_SESSION_NAME="main"
 ZSH_TMUX_UNICODE=true
 
 # --- Plugins List ---
-plugins=(git zsh-autosuggestions zsh-vi-mode zsh-syntax-highlighting tmux)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-vi-mode tmux)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -27,64 +53,21 @@ fi
 
 # === CUSTOM FIXES & INTEGRATIONS ===
 
-# 1. Clipboard Fix (Tmux + Hyprland + Zsh-Vi-Mode)
+# Clipboard Fix
 function zvm_vi_yank() {
     zvm_yank
     echo -n "${CUTBUFFER}" | wl-copy
 }
 
-# 2. Zsh Vi Mode Custom Logic (Command Mode Emulation)
+# Configurações do Vi-Mode
 ZVM_CURSOR_STYLE_ENABLED=true
 autoload -U edit-command-line
 zle -N edit-command-line
 
-typeset -g IN_CMD_MODE=0
-typeset -g HAS_STASHED=0
-
-function toggle-cmd-mode() {
-  # Sair/Cancelar
-  if [[ "$IN_CMD_MODE" -eq 1 ]]; then
-    IN_CMD_MODE=0
-    BUFFER="" 
-    if [[ "$HAS_STASHED" -eq 1 ]]; then
-       zle .get-line
-    fi
-    RPROMPT=""
-    zle reset-prompt
-    zle -U "a"
-    return
-  fi
-
-  # Entrar
-  IN_CMD_MODE=1
-  HAS_STASHED=0
-  if [[ -n "$BUFFER" ]]; then
-    zle push-line
-    HAS_STASHED=1
-  fi
-  BUFFER=""
-  RPROMPT="%B%F{cyan}COMMAND%f%b"
-  zle reset-prompt
-  zle -U "i"
-}
-zle -N toggle-cmd-mode
-
-function execute-cmd-mode() {
-  if [[ "$IN_CMD_MODE" -eq 1 ]]; then
-    IN_CMD_MODE=0
-    RPROMPT=""
-    zle reset-prompt
-  fi
-  zle .accept-line
-}
-zle -N execute-cmd-mode
-
 function zvm_after_init() {
+  # Ctrl+v abre o comando atual no Neovim para editar
   zvm_bindkey vicmd '^V' edit-command-line
   zvm_bindkey viins '^V' edit-command-line
-  zvm_bindkey vicmd ':' toggle-cmd-mode
-  zvm_bindkey viins '^M' execute-cmd-mode
-  zvm_bindkey vicmd '^M' execute-cmd-mode
 }
 
 # === ALIASES ===

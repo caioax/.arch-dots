@@ -1,121 +1,96 @@
-# 🖥️ Manual do Tmux
+# ⚡ Tmux Cheat Sheet
 
-| Informação           | Valor                                |
-| :------------------- | :----------------------------------- |
-| **Prefixo (Leader)** | `Ctrl` + `Space` (Espaço)            |
-| **Mouse**            | Ativado (Scroll e Redimensionamento) |
-| **Gerenciador**      | TPM (Tmux Plugin Manager)            |
-| **Persistência**     | Automática (Continuum)               |
-
----
-
-## ⌨️ Atalhos Essenciais (Cheat Sheet)
-
-> **Nota:** Todos os comandos abaixo (exceto navegação inteligente) exigem que você aperte o **Prefixo** (`Ctrl+Space`) antes.
-
-### 🪟 Gestão de Janelas e Painéis (Splits)
-
-|    Atalho (Pós-Prefixo)    | Ação                 | Detalhe                                            |
-| :------------------------: | :------------------- | :------------------------------------------------- |
-|            `\|`            | **Split Vertical**   | Divide a tela lado a lado (mantém a pasta atual)   |
-|          `Enter`           | **Split Horizontal** | Divide a tela em cima/baixo (mantém a pasta atual) |
-|            `c`             | **Create Window**    | Cria uma nova aba/janela limpa                     |
-|            `x`             | **Close**            | Fecha o painel atual                               |
-|         `1` a `9`          | **Go to Window**     | Pula direto para a janela pelo número              |
-| `Ctrl` + `Shift` + `⬅️/➡️` | **Move Window**      | Troca a ordem das janelas (sem prefixo)            |
-
-### 🧭 Navegação Inteligente (Sem Prefixo)
-
-A integração com o Neovim permite navegar entre painéis como se fosse um único programa.
-
-| Atalho       | Direção     | Comportamento                                |
-| :----------- | :---------- | :------------------------------------------- |
-| `<Ctrl> + h` | ⬅️ Esquerda | Vai para o painel da esquerda (ou vim split) |
-| `<Ctrl> + j` | ⬇️ Baixo    | Vai para o painel de baixo (ou vim split)    |
-| `<Ctrl> + k` | ⬆️ Cima     | Vai para o painel de cima (ou vim split)     |
-| `<Ctrl> + l` | ➡️ Direita  | Vai para o painel da direita (ou vim split)  |
+| Core Config | Valor                            |
+| :---------- | :------------------------------- |
+| **Prefixo** | `Ctrl` + `Space`                 |
+| **Mouse**   | Ativado (Click, Scroll, Resize)  |
+| **Índices** | Começam em 1 (Janelas e Painéis) |
+| **Engine**  | Vi Mode + Smart Splits           |
 
 ---
 
-## 🚀 Funcionalidades Especiais
+## 🧭 Navegação & Layout (Sem Prefixo)
 
-### 🆘 Popups de Ajuda
+Ações rápidas integradas ao teclado, sem necessidade de acionar o prefixo.
 
-Não precisa sair do terminal para consultar seus manuais.
-
-| Atalho (Pós-Prefixo) | Ação                                                           |
-| :------------------: | :------------------------------------------------------------- |
-|         `N`          | Abre o **README do Neovim** em modo leitura (popup flutuante)  |
-|         `T`          | Abre este **README do Tmux** em modo leitura (popup flutuante) |
-
-### 📋 Modo de Cópia (Estilo Vim)
-
-Para rolar o terminal para cima ou copiar texto sem usar o mouse:
-
-1. Aperte `Prefixo` + `[` para entrar no modo cópia.
-2. Navegue com `h`, `j`, `k`, `l`.
-3. Aperte `v` para começar a selecionar.
-4. Aperte `y` para copiar (sai do modo automaticamente).
-5. Cole onde quiser com `Ctrl+v` (ou `Prefixo + ]`).
+| Atalho                           | Ação                 | Contexto                                                   |
+| :------------------------------- | :------------------- | :--------------------------------------------------------- |
+| **`Ctrl` + `h j k l`**           | **Navegar (Foco)**   | Move entre splits do Tmux e janelas do Neovim fluidamente. |
+| **`Alt` + `h j k l`**            | **Redimensionar**    | Ajusta o tamanho do painel atual (ou split do Neovim).     |
+| **`Ctrl` + `Shift` + `h j k l`** | **Reordenar Splits** | Troca o painel atual de lugar com o vizinho (Swap).        |
+| **`Ctrl` + `Alt` + `h l`**       | **Trocar Aba**       | Navega para a Janela (Tab) anterior ou próxima.            |
 
 ---
 
-## 💾 Sessões e Persistência
+## ⌨️ Comandos Padrão (Requer Prefixo)
 
-O sistema usa **Resurrect + Continuum** para que você nunca perca seu trabalho, mesmo se reiniciar o PC.
+Aperte `Ctrl`+`Space`, solte, e digite a tecla abaixo.
 
-### Fluxo Automático
+### 🪟 Gestão de Painéis (Splits)
 
-1. O Tmux **salva** o estado automaticamente a cada **5 minutos**.
-2. Ao iniciar o computador e abrir o terminal, o Tmux **restaura** a última sessão sozinho.
+|     Tecla     | Ação             | Descrição                                           |
+| :-----------: | :--------------- | :-------------------------------------------------- | --------------------------------------------- |
+|     \*\*`     | `\*\*            | Split Vertical                                      | Divide a tela lado a lado (mantém diretório). |
+|    **`-`**    | Split Horizontal | Divide a tela cima/baixo (mantém diretório).        |
+|    **`x`**    | Fechar           | Fecha o painel atual (kill-pane).                   |
+|    **`z`**    | Zoom             | Maximiza/Restaura o painel atual.                   |
+| **`{` / `}`** | Swap             | Troca painéis de lugar (alternativa ao Ctrl+Shift). |
 
-### Comandos Manuais (Se precisar)
+### 📑 Gestão de Janelas (Abas)
 
-| Atalho (Pós-Prefixo) | Ação                                                           |
-| :------------------: | :------------------------------------------------------------- |
-|     `Ctrl` + `s`     | **Save:** Força o salvamento da sessão agora                   |
-|     `Ctrl` + `r`     | **Restore:** Força a restauração do último save                |
-|         `s`          | **Session Menu:** Abre uma árvore visual para trocar de sessão |
-|         `d`          | **Detach:** Sai da sessão sem fechar (deixa rodando no fundo)  |
+|     Tecla     | Ação     | Descrição                                            |
+| :-----------: | :------- | :--------------------------------------------------- |
+|    **`c`**    | Criar    | Nova aba limpa.                                      |
+| **`1` - `9`** | Ir para  | Pula direto para o número da aba.                    |
+|    **`,`**    | Renomear | Altera o nome da aba na barra de status.             |
+|    **`w`**    | Listar   | Mostra lista interativa de todas as janelas/sessões. |
 
----
+### 🚀 Popups & Ferramentas
 
-## 🛠️ Manutenção e Plugins
-
-### Gerenciamento (TPM)
-
-Os plugins ficam listados no final do arquivo `~/.tmux.conf`.
-
-| Atalho (Pós-Prefixo) | Ação                                                            |
-| :------------------: | :-------------------------------------------------------------- |
-|    `I` (Shift+i)     | **Install:** Baixa e instala novos plugins adicionados          |
-|    `U` (Shift+u)     | **Update:** Atualiza os plugins existentes                      |
-|         `r`          | **Reload:** Recarrega o arquivo de configuração (sem reiniciar) |
-
-### Estrutura Visual (Status Bar)
-
-- **Esquerda:**
-  - `❐` (Branco): Modo Normal.
-  - `⌨` (Amarelo): Prefixo Pressionado (Aguardando comando).
-  - Nome da Sessão atual.
-- **Direita:**
-  - Pasta atual (caminho inteligente, ex: `~/projetos/api`).
+|    Tecla    | Ferramenta                                       |
+| :---------: | :----------------------------------------------- |
+| **`Enter`** | **Terminal Flutuante** (Zsh no diretório atual). |
+|   **`N`**   | Abre o README do **Neovim** (Modo Leitura).      |
+|   **`T`**   | Abre este README do **Tmux** (Modo Leitura).     |
 
 ---
 
-## ⚙️ Como adicionar novos plugins?
+## 💾 Persistência de Sessão
 
-1. Edite o arquivo de configuração:
+O Tmux salva tudo automaticamente a cada 15 min (Continuum).
 
-   ```bash
-   nvim ~/.tmux.conf
-   ```
+| Prefixo + Tecla  | Ação                                  |
+| :--------------: | :------------------------------------ |
+| **`Ctrl` + `s`** | **Salvar** estado agora (Manual).     |
+| **`Ctrl` + `r`** | **Restaurar** último save (Manual).   |
+|     **`s`**      | Menu de Sessões (Árvore interativa).  |
+|     **`d`**      | Detach (Sai do Tmux, mantém rodando). |
 
-2. Adicione a linha na seção de plugins:
+---
 
-   ```tmux
-   set -g @plugin 'usuario/nome-do-plugin'
-   ```
+## 📋 Modo de Cópia (Vim Style)
 
-3. Salve e feche o arquivo.
-4. Dentro do Tmux, pressione `Prefixo` + `I` para instalar.
+1. **`Prefix` + `[`**: Entra no modo.
+2. **`v`**: Visual select (selecionar texto).
+3. **`y`**: Yank (copiar para o clipboard do sistema).
+4. **`q`**: Sair.
+
+---
+
+## 📦 Plugins (TPM)
+
+|  Prefixo + Tecla  | Ação                                          |
+| :---------------: | :-------------------------------------------- |
+| **`I`** (shift+i) | **Instalar** novos plugins listados no conf.  |
+| **`U`** (shift+u) | **Atualizar** plugins existentes.             |
+|      **`r`**      | **Recarregar** configurações (`source-file`). |
+
+### Como adicionar plugins
+
+Edite `~/.tmux.conf` e adicione na lista:
+
+```tmux
+set -g @plugin 'usuario/plugin'
+```
+
+---

@@ -1,27 +1,41 @@
 return {
-	-- 1. Catppuccin
-	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+	"mytheme",
+	dir = vim.fn.stdpath("config"),
+	lazy = false,
+	priority = 1000,
+	config = function()
+		-- 1. Setup Inicial
+		vim.cmd("hi clear")
+		if vim.fn.exists("syntax_on") then
+			vim.cmd("syntax reset")
+		end
+		vim.o.termguicolors = true
+		vim.g.colors_name = "mytheme"
 
-	-- 2. Tokyo Night
-	{ "folke/tokyonight.nvim", lazy = false, priority = 1000 },
+		-- 2. Carrega o tema
+		require("mytheme.highlights").setup()
 
-	-- 3. Gruvbox Material
-	{ "sainnhe/gruvbox-material", lazy = false, priority = 1000 },
+		-- ============================================================
+		-- FERRAMENTA DE RECARREGAMENTO (Hot Reload)
+		-- ============================================================
+		-- Comando :ReloadTheme
+		vim.api.nvim_create_user_command("ReloadTheme", function()
+			-- 1. Limpa o cache dos módulos do seu tema
+			package.loaded["mytheme.palette"] = nil
+			package.loaded["mytheme.highlights"] = nil
 
-	-- 4. Kanagawa
-	{ "rebelot/kanagawa.nvim", lazy = false, priority = 1000 },
+			-- 2. Recarrega os módulos limpos
+			require("mytheme.highlights").setup()
 
-	-- 5. Rose Pine
-	{ "rose-pine/neovim", name = "rose-pine", lazy = false, priority = 1000 },
+			-- 3. Força a atualização da Lualine
+			if package.loaded["lualine"] then
+				require("lualine").refresh()
+			end
 
-	-- === BLOCO DE ATIVAÇÃO ===
-	{
-		"LazyVim/LazyVim", -- (Apenas para garantir que carregue no final)
-		config = function()
-			-- MUDE O NOME ABAIXO PARA TROCAR O TEMA:
-			-- Opções: "catppuccin", "tokyonight", "gruvbox-material", "kanagawa", "rose-pine"
+			print("Theme reloaded successfully!")
+		end, {})
 
-			vim.cmd.colorscheme("tokyonight-night")
-		end,
-	},
+		-- Atalho: <leader>rt (Reload Theme)
+		vim.keymap.set("n", "<leader>rt", "<cmd>ReloadTheme<cr>", { desc = "Reload Theme" })
+	end,
 }

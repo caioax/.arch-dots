@@ -1,125 +1,123 @@
-# 📖 Manual do Neovim
+# ⚡ Neovim Cheat Sheet
 
-| Informação      | Valor                    |
-| :-------------- | :----------------------- |
-| **Tema**        | `Tokyo Night (Night)`    |
-| **Fonte**       | Caskaydia Cove Nerd Font |
-| **Leader Key**  | `Space` (Espaço)         |
-| **Gerenciador** | `Lazy.nvim`              |
-
----
-
-## 🧭 Navegação Imersiva (Nvim 🤝 Tmux)
-
-Graças ao plugin `vim-tmux-navigator`, a fronteira entre o editor e o terminal não existe mais.
-
-| Atalho       | Contexto    | Ação                                        |
-| :----------- | :---------- | :------------------------------------------ |
-| `<Ctrl> + h` | ⬅️ Esquerda | Move o foco para o split/painel da esquerda |
-| `<Ctrl> + j` | ⬇️ Baixo    | Move o foco para o split/painel de baixo    |
-| `<Ctrl> + k` | ⬆️ Cima     | Move o foco para o split/painel de cima     |
-| `<Ctrl> + l` | ➡️ Direita  | Move o foco para o split/painel da direita  |
+| Core Config        | Valor                     |
+| :----------------- | :------------------------ |
+| **Leader Key**     | `Space` (Espaço)          |
+| **Plugin Manager** | `lazy.nvim`               |
+| **LSP/Format**     | `Mason` + `Conform`       |
+| **Engine**         | `Smart Splits` + `Snacks` |
 
 ---
 
-## ⌨️ Cheat Sheet de Atalhos
+## 🧭 Navegação & Janelas (Smart Splits)
 
-### 📂 Arquivos e Buffers
+Integração fluida com o Tmux. Não requer Leader.
 
-| Atalho        | Comando                | Descrição                                      |
-| :------------ | :--------------------- | :--------------------------------------------- |
-| `<Leader> ff` | `Telescope find_files` | Busca arquivos (ignora pastas na visualização) |
-| `<Leader> fg` | `Telescope live_grep`  | Busca por palavras dentro de todos os arquivos |
-| `<Leader> fb` | `Telescope buffers`    | Lista arquivos abertos na memória              |
-| `<Leader> e`  | `NeoTree toggle`       | Abre/Fecha a árvore lateral de arquivos        |
-| `:Delete`     | `User Command`         | **Perigo:** Apaga o arquivo atual do disco     |
+| Atalho                 | Ação              | Descrição                                          |
+| :--------------------- | :---------------- | :------------------------------------------------- |
+| **`Ctrl` + `h j k l`** | **Navegar**       | Move o foco entre splits do Vim e Painéis do Tmux. |
+| **`Alt` + `h j k l`**  | **Redimensionar** | Aumenta/Diminui o tamanho do split atual.          |
 
-### 🧠 Inteligência (LSP) & Código
+---
 
-| Atalho          | Descrição                                                   |
-| :-------------- | :---------------------------------------------------------- |
-| `K`             | **Hover:** Mostra a documentação da função sob o cursor     |
-| `gd`            | **Go Definition:** Pula para onde a função foi criada       |
-| `<Leader> rn`   | **Rename:** Renomeia a variável no projeto todo (Refactor)  |
-| `<Leader> ca`   | **Code Action:** Menu de correções rápidas (Imports, Fixes) |
-| `<Leader> mp`   | **Format:** Formata o código manualmente (Prettier/Stylua)  |
-| `Tab` / `S-Tab` | Navega nas sugestões do Autocomplete (CMP)                  |
+## ⌨️ Comandos do Leader (`Space` + Tecla)
 
-### 🛠️ Utilitários & Terminais
+### 📂 Arquivos e Busca (Telescope)
 
-O `Snacks.nvim` fornece ferramentas poderosas embutidas:
+|    Atalho     | Ação        | Descrição                                          |
+| :-----------: | :---------- | :------------------------------------------------- |
+|   **`f f`**   | Find Files  | Busca arquivos pelo nome (ignora gitignore).       |
+|   **`f g`**   | Live Grep   | Busca por texto dentro de todos os arquivos.       |
+|   **`f b`**   | Buffers     | Lista arquivos abertos na memória.                 |
+|    **`e`**    | Explorer    | Abre/Fecha a árvore lateral (`NeoTree`).           |
+| **`:Delete`** | **Deletar** | Comando customizado: Apaga arquivo atual do disco. |
 
-| Atalho        | Ferramenta        | O que faz?                                     |
-| :------------ | :---------------- | :--------------------------------------------- |
-| `<Leader> lg` | **LazyGit**       | Abre uma interface gráfica completa para Git   |
-| `<Leader> gl` | **Git Log**       | Mostra o histórico de commits do arquivo atual |
-| `<Leader> sf` | **Scratchpad**    | Abre um bloco de notas temporário flutuante    |
-| `<Ctrl> + /`  | **Terminal**      | Abre/Fecha um terminal flutuante rápido        |
-| `<Leader> un` | **Notifications** | Limpa todas as notificações da tela            |
+### 🛠️ Ferramentas (Snacks.nvim)
+
+|      Atalho      | Ação           | Descrição                                 |
+| :--------------: | :------------- | :---------------------------------------- |
+|    **`l g`**     | **LazyGit**    | Abre interface gráfica do Git flutuante.  |
+|    **`g l`**     | Git Log        | Histórico de commits do arquivo atual.    |
+|    **`s f`**     | Scratch        | Bloco de notas temporário flutuante.      |
+|     **`S`**      | Select Scratch | Seleciona entre notas temporárias salvas. |
+|    **`u n`**     | Dismiss        | Limpa todas as notificações da tela.      |
+| **`Ctrl` + `/`** | Terminal       | Abre/Fecha terminal flutuante rápido.     |
 
 ### 💾 Sessões (Persistence)
 
-O Neovim lembra onde você parou.
+O Neovim grava sessões automaticamente.
 
-| Atalho        | Ação                                        |
-| :------------ | :------------------------------------------ |
-| `<Leader> qs` | Restaura a sessão da pasta atual            |
-| `<Leader> ql` | Restaura a **última** sessão usada (global) |
-| `<Leader> qd` | Desativa a gravação de sessão atual         |
-
----
-
-## 🎨 Personalização Visual
-
-### Temas
-
-O sistema carrega o **Tokyo Night** por padrão. Para mudar, edite `lua/plugins/theme.lua`:
-
-```lua
-vim.cmd.colorscheme("tokyonight-night")
--- Opções: catppuccin, gruvbox-material, kanagawa, rose-pine
-```
-
-### Git Signs (Barra Lateral)
-
-- `▎` (Azul/Verde): Linha adicionada ou modificada.
-- `` (Vermelho): Linha deletada.
-- **Preview:** Use `<Leader>gp` para ver o que foi alterado na linha sem abrir o git.
+|  Atalho   | Ação         | Descrição                              |
+| :-------: | :----------- | :------------------------------------- |
+| **`q s`** | Restore Dir  | Restaura a sessão da pasta atual.      |
+| **`q l`** | Restore Last | Restaura a última sessão global usada. |
+| **`q d`** | Stop         | Para de gravar a sessão atual.         |
 
 ---
 
-## ⚙️ Estrutura de Diretórios
+## 🧠 Código e Inteligência (LSP)
 
-Entenda onde mexer para não quebrar nada:
+Atalhos disponíveis quando um arquivo de código está aberto.
+
+### ⚡ Ações Rápidas
+
+|  Atalho   | Comando     | Descrição                                       |
+| :-------: | :---------- | :---------------------------------------------- |
+|  **`K`**  | Hover       | Abre documentação da função sob o cursor.       |
+| **`g d`** | Definition  | Pula para a definição da variável/função.       |
+| **`r n`** | Rename      | Renomeia variável no projeto todo.              |
+| **`c a`** | Code Action | Menu de correções rápidas (Fix/Import).         |
+| **`m p`** | **Format**  | Formata o arquivo (`Conform`: Prettier/Stylua). |
+
+### 🤖 Autocomplete (CMP)
+
+|        Tecla         | Ação                                                   |
+| :------------------: | :----------------------------------------------------- |
+| **`Ctrl` + `Space`** | Força aparecer o menu de sugestões.                    |
+|      **`Tab`**       | Próxima sugestão / Pula para próximo campo do snippet. |
+|     **`Enter`**      | Confirma a sugestão selecionada.                       |
+
+### 📝 Git (Gitsigns)
+
+|  Atalho   | Ação                                                    |
+| :-------: | :------------------------------------------------------ |
+| **`] c`** | Pula para a próxima alteração (Hunk).                   |
+| **`[ c`** | Pula para a alteração anterior.                         |
+| **`g p`** | **Preview**: Mostra o que mudou na linha atual (popup). |
+| **`g b`** | **Blame**: Mostra quem editou a linha atual.            |
+
+---
+
+## ⚙️ Manutenção e Instalação
+
+### Estrutura de Pastas
 
 ```text
 ~/.config/nvim/
-├── init.lua             # 🧠 Cérebro: Carrega os módulos
-├── lazy-lock.json       # 🔒 Trava versões dos plugins (NÃO MEXA)
+├── init.lua            # Boot
+├── lazy-lock.json      # Versões travadas (Não mexa)
 ├── lua/
-│   ├── config/          # ⚙️ Configurações Base
-│   │   ├── options.lua  # Tabs, Números, Clipboard
-│   │   ├── keymaps.lua  # Seus atalhos manuais
-│   │   ├── lazy.lua     # Boot do gerenciador
-│   │   └── commands.lua # Comandos customizados (:Delete)
-│   └── plugins/         # 🧩 Módulos (Adicione novos aqui)
-│       ├── lsp.lua      # Linguagens (JS, Lua, Python...)
-│       ├── editor.lua   # Telescope, Neo-tree
-│       ├── snacks.lua   # Dashboard, Terminal, Git
-│       └── ...
+│   ├── config/         # Options, Keymaps, Commands
+│   ├── mytheme/        # Seu tema local (Palette/Highlights)
+│   └── plugins/        # Módulos (LSP, Snacks, CMP, etc)
 ```
 
-## 📦 Como instalar coisas novas?
+### Como instalar...
 
-### Adicionar um Plugin
+**1. Novos Plugins:**
+Crie um arquivo em `lua/plugins/nome.lua` e cole o código `return { ... }`. O `lazy` instala sozinho no restart.
 
-1. Crie um arquivo em `lua/plugins/nome-do-plugin.lua`.
-2. Cole o código `return { "usuario/repo", ... }`.
-3. Reinicie o Neovim.
-
-### Adicionar uma Linguagem (LSP/Formatter)
+**2. Novas Linguagens (LSP/Formatters):**
 
 1. Digite `:Mason`.
-2. Use `/` para buscar (ex: `python`, `gopls`).
+2. Busque com `/` (ex: `python`, `gopls`).
 3. Aperte `i` para instalar.
-4. **Nota:** Se quiser que fique salvo na config, adicione na lista `ensure_installed` em `lua/plugins/lsp.lua` ou `formatting.lua`.
+4. **Obrigatório:** Adicione na lista `ensure_installed` em:
+   - `lua/plugins/lsp.lua` (para Servidores)
+   - `lua/plugins/formatting.lua` (para Formatadores)
+
+**3. Atualizações:**
+
+- Atualizar Plugins: `:Lazy sync`
+- Atualizar Ferramentas: `:MasonUpdate`
+- Recarregar Tema: `<Space>rt` (Reload Theme)
