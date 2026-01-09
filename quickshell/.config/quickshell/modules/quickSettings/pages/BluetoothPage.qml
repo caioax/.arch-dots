@@ -11,7 +11,7 @@ Item {
     signal backRequested
 
     Layout.fillWidth: true
-    implicitHeight: 400
+    implicitHeight: 350
 
     ColumnLayout {
         id: main

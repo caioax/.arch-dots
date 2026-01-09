@@ -12,7 +12,7 @@ Item {
     signal passwordRequested(string ssid)
 
     Layout.fillWidth: true
-    implicitHeight: 400
+    implicitHeight: 350
 
     ColumnLayout {
         id: main

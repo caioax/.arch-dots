@@ -13,7 +13,7 @@ PopupWindow {
 
     // Tamanho da janela
     implicitWidth: 380
-    implicitHeight: (pageStack.currentIndex ? pageStack.implicitHeight : 300) + 20
+    implicitHeight: (pageStack.children[pageStack.currentIndex]?.implicitHeight ?? 300) + 32
 
     // Animação suave quando a altura muda (troca de página)
     Behavior on implicitHeight {

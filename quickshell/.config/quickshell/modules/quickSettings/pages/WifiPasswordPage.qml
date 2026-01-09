@@ -8,9 +8,9 @@ import qs.services
 Item {
     id: root
 
-    // O Item wrapper serve para podermos centralizar o ColumnLayout na tela
     Layout.fillWidth: true
-    Layout.fillHeight: true
+
+    implicitHeight: 350
 
     // Propriedades recebidas
     property string targetSsid: ""

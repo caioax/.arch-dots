@@ -18,7 +18,7 @@ local function set_window_title()
 		elseif filetype == "TelescopePrompt" then
 			filename = "telescope"
 		else
-			filename = "nvim" -- Fallback padrão
+			filename = "nvim"
 		end
 	end
 
