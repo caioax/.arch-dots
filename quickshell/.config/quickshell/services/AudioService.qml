@@ -33,6 +33,19 @@ Singleton {
     readonly property real sourceVolume: sourceReady ? (source.audio.volume ?? 0) : 0
     readonly property int sourcePercentage: Math.round(sourceVolume * 100)
 
+    readonly property string systemIcon: {
+        if (!sinkReady || muted || volume <= 0)
+            return "";
+
+        if (volume < 0.33)
+            return "";
+
+        if (volume < 0.67)
+            return "";
+
+        return "";
+    }
+
     function setVolume(newVolume) {
         if (sinkReady) {
             sink.audio.muted = false;

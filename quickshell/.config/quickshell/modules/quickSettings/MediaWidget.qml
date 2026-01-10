@@ -147,12 +147,12 @@ Rectangle {
                     scale: playBtnMouse.pressed ? 0.9 : 1.0
                     Behavior on scale {
                         NumberAnimation {
-                            duration: 100
+                            duration: Config.animDurationShort
                         }
                     }
                     Behavior on color {
                         ColorAnimation {
-                            duration: 150
+                            duration: Config.animDurationShort
                         }
                     }
 

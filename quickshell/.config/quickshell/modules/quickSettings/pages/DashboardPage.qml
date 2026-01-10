@@ -128,6 +128,7 @@ Item {
             QuickSettingsTile {
                 icon: NetworkService.systemIcon
                 label: "Wi-Fi"
+                subLabel: NetworkService.statusText
                 // Sublabel mostra o SSID ou "Off"
                 property string ssid: NetworkService.accessPoints.find(ap => ap.active)?.ssid || "Conectado"
                 // Aqui adaptamos para mostrar um texto extra se quiser (sublabel)
@@ -142,6 +143,7 @@ Item {
             QuickSettingsTile {
                 icon: BluetoothService.systemIcon
                 label: "Bluetooth"
+                subLabel: BluetoothService.statusText
                 active: BluetoothService.isPowered
                 hasDetails: true
                 onToggled: BluetoothService.togglePower()
@@ -174,9 +176,10 @@ Item {
             Layout.topMargin: 4
 
             QsSlider {
-                icon: ""
+                icon: AudioService.systemIcon
                 value: AudioService.volume
                 onMoved: val => AudioService.setVolume(val)
+                onIconClicked: AudioService.toggleMute()
             }
 
             // Exemplo de Brilho (Mockup, precisaria de um BrightnessService)

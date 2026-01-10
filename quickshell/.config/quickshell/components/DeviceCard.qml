@@ -119,7 +119,7 @@ Rectangle {
             RowLayout {
                 spacing: 5
 
-                // Subtítulo (Endereço MAC ou Detalhe)
+                // Subtítulo
                 Text {
                     visible: root.subtitle !== ""
                     text: root.subtitle
@@ -164,7 +164,7 @@ Rectangle {
         // Botão do menu ---
         Rectangle {
             id: menuButton
-            visible: root.showMenu
+            visible: root.showMenu && !root.connecting
             Layout.preferredWidth: 30
             Layout.preferredHeight: 30
             radius: 15

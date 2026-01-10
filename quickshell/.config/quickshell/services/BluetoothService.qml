@@ -29,6 +29,34 @@ Singleton {
         return "";
     }
 
+    // Lista apenas dos dispoditivos conectados
+    readonly property var connectedDevices: {
+        return devicesList.filter(dev => dev.connected);
+    }
+
+    // Contagem (Para usar na UI)
+    readonly property int connectedDevicesCount: connectedDevices.length
+
+    // Texto inteligente (Para o Sublabel do Dashboard)
+    readonly property string statusText: {
+        if (!isPowered)
+            return "Desligado";
+
+        const count = connectedDevices.length;
+
+        if (count === 0)
+            return "Ligado";
+
+        if (count === 1) {
+            // Se for apenas 1, retorna o nome dele
+            const dev = connectedDevices[0];
+            return dev.alias || dev.name || "Desconhecido";
+        }
+
+        // Se for mais de 1, retorna a contagem
+        return count + " dispositivos";
+    }
+
     // A lista inteligente de dispositivos
     readonly property var devicesList: {
         if (!adapter || !adapter.devices)
@@ -89,7 +117,7 @@ Singleton {
     // Timer para desligar o Scan automaticamente
     Timer {
         id: scanTimer
-        interval: 5000 // 5 Segundos
+        interval: 10000 // 10 Segundos
         repeat: false
         onTriggered: {
             if (root.adapter && root.adapter.discovering) {

@@ -60,7 +60,8 @@ Singleton {
     readonly property int fontSizeSmall: 12
     readonly property int fontSizeNormal: 14
     readonly property int fontSizeLarge: 16
-    readonly property int fontSizeIcon: 18
+    readonly property int fontSizeIconSmall: 18
+    readonly property int fontSizeIcon: 22
     readonly property int fontSizeIconLarge: 28
 
     // ========================================================================

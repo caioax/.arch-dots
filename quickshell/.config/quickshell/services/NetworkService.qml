@@ -26,11 +26,30 @@ Singleton {
     // --- FUNÇÕES ---
 
     function getWifiIcon(signal) {
-        if (signal > 80) return "󰤨";
-        if (signal > 60) return "󰤥";
-        if (signal > 40) return "󰤢";
-        if (signal > 20) return "󰤟";
+        if (signal > 80)
+            return "󰤨";
+        if (signal > 60)
+            return "󰤥";
+        if (signal > 40)
+            return "󰤢";
+        if (signal > 20)
+            return "󰤟";
         return "󰤫";
+    }
+
+    // Texto de status
+    readonly property string statusText: {
+        if (!wifiEnabled)
+            return "Desligado";
+
+        const activeNetwork = accessPoints.find(ap => ap.active === true);
+
+        // Se tem rede ativa, retorna o SSID
+        if (activeNetwork)
+            return activeNetwork.ssid || "Rede Oculta";
+
+        // Se está ligado mas sem conexão
+        return "Ligado";
     }
 
     function toggleWifi() {
