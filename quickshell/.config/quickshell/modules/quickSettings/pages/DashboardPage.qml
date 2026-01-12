@@ -131,8 +131,6 @@ Item {
                 subLabel: NetworkService.statusText
                 // Sublabel mostra o SSID ou "Off"
                 property string ssid: NetworkService.accessPoints.find(ap => ap.active)?.ssid || "Conectado"
-                // Aqui adaptamos para mostrar um texto extra se quiser (sublabel)
-
                 active: NetworkService.wifiEnabled
                 hasDetails: true
                 onToggled: NetworkService.toggleWifi()

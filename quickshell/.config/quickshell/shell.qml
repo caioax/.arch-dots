@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import "./modules/bar/"
+import "./modules/notifications/"
 
 ShellRoot {
     id: root
@@ -25,4 +26,6 @@ ShellRoot {
         active: true
         sourceComponent: Bar {}
     }
+
+    NotificationOverlay {}
 }

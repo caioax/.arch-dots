@@ -71,4 +71,13 @@ Singleton {
     readonly property int animDurationShort: 100   // Duração curta (ms)
     readonly property int animDuration: 200        // Duração padrão (ms)
     readonly property int animDurationLong: 400    // Duração longa (ms)
+
+    // ========================================================================
+    // NOTIFICATIONS
+    // ========================================================================
+
+    readonly property int notifWidth: 350
+    readonly property int notifImageSize: 40
+    readonly property int notifTimeout: 5000 // 5 seconds
+    readonly property int notifSpacing: 10
 }

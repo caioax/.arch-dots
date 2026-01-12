@@ -6,3 +6,4 @@ singleton BatteryService BatteryService.qml
 singleton NetworkService NetworkService.qml
 singleton TrayService TrayService.qml
 singleton MprisService MprisService.qml
+singleton NotificationService NotificationService.qml

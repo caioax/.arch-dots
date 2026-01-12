@@ -78,4 +78,5 @@ alias dots='git -C ~/.arch-dots'
 
 # === FINALIZERS ===
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+export PATH="$HOME/.local/bin:$PATH"
 export PATH=$PATH:/home/caio/.spicetify
