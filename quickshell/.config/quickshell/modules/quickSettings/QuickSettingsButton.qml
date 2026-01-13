@@ -13,7 +13,15 @@ Rectangle {
 
     radius: height / 2
 
-    color: tapHandler.pressed ? Config.surface2Color : hoverHandler.hovered ? Config.surface1Color : "transparent"
+    color: {
+        if (quickSettingsWindow.visible)
+            return Config.surface1Color;
+
+        if (hoverHandler.hovered)
+            return Config.surface1Color;
+
+        return "transparent";
+    }
 
     // Ícones
     RowLayout {
@@ -21,10 +29,17 @@ Rectangle {
         anchors.centerIn: parent
         spacing: Config.spacing // Espaço entre os ícones
 
-        WifiIcon {}
-        BluetoothIcon {}
-        // VolumeIcon {}
-        BatteryIcon {}
+        property string iconColor: quickSettingsWindow.visible ? Config.accentColor : Config.textColor
+
+        WifiIcon {
+            color: iconsLayout.iconColor
+        }
+        BluetoothIcon {
+            color: iconsLayout.iconColor
+        }
+        BatteryIcon {
+            color: iconsLayout.iconColor
+        }
     }
 
     QuickSettingsWindow {

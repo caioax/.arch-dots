@@ -5,6 +5,7 @@ import QtQuick.Layouts
 import qs.config
 import "../../components/"
 import "../quickSettings/"
+import "../notifications/"
 
 Scope {
     id: root
@@ -93,6 +94,7 @@ Scope {
 
                     TrayWidget {}
                     QuickSettingsButton {}
+                    NotificationButton {}
                 }
             }
         }

@@ -17,6 +17,9 @@ Scope {
             required property var modelData
             screen: modelData
 
+            // Só mostra se houver popups ativos
+            visible: NotificationService.activePopupCount > 0
+
             WlrLayershell.layer: WlrLayer.Overlay
             WlrLayershell.exclusiveZone: -1
             WlrLayershell.namespace: "notifications"
@@ -36,21 +39,24 @@ Scope {
 
             color: "transparent"
 
+            // Máscara vazia para quando não há notificações
             Region {
                 id: emptyRegion
             }
 
-            mask: notifListView.count > 0 ? null : emptyRegion
+            mask: (NotificationService.activePopupCount > 0 && implicitHeight > 0) ? null : emptyRegion
 
             ListView {
                 id: notifListView
                 anchors.fill: parent
 
-                model: NotificationService.notificationsModel
+                // Usa a lista de popups ativos
+                model: NotificationService.popups
 
-                spacing: Config.notifSpacing
+                spacing: 0
                 interactive: false
 
+                // Animação de reposicionamento
                 displaced: Transition {
                     NumberAnimation {
                         properties: "y"
@@ -60,18 +66,10 @@ Scope {
                 }
 
                 delegate: NotificationCard {
-
                     required property var modelData
 
-                    notifId: modelData.notifId
-                    appName: modelData.appName
-                    summary: modelData.summary
-                    body: modelData.body
-                    appIcon: modelData.appIcon
-                    image: modelData.image
-                    urgency: modelData.urgency
-
-                    index: modelData.index
+                    wrapper: modelData
+                    popupMode: true
                 }
             }
         }
