@@ -22,13 +22,6 @@ ShellRoot {
         }
     }
 
-    Process {
-        id: workspaceManager
-
-        command: ["bash", "-c", "$HOME/.config/quickshell/scripts/workspace-manager.sh --auto-update"]
-        running: true
-    }
-
     Loader {
         active: true
         sourceComponent: Bar {}

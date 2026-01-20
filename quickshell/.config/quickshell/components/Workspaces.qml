@@ -1,7 +1,5 @@
 pragma ComponentBehavior: Bound
 import QtQuick
-import QtQuick.Layouts
-import Quickshell
 import Quickshell.Hyprland
 import qs.config
 
@@ -17,64 +15,87 @@ Item {
     readonly property int heightSizeActive: 20
     readonly property int itemSpacing: 3
     readonly property int visibleCount: 5
-    readonly property int totalWorkspaces: 99  // Limitado a 99 para evitar bug no offset
+    readonly property int totalWorkspaces: 99
 
-    // Largura total do viewport
-    readonly property real viewportWidth: (widthSize * visibleCount) + (widthSizeActive - widthSize) + (itemSpacing * (visibleCount - 1))
+    // Diferença de largura quando ativo
+    readonly property int activeWidthDelta: widthSizeActive - widthSize
 
-    // Largura de um item padrão + spacing
+    // Margem extra para animação suave
+    readonly property int bufferCount: 3
+
+    readonly property real viewportWidth: (widthSize * visibleCount) + activeWidthDelta + (itemSpacing * (visibleCount - 1))
     readonly property real itemStep: widthSize + itemSpacing
 
     // --- Lógica do Monitor ---
     property var currentMonitor: {
         if (!screen)
             return Hyprland.focusedMonitor;
-
         const screenName = screen.name;
         const monitor = Hyprland.monitors.values.find(m => m.name === screenName);
         return monitor ?? Hyprland.focusedMonitor;
     }
 
     property int activeId: currentMonitor ? currentMonitor.activeWorkspace.id : 1
-
-    // Calcula offset baseado no ID (1-99 = monitor 0, 101-199 = monitor 1, etc.)
     property int monitorOffset: Math.floor((activeId - 1) / 100) * 100
 
-    // ID relativo (1-99)
     readonly property int relativeActiveId: {
         let relative = activeId - monitorOffset;
-        // Garante que está no range válido
         return Math.max(1, Math.min(relative, totalWorkspaces));
     }
 
-    // Índice (0-based)
     readonly property int targetIndex: Math.max(0, Math.min(relativeActiveId - 1, totalWorkspaces - 1))
 
-    // Posição X alvo com clamping nas bordas
     readonly property real targetScrollX: {
-        // Posição ideal (centralizado)
         let idealX = (targetIndex * itemStep) - (viewportWidth / 2) + (widthSizeActive / 2);
-
-        // Limites
         let minX = 0;
-        let maxX = (totalWorkspaces * itemStep) - itemSpacing - viewportWidth + (widthSizeActive - widthSize);
-
-        // Clamp
+        let maxX = (totalWorkspaces * itemStep) - itemSpacing - viewportWidth + activeWidthDelta;
         return Math.max(minX, Math.min(idealX, maxX));
     }
 
-    // Clip para esconder items fora
+    // ScrollX animado para calcular janela visível
+    property real animatedScrollX: targetScrollX
+
+    Behavior on animatedScrollX {
+        SmoothedAnimation {
+            velocity: Config.animDuration
+            duration: Config.animDurationLong
+        }
+    }
+
+    // Calcula range de índices visíveis
+    readonly property int firstVisibleIndex: Math.max(0, Math.floor(animatedScrollX / itemStep) - bufferCount)
+    readonly property int lastVisibleIndex: Math.min(totalWorkspaces - 1, Math.ceil((animatedScrollX + viewportWidth) / itemStep) + bufferCount)
+
+    readonly property var visibleIndices: {
+        let indices = [];
+        for (let i = firstVisibleIndex; i <= lastVisibleIndex; i++) {
+            indices.push(i);
+        }
+        return indices;
+    }
+
+    // Função para calcular posição X de um item
+    function calculateItemX(itemIndex: int): real {
+        // Posição base (como se todos fossem do tamanho padrão)
+        let baseX = itemIndex * itemStep;
+
+        // Se este item está DEPOIS do item ativo, adiciona o delta
+        if (itemIndex > targetIndex) {
+            return baseX + activeWidthDelta;
+        }
+
+        return baseX;
+    }
+
     clip: true
 
     Item {
         id: container
 
         x: -root.targetScrollX
-
-        width: (root.totalWorkspaces * root.itemStep) + (root.widthSizeActive - root.widthSize)
+        width: (root.totalWorkspaces * root.itemStep) + root.activeWidthDelta
         height: parent.height
 
-        // SmoothedAnimation
         Behavior on x {
             SmoothedAnimation {
                 velocity: Config.animDuration
@@ -82,40 +103,84 @@ Item {
             }
         }
 
-        Row {
-            id: row
+        Repeater {
+            model: root.visibleIndices
 
-            spacing: root.itemSpacing
-            height: parent.height
+            delegate: Rectangle {
+                id: workspaceItem
 
-            Repeater {
-                model: root.totalWorkspaces
+                required property int modelData
 
-                delegate: Rectangle {
-                    id: workspaceItem
+                readonly property int index: modelData
+                readonly property int workspaceId: root.monitorOffset + index + 1
+                readonly property int visualId: index + 1
+                readonly property bool isActive: workspaceId === root.activeId
+                readonly property var wsObject: Hyprland.workspaces.values.find(ws => ws.id === workspaceId)
+                readonly property bool isEmpty: wsObject === undefined
 
-                    required property int index
+                // Posição calculada considerando o item ativo
+                x: root.calculateItemX(index)
+                y: (root.heightSizeActive + 4 - height) / 2
 
-                    readonly property int workspaceId: root.monitorOffset + index + 1
-                    readonly property int visualId: index + 1
+                width: isActive ? root.widthSizeActive : root.widthSize
+                height: isActive ? root.heightSizeActive : root.heightSize
 
-                    readonly property bool isActive: workspaceId === root.activeId
-                    readonly property var wsObject: Hyprland.workspaces.values.find(ws => ws.id === workspaceId)
-                    readonly property bool isEmpty: wsObject === undefined
+                radius: Config.radius
 
-                    width: isActive ? root.widthSizeActive : root.widthSize
-                    height: isActive ? root.heightSizeActive : root.heightSize
+                color: {
+                    if (isActive)
+                        return Config.accentColor;
+                    if (!isEmpty)
+                        return Config.surface2Color;
+                    return Config.surface0Color;
+                }
 
-                    anchors.verticalCenter: parent.verticalCenter
+                // Anima a posição X quando o item ativo muda
+                Behavior on x {
+                    SmoothedAnimation {
+                        velocity: 150
+                        duration: Config.animDuration
+                    }
+                }
 
-                    radius: Config.radius
+                Behavior on color {
+                    ColorAnimation {
+                        duration: Config.animDuration
+                    }
+                }
+
+                Behavior on width {
+                    SmoothedAnimation {
+                        velocity: 150
+                    }
+                }
+
+                Behavior on height {
+                    SmoothedAnimation {
+                        velocity: 150
+                    }
+                }
+
+                Text {
+                    anchors.centerIn: parent
+                    text: workspaceItem.visualId
+
+                    font.family: Config.font
+                    font.bold: true
+                    font.pixelSize: workspaceItem.isActive ? Config.fontSizeNormal : Config.fontSizeSmall
 
                     color: {
-                        if (isActive)
-                            return Config.accentColor;
-                        if (!isEmpty)
-                            return Config.surface2Color;
-                        return Config.surface0Color;
+                        if (workspaceItem.isActive)
+                            return Config.textReverseColor;
+                        if (!workspaceItem.isEmpty)
+                            return Config.textColor;
+                        return Config.subtextColor;
+                    }
+
+                    Behavior on font.pixelSize {
+                        SmoothedAnimation {
+                            velocity: 50
+                        }
                     }
 
                     Behavior on color {
@@ -123,65 +188,24 @@ Item {
                             duration: Config.animDuration
                         }
                     }
+                }
 
-                    Behavior on width {
-                        SmoothedAnimation {
-                            velocity: 150
-                        }
+                TapHandler {
+                    onTapped: {
+                        Hyprland.dispatch("workspace " + workspaceItem.workspaceId);
                     }
+                }
 
-                    Behavior on height {
-                        SmoothedAnimation {
-                            velocity: 150
-                        }
-                    }
+                HoverHandler {
+                    id: hoverHandler
+                    cursorShape: !workspaceItem.isActive ? Qt.PointingHandCursor : Qt.ArrowCursor
+                }
 
-                    Text {
-                        anchors.centerIn: parent
-                        text: workspaceItem.visualId
+                opacity: hoverHandler.hovered && !isActive ? 0.7 : 1.0
 
-                        font.family: Config.font
-                        font.bold: true
-                        font.pixelSize: workspaceItem.isActive ? Config.fontSizeNormal : Config.fontSizeSmall
-
-                        color: {
-                            if (workspaceItem.isActive)
-                                return Config.textReverseColor;
-                            if (!workspaceItem.isEmpty)
-                                return Config.textColor;
-                            return Config.subtextColor;
-                        }
-
-                        Behavior on font.pixelSize {
-                            SmoothedAnimation {
-                                velocity: 50
-                            }
-                        }
-
-                        Behavior on color {
-                            ColorAnimation {
-                                duration: Config.animDuration
-                            }
-                        }
-                    }
-
-                    TapHandler {
-                        onTapped: {
-                            Hyprland.dispatch("workspace " + workspaceItem.workspaceId);
-                        }
-                    }
-
-                    HoverHandler {
-                        id: hoverHandler
-                        cursorShape: !workspaceItem.isActive ? Qt.PointingHandCursor : Qt.ArrowCursor
-                    }
-
-                    opacity: hoverHandler.hovered && !isActive ? 0.7 : 1.0
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: Config.animDuration / 2
-                        }
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: Config.animDuration / 2
                     }
                 }
             }

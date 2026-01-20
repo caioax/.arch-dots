@@ -73,7 +73,7 @@ Scope {
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: root.gapIn
 
-                    Workspaces {}
+                    Clock {}
                 }
 
                 // --- CENTRO ---
@@ -82,7 +82,7 @@ Scope {
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: root.gapIn
 
-                    Clock {}
+                    Workspaces {}
                 }
 
                 // --- DIREITA ---
