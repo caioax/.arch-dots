@@ -1,3 +1,8 @@
 *.log
 .qmlls.ini
-.zsh_secrets
+
+hyprland/.config/hypr/local/*
+!hyprland/.config/hypr/local/.gitkeep
+
+hyprland/.config/uwsm/env.d/*
+!hyprland/.config/uwsm/env.d/.gitkeep

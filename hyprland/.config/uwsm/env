@@ -2,14 +2,6 @@
 # UWSM GLOBAL ENVIRONMENT VARIABLES
 # ==============================================================================
 
-# ------------------------------------------------------------------------------
-# NVIDIA & HARDWARE ACCELERATION
-# Essenciais para garantir que a GPU dedicada seja usada corretamente
-# ------------------------------------------------------------------------------
-export LIBVA_DRIVER_NAME=nvidia
-export __GLX_VENDOR_LIBRARY_NAME=nvidia
-export NVD_BACKEND=direct
-
 # Força apps Electron (VSCode, Discord, Obsidian) a usar Wayland nativo
 export ELECTRON_OZONE_PLATFORM_HINT=auto
 
@@ -37,13 +29,8 @@ export QT_QPA_PLATFORMTHEME=qt6ct
 export QT_AUTO_SCREEN_SCALE_FACTOR=1
 export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
 
-# ------------------------------------------------------------------------------
-# LOCALIZAÇÃO & IDIOMA
-# Sistema em Inglês, Formatos (Data/Dinheiro) em PT-BR
-# ------------------------------------------------------------------------------
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
+# Load local global hardware exports
+if [ -f "$HOME/.config/uwsm/env.d/global_hardware.sh" ]; then
+    . "$HOME/.config/uwsm/env.d/global_hardware.sh"
+fi
 
-export LC_TIME=pt_BR.UTF-8
-export LC_NUMERIC=pt_BR.UTF-8
-export LC_MONETARY=pt_BR.UTF-8

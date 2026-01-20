@@ -19,13 +19,14 @@ export HYPRCURSOR_SIZE=24
 # Correção para alguns artefatos visuais (0 = desativado)
 export AQ_FORCE_LINEAR_BLIT=0
 
-# Seleção explicita de GPUs (Nvidia dGPU primeiro, Intel iGPU depois)
-# Garante que o Hyprland renderize na placa correta
-export AQ_DRM_DEVICES="/dev/dri/nvidia-dgpu:/dev/dri/intel-igpu"
-
 # ------------------------------------------------------------------------------
 # APPS & TOOLS CONFIGURATION
 # Variáveis customizadas para scripts e ferramentas do usuário
 # ------------------------------------------------------------------------------
 # Diretório padrão para salvar capturas de tela do Hyprshot
 export HYPRSHOT_DIR="$HOME/Pictures/Screenshots"
+
+# Load local hyprland hardware exports (Aquamarine, etc)
+if [ -f "$HOME/.config/uwsm/env.d/hyprland_hardware.sh" ]; then
+    . "$HOME/.config/uwsm/env.d/hyprland_hardware.sh"
+fi
