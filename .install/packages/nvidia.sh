@@ -7,17 +7,17 @@
 # =============================================================================
 
 NVIDIA_PACKAGES=(
-    # Drivers
-    "nvidia-open-dkms" # NVIDIA proprietary driver
-    "nvidia-utils"     # NVIDIA utilities
-    "nvidia-settings"  # NVIDIA settings GUI
-
-    # Video Acceleration
-    "libva-nvidia-driver" # VA-API driver for NVIDIA
-
-    # For hybrid graphics (Intel + NVIDIA)
-    "intel-media-driver" # Intel VA-API driver
-    "libva-utils"        # VA-API utilities (vainfo)
+    # # Drivers
+    # "nvidia-open-dkms" # NVIDIA proprietary driver
+    # "nvidia-utils"     # NVIDIA utilities
+    # "nvidia-settings"  # NVIDIA settings GUI
+    #
+    # # Video Acceleration
+    # "libva-nvidia-driver" # VA-API driver for NVIDIA
+    #
+    # # For hybrid graphics (Intel + NVIDIA)
+    # "intel-media-driver" # Intel VA-API driver
+    # "libva-utils"        # VA-API utilities (vainfo)
 )
 
 # Pacotes AUR

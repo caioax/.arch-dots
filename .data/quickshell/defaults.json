@@ -7,8 +7,8 @@
     "intensity": 0.5
   },
   "bar": {
-    "autoHide": true,
-    "height": 32
+    "autoHide": false,
+    "height": 30
   },
   "palette": {
     "background": "#1a1b26",

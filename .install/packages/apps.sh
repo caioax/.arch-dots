@@ -28,4 +28,6 @@ APPS_PACKAGES=(
 APPS_AUR_PACKAGES=(
     "zen-browser-bin" # Zen Browser (Firefox fork)
     "spotify"         # Spotify music player
+
+    "qview" # Image viewer
 )

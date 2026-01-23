@@ -6,20 +6,19 @@
 # =============================================================================
 
 THEMING_PACKAGES=(
-    # Qt Theming
-    "qt5ct"                 # Qt5 theme configuration
-    "qt6ct"                 # Qt6 theme configuration
-    "kvantum"               # Qt theme engine
-
     # GTK Theming
-    "nwg-look"              # GTK theme configuration for Wayland
+    "nwg-look" # GTK theme configuration for Wayland
 
     # Themes
-    "breeze"                # KDE Breeze theme
-    "breeze-gtk"            # Breeze GTK theme
+    "breeze"     # KDE Breeze theme
+    "breeze5"    # Breeze QT5 theme
+    "breeze-gtk" # Breeze GTK theme
 )
 
 # Pacotes AUR
 THEMING_AUR_PACKAGES=(
-    # Temas adicionais podem ser adicionados aqui
+    # Qt Theming
+    "qt5ct-kde" # Qt5 theme configuration
+    "qt6ct-kde" # Qt6 theme configuration
+
 )

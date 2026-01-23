@@ -7,19 +7,20 @@
 
 EDITOR_PACKAGES=(
     # Editor
-    "neovim"                # Modern Vim-based text editor
+    "neovim" # Modern Vim-based text editor
 
     # Build tools (para plugins do Neovim)
-    "base-devel"            # Build essentials
-    "gcc"                   # GNU Compiler Collection
-    "make"                  # Build automation tool
-    "unzip"                 # Unzip utility
-    "ripgrep"               # Fast grep (para Telescope)
-    "fd"                    # Fast find (para Telescope)
+    "base-devel" # Build essentials
+    "gcc"        # GNU Compiler Collection
+    "make"       # Build automation tool
+    "unzip"      # Unzip utility
+    "unrar"      # Unrar utility
+    "ripgrep"    # Fast grep (para Telescope)
+    "fd"         # Fast find (para Telescope)
 
     # Node.js (para LSPs)
-    "nodejs"                # JavaScript runtime
-    "npm"                   # Node package manager
+    "nodejs" # JavaScript runtime
+    "npm"    # Node package manager
 )
 
 # Pacotes AUR

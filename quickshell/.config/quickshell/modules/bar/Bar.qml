@@ -27,7 +27,7 @@ Scope {
             WlrLayershell.namespace: "qs_modules"
 
             // --- CONFIGURAÇÃO DA BARRA ---
-            implicitHeight: 30
+            implicitHeight: StateService.get("bar.height", 30)
             color: "transparent"
             screen: modelData
 
