@@ -4,6 +4,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
+import Quickshell.Wayland
 import qs.services
 import "./modules/bar/"
 
@@ -104,6 +105,12 @@ ShellRoot {
         source: "./modules/osd/OsdOverlay.qml"
     }
 
+    // Wallpaper Picker - carrega sob demanda
+    Loader {
+        active: WallpaperService.pickerVisible
+        source: "./modules/wallpaper/WallpaperPicker.qml"
+    }
+
     // =========================================================================
     // ATALHOS GLOBAIS
     // =========================================================================
@@ -191,5 +198,13 @@ ShellRoot {
             BrightnessService.decreaseBrightness();
             OsdService.showBrightness(BrightnessService.brightness);
         }
+    }
+
+    // Atalho: Wallpaper Picker
+    GlobalShortcut {
+        name: "wallpaper_picker"
+        description: "Seletor de wallpaper"
+
+        onPressed: WallpaperService.toggle()
     }
 }

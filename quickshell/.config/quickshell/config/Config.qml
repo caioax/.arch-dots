@@ -12,10 +12,11 @@ Singleton {
     // ========================================================================
 
     // General Background (Bars, Menus)
-    readonly property color backgroundColor: "#1a1b26"    // Background
-    readonly property color surface0Color: "#24283b"      // Slightly lighter background
-    readonly property color surface1Color: "#292e42"      // Inactive tab background
-    readonly property color surface2Color: "#414868"      // Bright black (selection/highlight)
+    readonly property color backgroundColor: "#1a1b26" // Main window background
+    readonly property color surface0Color: "#24283b"   // Slightly lighter background for grouping
+    readonly property color surface1Color: "#292e42"   // Inactive tab or secondary element background
+    readonly property color surface2Color: "#414868"   // Selection, highlight, or default hover state
+    readonly property color surface3Color: "#565f89"   // Active borders or hover state for highlighted elements
 
     // Text
     readonly property color textColor: "#c0caf5"           // Foreground
@@ -36,7 +37,7 @@ Singleton {
     readonly property color activeColor: "#c0caf5"         // Main foreground
 
     // Others (Extra variants from Tokyo Night)
-    readonly property color grayBlueColor: "#283457"       // Selection background
+    readonly property color greyBlueColor: "#283457"       // Selection background
     readonly property color blueDarkColor: "#16161e"       // Darker background variant
 
     // ========================================================================
