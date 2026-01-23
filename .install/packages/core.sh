@@ -23,6 +23,8 @@ CORE_PACKAGES=(
 
     # XDG & Portal
     "xdg-desktop-portal-hyprland" # Portal for Hyprland
+    "xdg-desktop-portal-gtk"      # Portal for Gtk
+    "xdg-user-dirs-gtk"           # For default files
     "xdg-utils"                   # XDG utilities
 )
 

@@ -8,6 +8,7 @@
 APPS_PACKAGES=(
     # File Manager
     "dolphin"                  # KDE file manager
+    "dolphin-plugins"          # Dolphin plugins
     "ark"                      # Archive manager (integração com Dolphin)
     "ffmpegthumbs"             # Video thumbnails para Dolphin
     "kdegraphics-thumbnailers" # Image/PDF thumbnails
@@ -17,6 +18,9 @@ APPS_PACKAGES=(
 
     # Multi mídia
     "mpv"
+
+    # Flatpak Store
+    "discover"
 
     # KDE Integration
     "breeze"             # KDE theme (para ícones do Dolphin)
