@@ -73,7 +73,7 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 
 # === ENVIRONMENT VARIABLES ===
-[[ -n $SSH_CONNECTION ]] && export EDITOR='vim' || export EDITOR='nvim'
+[[ -n $SSH_CONNECTION ]] && export EDITOR='nvim' || export EDITOR='vim'
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$PATH:$HOME/.spicetify"
 
@@ -90,6 +90,25 @@ zle -N edit-command-line
 function zvm_after_init() {
   zvm_bindkey vicmd '^V' edit-command-line
   zvm_bindkey viins '^V' edit-command-line
+}
+
+# === SHELL-STATE FUNCTION ===
+shell-state() {
+    local config_path="$HOME/.arch-dots/quickshell/.config/quickshell/state.json"
+    local default_editor="nvim"
+    
+    # Extrai editor e remove aspas do jq. 
+    # Adicionado tratamento para caso o valor retornado seja a string "null"
+    local custom_editor=$(jq -r '.system.editor // empty' "$config_path" 2>/dev/null)
+
+    if [[ -n "$custom_editor" && "$custom_editor" != "null" ]] && command -v "${custom_editor%% *}" >/dev/null 2>&1; then
+        eval "$custom_editor $config_path"
+    else
+        [[ -n "$custom_editor" && "$custom_editor" != "null" ]] && \
+            echo "⚠️  Editor '$custom_editor' not found. Falling back to $default_editor."
+        
+        $default_editor "$config_path"
+    fi
 }
 
 # === ALIASES ===

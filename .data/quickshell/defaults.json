@@ -1,4 +1,7 @@
 {
+  "system": {
+    "editor": "nvim"
+  },
   "nightLight": {
     "enabled": false,
     "intensity": 0.5

@@ -16,13 +16,6 @@ Singleton {
 
     Component.onCompleted: loadState()
 
-    // --- Reload Function ---
-    function reload() {
-        console.log("[StateService] Saving and reloading shell...");
-        saveState();
-        Quickshell.reload([]);
-    }
-
     // --- Dot Notation Functions ---
     function get(path: string, defaultValue) {
         const keys = path.split('.');
