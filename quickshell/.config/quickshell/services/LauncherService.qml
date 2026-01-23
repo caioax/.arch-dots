@@ -20,19 +20,37 @@ Singleton {
     readonly property var filteredApps: {
         let apps = DesktopEntries.applications.values;
 
+        // Ordena alfabeticamente
+        apps = apps.slice().sort((a, b) => {
+            const nameA = (a.name || "").toLowerCase();
+            const nameB = (b.name || "").toLowerCase();
+            return nameA.localeCompare(nameB);
+        });
+
         if (query === "") {
             return apps.slice(0, maxItems);
         }
 
         const q = query.toLowerCase();
-        let result = apps.filter(app => {
+
+        // Separa em dois grupos: match no nome vs match na descrição
+        let nameMatches = [];
+        let descMatches = [];
+
+        for (const app of apps) {
             const name = (app.name || "").toLowerCase();
             const comment = (app.comment || "").toLowerCase();
             const genericName = (app.genericName || "").toLowerCase();
-            return name.includes(q) || comment.includes(q) || genericName.includes(q);
-        });
 
-        return result.slice(0, maxItems);
+            if (name.includes(q)) {
+                nameMatches.push(app);
+            } else if (comment.includes(q) || genericName.includes(q)) {
+                descMatches.push(app);
+            }
+        }
+
+        // Nome primeiro, depois descrição
+        return [...nameMatches, ...descMatches].slice(0, maxItems);
     }
 
     // ========================================================================

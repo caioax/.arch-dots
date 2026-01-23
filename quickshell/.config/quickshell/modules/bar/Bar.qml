@@ -84,6 +84,7 @@ Scope {
                     spacing: root.gapIn
 
                     Clock {}
+                    ActiveWindow {}
                 }
 
                 // --- CENTRO ---
