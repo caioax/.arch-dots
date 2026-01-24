@@ -271,21 +271,35 @@ setup_wallpaper() {
     # Verificar se o wallpaper existe
     if [[ ! -f "$WALLPAPER" ]]; then
         log_warn "Wallpaper não encontrado: $WALLPAPER"
-        log_info "O wallpaper será aplicado após criar os symlinks."
+        return 0
+    fi
+
+    # Verificar se está em uma sessão Wayland
+    if [[ -z "$WAYLAND_DISPLAY" ]]; then
+        log_warn "Não está em uma sessão Wayland."
+        log_info "O wallpaper será aplicado automaticamente ao iniciar o Hyprland."
         return 0
     fi
 
     log_step "Iniciando swww daemon..."
     # Iniciar daemon se não estiver rodando
-    if ! pgrep -x "swww-daemon" &>/dev/null; then
+    if ! pgrep -f "swww-daemon" &>/dev/null; then
         swww-daemon &
-        sleep 1
+        sleep 2
+    fi
+
+    # Verificar se o daemon iniciou
+    if ! pgrep -f "swww-daemon" &>/dev/null; then
+        log_warn "Não foi possível iniciar o swww daemon."
+        return 0
     fi
 
     log_step "Aplicando wallpaper: bash.png"
-    swww img "$WALLPAPER" --transition-type fade --transition-duration 1
-
-    log_info "Wallpaper configurado com sucesso!"
+    if swww img "$WALLPAPER" --transition-type fade --transition-duration 1 2>/dev/null; then
+        log_info "Wallpaper configurado com sucesso!"
+    else
+        log_warn "Erro ao aplicar wallpaper."
+    fi
 }
 
 # =============================================================================

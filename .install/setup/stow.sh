@@ -109,7 +109,7 @@ remove_existing_targets() {
 
     # Se não há itens para remover, retornar
     if [[ ${#ITEMS_TO_REMOVE[@]} -eq 0 ]]; then
-        log_info "Nenhum destino existente encontrado."
+        log_info "Nenhum destino existente encontrado. Pronto para stow!"
         return 0
     fi
 
@@ -129,10 +129,10 @@ remove_existing_targets() {
     echo ""
 
     # Pedir confirmação
-    echo -ne "${RED}Deseja REMOVER todos esses itens para criar os novos symlinks? [y/N]: ${NC}"
+    echo -ne "${RED}Deseja REMOVER esses itens para criar os novos symlinks? [Y/n]: ${NC}"
     read -r confirm
 
-    if [[ $confirm =~ ^[Yy]$ ]]; then
+    if [[ ! $confirm =~ ^[Nn]$ ]]; then
         log_info "Removendo destinos existentes..."
         for item in "${ITEMS_TO_REMOVE[@]}"; do
             if [[ -e "$item" || -L "$item" ]]; then
@@ -142,76 +142,9 @@ remove_existing_targets() {
         done
         log_info "Destinos removidos com sucesso!"
     else
-        log_warn "Remoção cancelada. O stow tentará usar --adopt para conflitos."
-    fi
-}
-
-# =============================================================================
-# Fazer backup de configs existentes (legado - mantido para compatibilidade)
-# =============================================================================
-backup_existing() {
-    local BACKUP_DIR="$HOME/.config-backup-$(date +%Y%m%d-%H%M%S)"
-    local NEED_BACKUP=false
-    local ITEMS_TO_BACKUP=()
-
-    # Verificar cada diretório
-    for dir in "${STOW_DIRS[@]}"; do
-        case "$dir" in
-            "zsh")
-                if [[ -f "$HOME/.zshrc" && ! -L "$HOME/.zshrc" ]]; then
-                    NEED_BACKUP=true
-                    ITEMS_TO_BACKUP+=("$HOME/.zshrc")
-                fi
-                if [[ -f "$HOME/.p10k.zsh" && ! -L "$HOME/.p10k.zsh" ]]; then
-                    NEED_BACKUP=true
-                    ITEMS_TO_BACKUP+=("$HOME/.p10k.zsh")
-                fi
-                ;;
-            "tmux")
-                if [[ -f "$HOME/.tmux.conf" && ! -L "$HOME/.tmux.conf" ]]; then
-                    NEED_BACKUP=true
-                    ITEMS_TO_BACKUP+=("$HOME/.tmux.conf")
-                fi
-                ;;
-            "local")
-                if [[ -d "$HOME/.local/scripts" && ! -L "$HOME/.local/scripts" ]]; then
-                    # Verificar se tem arquivos dentro
-                    if [[ "$(ls -A "$HOME/.local/scripts" 2>/dev/null)" ]]; then
-                        NEED_BACKUP=true
-                        ITEMS_TO_BACKUP+=("$HOME/.local/scripts")
-                    fi
-                fi
-                ;;
-            "kde")
-                if [[ -f "$HOME/.config/kdeglobals" && ! -L "$HOME/.config/kdeglobals" ]]; then
-                    NEED_BACKUP=true
-                    ITEMS_TO_BACKUP+=("$HOME/.config/kdeglobals")
-                fi
-                ;;
-            *)
-                if [[ -d "$HOME/.config/${dir}" && ! -L "$HOME/.config/${dir}" ]]; then
-                    NEED_BACKUP=true
-                    ITEMS_TO_BACKUP+=("$HOME/.config/${dir}")
-                fi
-                ;;
-        esac
-    done
-
-    # Fazer backup se necessário
-    if $NEED_BACKUP; then
-        log_warn "Configurações existentes encontradas. Fazendo backup..."
-        mkdir -p "$BACKUP_DIR"
-
-        for item in "${ITEMS_TO_BACKUP[@]}"; do
-            if [[ -e "$item" ]]; then
-                log_step "  Backup: $item"
-                mv "$item" "$BACKUP_DIR/" 2>/dev/null || true
-            fi
-        done
-
-        log_info "Backup salvo em: $BACKUP_DIR"
-    else
-        log_info "Nenhum backup necessário."
+        log_error "Remoção cancelada. O stow não pode criar symlinks sobre arquivos existentes."
+        log_info "Remova os arquivos manualmente ou execute o script novamente."
+        return 1
     fi
 }
 
@@ -226,13 +159,9 @@ execute_stow() {
     for dir in "${STOW_DIRS[@]}"; do
         if [[ -d "$dir" ]]; then
             log_step "  Stowing: $dir"
-            # Tentar stow normal primeiro
-            if ! stow -R "$dir" 2>/dev/null; then
-                # Se falhar, tentar com --adopt
-                log_warn "    Restowing $dir com --adopt"
-                stow --adopt -R "$dir" 2>/dev/null || {
-                    log_warn "    Falha ao fazer stow de $dir"
-                }
+            if ! stow -R "$dir" 2>&1; then
+                log_error "    Falha ao fazer stow de $dir"
+                log_info "    Verifique se há conflitos e tente novamente."
             fi
         else
             log_warn "  Diretório não encontrado: $dir"
@@ -257,7 +186,11 @@ run_stow_main() {
     fi
 
     create_dirs
-    remove_existing_targets
+
+    if ! remove_existing_targets; then
+        return 1
+    fi
+
     execute_stow
 
     echo ""
