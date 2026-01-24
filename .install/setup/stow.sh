@@ -67,6 +67,9 @@ get_stow_targets() {
     local targets=()
 
     case "$dir" in
+        "hyprland")
+            targets+=("$HOME/.config/hypr" "$HOME/.config/uwsm")
+            ;;
         "zsh")
             targets+=("$HOME/.zshrc" "$HOME/.p10k.zsh")
             ;;
@@ -78,6 +81,9 @@ get_stow_targets() {
             ;;
         "kde")
             targets+=("$HOME/.config/kdeglobals")
+            ;;
+        "gtk")
+            targets+=("$HOME/.config/gtk-3.0" "$HOME/.config/gtk-4.0")
             ;;
         *)
             targets+=("$HOME/.config/${dir}")
