@@ -359,12 +359,12 @@ full_install() {
 # =============================================================================
 ask_reboot() {
     echo ""
-    echo -ne "${YELLOW}Deseja reiniciar o sistema agora para aplicar todas as mudanças? [y/N]: ${NC}"
+    echo -ne "${YELLOW}Deseja reiniciar o sistema agora para aplicar todas as mudanças? [Y/n]: ${NC}"
     read -r do_reboot
 
-    if [[ $do_reboot =~ ^[Yy]$ ]]; then
-        log_info "Reiniciando em 5 segundos..."
-        sleep 5
+    if [[ $do_reboot =~ ^[Yy]$ ]] || [[ -z "$do_reboot" ]]; then
+        log_info "Reiniciando..."
+        sleep 2
         sudo reboot
     else
         log_info "Lembre-se de reiniciar o sistema para aplicar todas as mudanças."

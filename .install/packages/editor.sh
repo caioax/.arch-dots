@@ -17,6 +17,7 @@ EDITOR_PACKAGES=(
     "unrar"      # Unrar utility
     "ripgrep"    # Fast grep (para Telescope)
     "fd"         # Fast find (para Telescope)
+    "ffmpeg"     # Multimedia framework
 
     # Node.js (para LSPs)
     "nodejs" # JavaScript runtime
