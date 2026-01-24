@@ -185,7 +185,10 @@ Item {
         }
 
         TapHandler {
-            onTapped: Hyprland.dispatch("togglespecialworkspace " + root.specialWorkspaceName)
+            onTapped: {
+                let wsName = root.specialWorkspaceName;
+                if (wsName) Hyprland.dispatch("togglespecialworkspace " + wsName);
+            }
         }
 
         HoverHandler {
@@ -231,7 +234,7 @@ Item {
                     readonly property int index: modelData
                     readonly property int workspaceId: root.monitorOffset + index + 1
                     readonly property bool isActive: workspaceId === root.activeId && !root.isSpecialWorkspace
-                    readonly property var wsObject: Hyprland.workspaces.values.find(ws => ws.id === workspaceId)
+                    readonly property var wsObject: Hyprland.workspaces.values?.find(ws => ws.id === workspaceId) ?? undefined
                     readonly property bool isEmpty: wsObject === undefined
 
                     x: root.calculateItemX(index)
@@ -266,7 +269,10 @@ Item {
                     }
 
                     TapHandler {
-                        onTapped: Hyprland.dispatch("workspace " + workspaceItem.workspaceId)
+                        onTapped: {
+                            let targetId = workspaceItem.workspaceId;
+                            Hyprland.dispatch("workspace " + targetId);
+                        }
                     }
                     HoverHandler {
                         id: h

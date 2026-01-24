@@ -4,7 +4,7 @@
         "source": "~/.config/fastfetch/arch.png",
         "type": "kitty-icat",
         "width": 30,
-        "height": 15,
+        "height": 14,
         "padding": {
             "top": 0,
             "right": 4,
