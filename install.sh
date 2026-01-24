@@ -260,7 +260,7 @@ setup_services() {
 setup_wallpaper() {
     log_header "Configurando Wallpaper Inicial"
 
-    local WALLPAPER="$HOME/.local/wallpapers/bash.png"
+    local WALLPAPER="$HOME/.local/wallpapers/Background2.png"
 
     # Verificar se swww está instalado
     if ! command -v swww &>/dev/null; then
@@ -295,7 +295,7 @@ setup_wallpaper() {
     fi
 
     log_step "Aplicando wallpaper: bash.png"
-    if swww img "$WALLPAPER" --transition-type fade --transition-duration 1 2>/dev/null; then
+    if swww img "$WALLPAPER" --transition-type grow --transition-duration 2 2>/dev/null; then
         log_info "Wallpaper configurado com sucesso!"
     else
         log_warn "Erro ao aplicar wallpaper."
