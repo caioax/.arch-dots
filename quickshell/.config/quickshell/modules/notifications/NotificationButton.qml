@@ -10,7 +10,7 @@ Item {
     implicitWidth: Config.barHeight - 10
     implicitHeight: Config.barHeight - 10
 
-    // Janela Popup
+    // Popup Window
     NotificationWindow {
         id: notifWindow
 
@@ -22,7 +22,7 @@ Item {
         visible: false
     }
 
-    // Botão Visual
+    // Visual Button
     Rectangle {
         anchors.fill: parent
         radius: height / 2
@@ -40,7 +40,7 @@ Item {
             }
         }
 
-        // Ícone (Sino) - sempre branco na barra
+        // Icon (Bell) - always white on the bar
         Text {
             anchors.centerIn: parent
             text: {
@@ -52,11 +52,11 @@ Item {
             }
             font.family: Config.font
             font.pixelSize: Config.fontSizeLarge
-            // Cor sempre branca na barra, só muda se a janela estiver aberta
+            // Color always white on the bar, only changes if the window is open
             color: notifWindow.visible ? Config.accentColor : Config.textColor
         }
 
-        // Badge de contagem
+        // Count badge
         Rectangle {
             visible: NotificationService.count > 0 && !NotificationService.dndEnabled
             anchors.top: parent.top
@@ -81,7 +81,7 @@ Item {
             }
         }
 
-        // Indicador de DND (pequeno ponto) - só quando DND ativo
+        // DND indicator (small dot) - only when DND is active
         Rectangle {
             visible: NotificationService.dndEnabled && NotificationService.count === 0
             anchors.top: parent.top

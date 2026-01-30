@@ -21,18 +21,19 @@ PanelWindow {
         right: true
     }
 
+    WlrLayershell.namespace: "qs_launcher"
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
 
     color: "transparent"
 
-    // Clique no fundo fecha
+    // Click on background closes
     MouseArea {
         anchors.fill: parent
         onClicked: LauncherService.hide()
     }
 
-    // Loader que cria/destrói o conteúdo
+    // Loader that creates/destroys the content
     Loader {
         id: contentLoader
         anchors.centerIn: parent
@@ -42,21 +43,21 @@ PanelWindow {
             id: content
             width: 520
 
-            // Altura dinâmica baseada no conteúdo
+            // Dynamic height based on content
             property int listHeight: Math.min(420, appList.contentHeight + 12)
             property int totalHeight: listHeight + searchBar.height + 32
 
             height: totalHeight
             radius: Config.radiusLarge
-            color: Config.backgroundColor
+            color: Config.backgroundTransparentColor
             border.color: Qt.alpha(Config.accentColor, 0.2)
             border.width: 1
 
-            // Animação de escala na entrada
+            // Scale animation on entry
             scale: 1
             opacity: 1
 
-            // Animação de altura suave
+            // Smooth height animation
             Behavior on height {
                 NumberAnimation {
                     duration: Config.animDuration
@@ -69,7 +70,7 @@ PanelWindow {
                 anchors.margins: Config.spacing + 4
                 spacing: Config.spacing
 
-                // Barra de busca
+                // Search bar
                 Rectangle {
                     id: searchBar
                     Layout.fillWidth: true
@@ -114,10 +115,10 @@ PanelWindow {
                             font.pixelSize: Config.fontSizeLarge
                             verticalAlignment: TextInput.AlignVCenter
                             selectByMouse: true
-                            placeholderText: "Buscar aplicativos..."
+                            placeholderText: "Search apps..."
                             placeholderTextColor: Config.mutedColor
 
-                            // Remove o background padrão do TextField
+                            // Remove the default TextField background
                             background: null
 
                             onTextChanged: LauncherService.query = text
@@ -139,7 +140,7 @@ PanelWindow {
                             }
 
                             Keys.onPressed: event => {
-                                // Shift+Tab para voltar
+                                // Shift+Tab to go back
                                 if (event.key === Qt.Key_Backtab || (event.key === Qt.Key_Tab && (event.modifiers & Qt.ShiftModifier))) {
                                     if (LauncherService.selectedIndex > 0)
                                         LauncherService.selectedIndex--;
@@ -147,7 +148,7 @@ PanelWindow {
                                 }
                             }
 
-                            // Foco automático ao ser criado
+                            // Auto-focus when created
                             Component.onCompleted: {
                                 LauncherService.query = "";
                                 LauncherService.selectedIndex = 0;
@@ -155,7 +156,7 @@ PanelWindow {
                             }
                         }
 
-                        // Contador de resultados
+                        // Results counter
                         Rectangle {
                             visible: LauncherService.filteredApps.length > 0
                             Layout.preferredWidth: countText.implicitWidth + 12
@@ -173,7 +174,7 @@ PanelWindow {
                             }
                         }
 
-                        // Botão limpar
+                        // Clear button
                         Rectangle {
                             visible: searchInput.text
                             Layout.preferredWidth: 28
@@ -209,14 +210,14 @@ PanelWindow {
                     }
                 }
 
-                // Separador
+                // Separator
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 1
                     color: Config.surface1Color
                 }
 
-                // Lista de apps
+                // App list
                 ListView {
                     id: appList
                     Layout.fillWidth: true
@@ -227,7 +228,7 @@ PanelWindow {
                     model: LauncherService.filteredApps
                     currentIndex: LauncherService.selectedIndex
 
-                    // Animações de adicionar/remover items
+                    // Add/remove item animations
                     add: Transition {
                         NumberAnimation {
                             property: "opacity"
@@ -265,7 +266,7 @@ PanelWindow {
                         }
                     }
 
-                    // Highlight customizado
+                    // Custom highlight
                     highlightFollowsCurrentItem: false
                     highlight: Rectangle {
                         width: appList.width
@@ -300,7 +301,7 @@ PanelWindow {
                             anchors.rightMargin: 12
                             spacing: 14
 
-                            // Ícone com background
+                            // Icon with background
                             Rectangle {
                                 Layout.preferredWidth: 40
                                 Layout.preferredHeight: 40
@@ -321,7 +322,7 @@ PanelWindow {
                                 }
                             }
 
-                            // Textos
+                            // Texts
                             ColumnLayout {
                                 Layout.fillWidth: true
                                 spacing: 2
@@ -347,7 +348,7 @@ PanelWindow {
                                 }
                             }
 
-                            // Indicador de seleção
+                            // Selection indicator
                             Text {
                                 visible: delegateItem.isSelected
                                 text: "󰌑"
@@ -364,17 +365,17 @@ PanelWindow {
                             cursorShape: Qt.PointingHandCursor
                             onClicked: {
                                 if (delegateItem.isSelected) {
-                                    // Segundo clique: abre o app
+                                    // Second click: opens the app
                                     LauncherService.launch(delegateItem.modelData);
                                 } else {
-                                    // Primeiro clique: seleciona
+                                    // First click: selects
                                     LauncherService.selectedIndex = delegateItem.index;
                                 }
                             }
                         }
                     }
 
-                    // Estado vazio
+                    // Empty state
                     Column {
                         anchors.centerIn: parent
                         spacing: Config.spacing
@@ -405,19 +406,19 @@ PanelWindow {
 
                         Text {
                             anchors.horizontalCenter: parent.horizontalCenter
-                            text: LauncherService.query ? "Nenhum resultado" : "Carregando..."
+                            text: LauncherService.query ? "No results" : "Loading..."
                             color: Config.subtextColor
                             font.family: Config.font
                             font.pixelSize: Config.fontSizeNormal
                         }
                     }
 
-                    // Auto-scroll ao navegar (sem animação para não afetar mouse)
+                    // Auto-scroll when navigating (no animation to avoid affecting mouse)
                     onCurrentIndexChanged: {
                         positionViewAtIndex(currentIndex, ListView.Contain);
                     }
 
-                    // Scroll suave
+                    // Smooth scroll
                     ScrollBar.vertical: ScrollBar {
                         policy: ScrollBar.AsNeeded
 

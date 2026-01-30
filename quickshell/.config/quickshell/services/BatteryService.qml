@@ -8,29 +8,29 @@ import Quickshell.Services.UPower
 Singleton {
     id: root
 
-    // Retorna true se encontrou uma bateria de laptop
+    // Returns true if a laptop battery was found
     readonly property bool hasBattery: mainBattery !== null
 
-    // Porcentagem (0 a 100)
+    // Percentage (0 to 100)
     readonly property int percentage: mainBattery ? Math.round(mainBattery.percentage * 100) : 0
 
-    // Estado (Carregando, Descarregando, Cheio...)
+    // State (Charging, Discharging, Full...)
     readonly property int state: mainBattery ? mainBattery.state : UPowerDeviceState.Unknown
 
-    // Helper booleano para facilitar bindings na UI
+    // Boolean helper to simplify UI bindings
     readonly property bool isCharging: state === UPowerDeviceState.Charging
 
-    // Guarda a referência ao objeto da bateria
+    // Holds the reference to the battery object
     property var mainBattery: null
 
-    // O Instantiator varre a lista de dispositivos sem criar visual
+    // The Instantiator scans the device list without creating visuals
     Instantiator {
         model: UPower.devices
 
         delegate: QtObject {
             required property var modelData
             
-            // Quando um dispositivo é criado ou muda, checamos se é a bateria principal
+            // When a device is created or changes, we check if it is the main battery
             Component.onCompleted: checkDevice()
             
             function checkDevice() {
@@ -41,7 +41,7 @@ Singleton {
         }
     }
 
-    // Lógica do ícone aqui. 
+    // Icon logic here.
     function getBatteryIcon() {
         if (state === UPowerDeviceState.Charging) return "󰂄"
 

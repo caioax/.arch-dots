@@ -19,18 +19,18 @@ Item {
         anchors.fill: parent
         spacing: 15
 
-        // Cabeçalho (Header)
+        // Header
         RowLayout {
             Layout.fillWidth: true
             Layout.margins: 10
             spacing: 10
 
-            // Botão voltar
+            // Back button
             BackButton {
                 onClicked: root.backRequested()
             }
 
-            // Titulo
+            // Title
             Text {
                 text: "Wi-Fi"
                 color: Config.textColor
@@ -39,7 +39,7 @@ Item {
                 Layout.fillWidth: true
             }
 
-            // Botão Escanear
+            // Scan Button
             RefreshButton {
                 visible: NetworkService.wifiEnabled
                 loading: NetworkService.scanning
@@ -47,14 +47,14 @@ Item {
                 onClicked: NetworkService.scan()
             }
 
-            // Switch de Ligar/Desligar
+            // On/Off Switch
             QsSwitch {
                 checked: NetworkService.wifiEnabled
                 onToggled: NetworkService.toggleWifi()
             }
         }
 
-        // Lista de Redes
+        // Network List
         ListView {
             id: wifiList
             Layout.fillWidth: true
@@ -68,30 +68,30 @@ Item {
             delegate: DeviceCard {
                 required property var modelData
 
-                // Helper para saber se este card está conectando
+                // Helper to know if this card is connecting
                 property bool isConnectingThis: NetworkService.connectingSsid === modelData.ssid
 
-                // Dados
-                title: modelData.ssid || "Rede Oculta"
+                // Data
+                title: modelData.ssid || "Hidden Network"
                 subtitle: modelData.signal + "%"
                 icon: NetworkService.getWifiIcon(modelData.signal)
 
-                // Estados
+                // States
                 active: modelData.active
                 connecting: isConnectingThis
                 secured: modelData.secure && !active && !connecting
 
-                // Texto de status
+                // Status text
                 statusText: {
                     if (connecting)
-                        return "Conectando...";
+                        return "Connecting...";
                     if (active)
-                        return "Conectado";
+                        return "Connected";
                     if (modelData.saved)
-                        return "Salvo";
+                        return "Saved";
                     if (modelData.secure)
-                        return "Protegido";
-                    return "Aberta";
+                        return "Secured";
+                    return "Open";
                 }
 
                 // Menu
@@ -101,7 +101,7 @@ Item {
                     var list = [];
                     if (active) {
                         list.push({
-                            text: "Desconectar",
+                            text: "Disconnect",
                             action: "disconnect",
                             icon: "",
                             textColor: Config.warningColor,
@@ -109,7 +109,7 @@ Item {
                         });
                     } else {
                         list.push({
-                            text: "Conectar",
+                            text: "Connect",
                             action: "connect",
                             icon: "",
                             textColor: Config.successColor,
@@ -118,7 +118,7 @@ Item {
                     }
                     if (active || modelData.saved) {
                         list.push({
-                            text: "Esquecer",
+                            text: "Forget",
                             action: "forget",
                             icon: "",
                             textColor: Config.errorColor,
@@ -138,7 +138,7 @@ Item {
                     }
                 }
 
-                // Clique principal
+                // Main click
                 onClicked: wifiToggleConnect()
 
                 function wifiToggleConnect() {
@@ -157,15 +157,15 @@ Item {
                 }
             }
 
-            // Mensagem de lista vazia
+            // Empty list message
             Text {
                 anchors.centerIn: parent
                 anchors.verticalCenterOffset: -40
                 visible: !NetworkService.wifiEnabled || (parent.count === 0 && !NetworkService.scanning)
                 text: {
                     if (!NetworkService.wifiEnabled)
-                        return "Wi-Fi Desligado";
-                    return "Nenhuma rede encontrada";
+                        return "Wi-Fi Off";
+                    return "No networks found";
                 }
                 color: Config.surface2Color
                 font.pixelSize: Config.fontSizeNormal

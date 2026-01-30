@@ -12,13 +12,13 @@
 set -e
 
 # =============================================================================
-# Configuração
+# Configuration
 # =============================================================================
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PACKAGES_DIR="$DOTFILES_DIR/.install/packages"
 SETUP_DIR="$DOTFILES_DIR/.install/setup"
 
-# Cores
+# Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -28,7 +28,7 @@ CYAN='\033[0;36m'
 NC='\033[0m'
 
 # =============================================================================
-# Funções de logging
+# Logging functions
 # =============================================================================
 log_header() {
     echo ""
@@ -44,22 +44,22 @@ log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 log_step() { echo -e "${CYAN}[>>]${NC} $1"; }
 
 # =============================================================================
-# Verificações iniciais
+# Initial checks
 # =============================================================================
 check_arch() {
     if [[ ! -f /etc/arch-release ]]; then
-        log_error "Este script é apenas para Arch Linux!"
+        log_error "This script is for Arch Linux only!"
         exit 1
     fi
 }
 
 check_internet() {
-    log_step "Verificando conexão com a internet..."
+    log_step "Checking internet connection..."
     if ! ping -c 1 google.com &>/dev/null; then
-        log_error "Sem conexão com a internet!"
+        log_error "No internet connection!"
         exit 1
     fi
-    log_info "Conexão OK"
+    log_info "Connection OK"
 }
 
 check_aur_helper() {
@@ -68,8 +68,8 @@ check_aur_helper() {
     elif command -v paru &>/dev/null; then
         AUR_HELPER="paru"
     else
-        log_warn "Nenhum AUR helper encontrado (yay/paru)"
-        log_info "Instalando yay..."
+        log_warn "No AUR helper found (yay/paru)"
+        log_info "Installing yay..."
         install_yay
         AUR_HELPER="yay"
     fi
@@ -87,64 +87,64 @@ install_yay() {
 }
 
 # =============================================================================
-# Instalação de pacotes
+# Package installation
 # =============================================================================
 install_packages() {
     local CATEGORY=$1
     local PACKAGES_FILE="$PACKAGES_DIR/${CATEGORY}.sh"
 
     if [[ ! -f "$PACKAGES_FILE" ]]; then
-        log_error "Arquivo de pacotes não encontrado: $PACKAGES_FILE"
+        log_error "Package file not found: $PACKAGES_FILE"
         return 1
     fi
 
-    # Carregar arrays de pacotes
+    # Load package arrays
     source "$PACKAGES_FILE"
 
     local ARRAY_NAME="${CATEGORY^^}_PACKAGES"
     local AUR_ARRAY_NAME="${CATEGORY^^}_AUR_PACKAGES"
 
-    # Converter para array usando nameref
+    # Convert to array using nameref
     local -n PACKAGES_REF="$ARRAY_NAME" 2>/dev/null || true
     local -n AUR_PACKAGES_REF="$AUR_ARRAY_NAME" 2>/dev/null || true
 
-    # Instalar pacotes oficiais
+    # Install official packages
     if [[ ${#PACKAGES_REF[@]} -gt 0 ]]; then
-        log_step "Instalando pacotes oficiais ($CATEGORY)..."
+        log_step "Installing official packages ($CATEGORY)..."
         sudo pacman -S --needed --noconfirm "${PACKAGES_REF[@]}" || {
-            log_warn "Alguns pacotes podem não estar disponíveis"
+            log_warn "Some packages may not be available"
         }
     fi
 
-    # Instalar pacotes AUR
+    # Install AUR packages
     if [[ ${#AUR_PACKAGES_REF[@]} -gt 0 ]]; then
-        log_step "Instalando pacotes AUR ($CATEGORY)..."
+        log_step "Installing AUR packages ($CATEGORY)..."
         $AUR_HELPER -S --needed --noconfirm "${AUR_PACKAGES_REF[@]}" || {
-            log_warn "Alguns pacotes AUR podem não estar disponíveis"
+            log_warn "Some AUR packages may not be available"
         }
     fi
 }
 
 # =============================================================================
-# Menu de seleção de categorias
+# Category selection menu
 # =============================================================================
 show_menu() {
     echo ""
-    echo -e "${CYAN}Selecione as categorias para instalar:${NC}"
+    echo -e "${CYAN}Select categories to install:${NC}"
     echo ""
-    echo "  1) core       - Hyprland, UWSM, portal (ESSENCIAL)"
+    echo "  1) core       - Hyprland, UWSM, portal (ESSENTIAL)"
     echo "  2) terminal   - Kitty, Zsh, Tmux, Fastfetch"
-    echo "  3) editor     - Neovim + ferramentas de desenvolvimento"
+    echo "  3) editor     - Neovim + development tools"
     echo "  4) apps       - Dolphin, Zen Browser, Spotify, Rofi"
     echo "  5) utils      - Clipboard, playerctl, audio, etc"
-    echo "  6) fonts      - Nerd Fonts, cursores, ícones"
+    echo "  6) fonts      - Nerd Fonts, cursors, icons"
     echo "  7) quickshell - QuickShell bar/shell"
     echo "  8) theming    - Qt/GTK theming"
-    echo "  9) nvidia     - Drivers NVIDIA (apenas se tiver GPU NVIDIA)"
+    echo "  9) nvidia     - NVIDIA drivers (only if you have an NVIDIA GPU)"
     echo ""
-    echo "  a) ALL        - Instalar tudo (exceto nvidia)"
-    echo "  n) ALL+NVIDIA - Instalar tudo (incluindo nvidia)"
-    echo "  q) QUIT       - Sair"
+    echo "  a) ALL        - Install everything (except nvidia)"
+    echo "  n) ALL+NVIDIA - Install everything (including nvidia)"
+    echo "  q) QUIT       - Exit"
     echo ""
 }
 
@@ -153,12 +153,12 @@ get_selection() {
 
     while true; do
         show_menu
-        echo -ne "${BLUE}Digite os números separados por espaço (ex: 1 2 3 5): ${NC}"
+        echo -ne "${BLUE}Enter numbers separated by spaces (e.g.: 1 2 3 5): ${NC}"
         read -r input
 
         case "$input" in
         q | Q)
-            log_info "Instalação cancelada."
+            log_info "Installation cancelled."
             exit 0
             ;;
         a | A)
@@ -181,7 +181,7 @@ get_selection() {
                 7) SELECTED+=("quickshell") ;;
                 8) SELECTED+=("theming") ;;
                 9) SELECTED+=("nvidia") ;;
-                *) log_warn "Opção inválida: $num" ;;
+                *) log_warn "Invalid option: $num" ;;
                 esac
             done
 
@@ -192,243 +192,243 @@ get_selection() {
         esac
     done
 
-    # Remover duplicatas
+    # Remove duplicates
     CATEGORIES=($(printf "%s\n" "${SELECTED[@]}" | sort -u))
 }
 
 # =============================================================================
-# Funções de setup
+# Setup functions
 # =============================================================================
 run_stow() {
-    log_header "Criando Symlinks (Stow)"
+    log_header "Creating Symlinks (Stow)"
     source "$SETUP_DIR/stow.sh"
     run_stow_main
 }
 
 run_hyprland_setup() {
-    log_header "Configurando Hyprland"
+    log_header "Configuring Hyprland"
     source "$SETUP_DIR/hyprland.sh"
     run_hyprland_main
 }
 
 setup_zsh() {
-    log_header "Configurando Zsh"
+    log_header "Configuring Zsh"
 
-    # Mudar shell padrão para zsh
+    # Change default shell to zsh
     if [[ "$SHELL" != *"zsh"* ]]; then
-        log_step "Mudando shell padrão para Zsh..."
+        log_step "Changing default shell to Zsh..."
         chsh -s $(which zsh)
-        log_info "Shell mudado para Zsh. Faça logout/login para aplicar."
+        log_info "Shell changed to Zsh. Log out/in to apply."
     else
-        log_info "Zsh já é o shell padrão."
+        log_info "Zsh is already the default shell."
     fi
 
-    log_info "Oh-My-Zsh e plugins serão instalados automaticamente"
-    log_info "na primeira vez que você abrir um terminal."
+    log_info "Oh-My-Zsh and plugins will be installed automatically"
+    log_info "the first time you open a terminal."
 }
 
 setup_tmux() {
-    log_header "Configurando Tmux"
+    log_header "Configuring Tmux"
 
-    # Instalar TPM (Tmux Plugin Manager)
+    # Install TPM (Tmux Plugin Manager)
     local TPM_DIR="$HOME/.tmux/plugins/tpm"
     if [[ ! -d "$TPM_DIR" ]]; then
-        log_step "Instalando TPM (Tmux Plugin Manager)..."
+        log_step "Installing TPM (Tmux Plugin Manager)..."
         git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
-        log_info "TPM instalado. Use prefix + I dentro do tmux para instalar plugins."
+        log_info "TPM installed. Use prefix + I inside tmux to install plugins."
     else
-        log_info "TPM já está instalado."
+        log_info "TPM is already installed."
     fi
 }
 
 setup_services() {
-    log_header "Habilitando Serviços"
+    log_header "Enabling Services"
 
     # Bluetooth
     if systemctl list-unit-files | grep -q "bluetooth.service"; then
-        log_step "Habilitando Bluetooth..."
+        log_step "Enabling Bluetooth..."
         sudo systemctl enable --now bluetooth.service
     fi
 
     # NetworkManager
     if systemctl list-unit-files | grep -q "NetworkManager.service"; then
-        log_step "Habilitando NetworkManager..."
+        log_step "Enabling NetworkManager..."
         sudo systemctl enable --now NetworkManager.service
     fi
 }
 
 setup_mimetypes() {
-    log_header "Configurando Aplicativos Padrão (MIME)"
+    log_header "Configuring Default Applications (MIME)"
 
     if command -v dolphin &>/dev/null; then
-        log_step "Definindo Dolphin como gerenciador de arquivos padrão..."
+        log_step "Setting Dolphin as default file manager..."
 
-        # Define o Dolphin para abrir diretórios
+        # Set Dolphin to open directories
         xdg-mime default org.kde.dolphin.desktop inode/directory
 
-        # Atualiza o banco de dados de serviços do KDE
+        # Update KDE services database
         if command -v kbuildsycoca6 &>/dev/null; then
-            log_step "Atualizando cache de serviços do KDE..."
+            log_step "Updating KDE services cache..."
             kbuildsycoca6 >/dev/null 2>&1
         fi
     else
-        log_warn "Dolphin não encontrado. Pulando configuração de MIME types."
+        log_warn "Dolphin not found. Skipping MIME types configuration."
     fi
 }
 
 setup_wallpaper() {
-    log_header "Configurando Wallpaper Inicial"
+    log_header "Configuring Initial Wallpaper"
 
     local CURRENT_FILE="$HOME/.local/wallpapers/.current"
     local WALLPAPER
     if [[ -f "$CURRENT_FILE" ]]; then
         WALLPAPER="$(cat "$CURRENT_FILE")"
     fi
-    # Fallback para o padrão se .current não existe ou aponta para arquivo inexistente
+    # Fallback to default if .current doesn't exist or points to a missing file
     if [[ -z "$WALLPAPER" || ! -f "$WALLPAPER" ]]; then
         WALLPAPER="$HOME/.local/wallpapers/water.png"
     fi
 
-    # Verificar se swww está instalado
+    # Check if swww is installed
     if ! command -v swww &>/dev/null; then
-        log_warn "swww não está instalado. Pulando configuração de wallpaper."
+        log_warn "swww is not installed. Skipping wallpaper configuration."
         return 0
     fi
 
-    # Verificar se o wallpaper existe
+    # Check if the wallpaper exists
     if [[ ! -f "$WALLPAPER" ]]; then
-        log_warn "Wallpaper não encontrado: $WALLPAPER"
+        log_warn "Wallpaper not found: $WALLPAPER"
         return 0
     fi
 
-    # Verificar se está em uma sessão Wayland
+    # Check if running in a Wayland session
     if [[ -z "$WAYLAND_DISPLAY" ]]; then
-        log_warn "Não está em uma sessão Wayland."
-        log_info "O wallpaper será aplicado automaticamente ao iniciar o Hyprland."
+        log_warn "Not in a Wayland session."
+        log_info "The wallpaper will be applied automatically when Hyprland starts."
         return 0
     fi
 
-    log_step "Iniciando swww daemon..."
-    # Iniciar daemon se não estiver rodando
+    log_step "Starting swww daemon..."
+    # Start daemon if not running
     if ! pgrep -f "swww-daemon" &>/dev/null; then
         swww-daemon >/dev/null 2>&1 &
     fi
     sleep 3
 
-    # Verificar se o daemon iniciou
+    # Check if daemon started
     if ! pgrep -f "swww-daemon" &>/dev/null; then
-        log_warn "Não foi possível iniciar o swww daemon."
+        log_warn "Could not start swww daemon."
         return 0
     fi
 
-    log_step "Aplicando wallpaper"
+    log_step "Applying wallpaper"
     if swww img "$WALLPAPER" --transition-type grow --transition-duration 2 2>/dev/null; then
-        log_info "Wallpaper configurado com sucesso!"
+        log_info "Wallpaper configured successfully!"
     else
-        log_warn "Erro ao aplicar wallpaper."
+        log_warn "Failed to apply wallpaper."
     fi
 }
 
 # =============================================================================
-# Instalação completa
+# Full installation
 # =============================================================================
 full_install() {
-    log_header "Iniciando Instalação Completa"
+    log_header "Starting Full Installation"
 
-    # Verificar internet e AUR helper agora (após seleção)
+    # Check internet and AUR helper now (after selection)
     check_internet
     check_aur_helper
 
-    # Instalar stow primeiro
-    log_step "Instalando GNU Stow..."
+    # Install stow first
+    log_step "Installing GNU Stow..."
     sudo pacman -S --needed --noconfirm stow git
 
-    # Instalar pacotes selecionados
+    # Install selected packages
     for category in "${CATEGORIES[@]}"; do
-        log_header "Instalando: ${category^^}"
+        log_header "Installing: ${category^^}"
         install_packages "$category"
     done
 
-    # Rodar setup scripts
+    # Run setup scripts
     run_stow
     run_hyprland_setup
     setup_mimetypes
 
-    # Instalar Tela icons do git (se fonts foi selecionado)
+    # Install Tela icons from git (if fonts was selected)
     if [[ " ${CATEGORIES[*]} " =~ " fonts " ]]; then
-        log_header "Instalando Tela Icon Theme"
+        log_header "Installing Tela Icon Theme"
         install_tela_icons
     fi
 
-    # Setup adicional baseado nas categorias instaladas
+    # Additional setup based on installed categories
     if [[ " ${CATEGORIES[*]} " =~ " terminal " ]]; then
         setup_zsh
         setup_tmux
     fi
 
-    # Habilitar serviços
+    # Enable services
     if [[ " ${CATEGORIES[*]} " =~ " utils " ]]; then
         setup_services
     fi
 
-    # Configurar wallpaper inicial
+    # Configure initial wallpaper
     if [[ " ${CATEGORIES[*]} " =~ " core " ]]; then
         setup_wallpaper
     fi
 
-    # Aplicar tema GTK
+    # Apply GTK theme
     if [[ " ${CATEGORIES[*]} " =~ " theming " ]]; then
         setup_theming
     fi
 }
 
 # =============================================================================
-# Solicitar reboot
+# Reboot prompt
 # =============================================================================
 ask_reboot() {
     echo ""
-    echo -ne "${YELLOW}Deseja reiniciar o sistema agora para aplicar todas as mudanças? [Y/n]: ${NC}"
+    echo -ne "${YELLOW}Do you want to reboot the system now to apply all changes? [Y/n]: ${NC}"
     read -r do_reboot
 
     if [[ $do_reboot =~ ^[Yy]$ ]] || [[ -z "$do_reboot" ]]; then
-        log_info "Reiniciando..."
+        log_info "Rebooting..."
         sleep 2
         sudo reboot
     else
-        log_info "Lembre-se de reiniciar o sistema para aplicar todas as mudanças."
+        log_info "Remember to reboot the system to apply all changes."
     fi
 }
 
 # =============================================================================
-# Resumo final
+# Final summary
 # =============================================================================
 show_summary() {
-    log_header "Instalação Concluída!"
+    log_header "Installation Complete!"
 
-    echo -e "${GREEN}Categorias instaladas:${NC}"
+    echo -e "${GREEN}Installed categories:${NC}"
     for cat in "${CATEGORIES[@]}"; do
         echo "  - $cat"
     done
 
     echo ""
-    echo -e "${YELLOW}Próximos passos:${NC}"
-    echo "  1. Faça logout e selecione 'Hyprland (uwsm)' no seu display manager"
-    echo "  2. Ou inicie manualmente com: uwsm start hyprland-uwsm.desktop"
+    echo -e "${YELLOW}Next steps:${NC}"
+    echo "  1. Log out and select 'Hyprland (uwsm)' in your display manager"
+    echo "  2. Or start manually with: uwsm start hyprland-uwsm.desktop"
     echo ""
-    echo "  3. Configure seus monitores com: nwg-displays"
-    echo "  4. Os workspaces serão configurados automaticamente pelo workspace-manager"
+    echo "  3. Configure your monitors with: nwg-displays"
+    echo "  4. Workspaces will be configured automatically by workspace-manager"
     echo ""
 
     if [[ " ${CATEGORIES[*]} " =~ " terminal " ]]; then
-        echo "  5. Abra um terminal para instalar Oh-My-Zsh automaticamente"
-        echo "  6. No tmux, use prefix + I para instalar plugins"
+        echo "  5. Open a terminal to install Oh-My-Zsh automatically"
+        echo "  6. In tmux, use prefix + I to install plugins"
     fi
 
     if [[ " ${CATEGORIES[*]} " =~ " nvidia " ]]; then
         echo ""
         echo -e "${YELLOW}NVIDIA:${NC}"
-        echo "  - Revise ~/.config/hypr/local/extra_environment.conf"
-        echo "  - Para GPUs híbridas, descomente a linha AQ_DRM_DEVICES"
+        echo "  - Review ~/.config/hypr/local/extra_environment.conf"
+        echo "  - For hybrid GPUs, uncomment the AQ_DRM_DEVICES line"
     fi
 
     echo ""
@@ -437,7 +437,7 @@ show_summary() {
 }
 
 # =============================================================================
-# Mostrar banner
+# Show banner
 # =============================================================================
 show_banner() {
     echo ""
@@ -462,47 +462,47 @@ EOF
 main() {
     show_banner
 
-    # Verificar se é Arch Linux
+    # Check if running on Arch Linux
     check_arch
 
-    # PRIMEIRO: Seleção de categorias (antes de qualquer instalação)
+    # FIRST: Category selection (before any installation)
     get_selection
 
     echo ""
-    log_info "Categorias selecionadas: ${CATEGORIES[*]}"
+    log_info "Selected categories: ${CATEGORIES[*]}"
     echo ""
-    echo -ne "${YELLOW}Continuar com a instalação? [Y/n]: ${NC}"
+    echo -ne "${YELLOW}Continue with the installation? [Y/n]: ${NC}"
     read -r confirm
 
     if [[ $confirm =~ ^[Nn]$ ]]; then
-        log_info "Instalação cancelada."
+        log_info "Installation cancelled."
         exit 0
     fi
 
-    # Executar instalação (verificações e AUR helper aqui)
+    # Run installation (checks and AUR helper here)
     full_install
 
-    # Mostrar resumo
+    # Show summary
     show_summary
 
-    # Solicitar reboot
+    # Prompt for reboot
     ask_reboot
 }
 
 # =============================================================================
-# Argumentos de linha de comando
+# Command line arguments
 # =============================================================================
 case "${1:-}" in
 --help | -h)
-    echo "Uso: ./install.sh [opção]"
+    echo "Usage: ./install.sh [option]"
     echo ""
-    echo "Opções:"
-    echo "  --help, -h      Mostra esta ajuda"
-    echo "  --stow-only     Apenas executa stow (symlinks)"
-    echo "  --setup-only    Apenas executa setup do Hyprland"
-    echo "  --packages PKG  Instala apenas a categoria especificada"
+    echo "Options:"
+    echo "  --help, -h      Show this help"
+    echo "  --stow-only     Only run stow (symlinks)"
+    echo "  --setup-only    Only run Hyprland setup"
+    echo "  --packages PKG  Install only the specified category"
     echo ""
-    echo "Categorias disponíveis:"
+    echo "Available categories:"
     echo "  core, terminal, editor, apps, utils, fonts, quickshell, theming, nvidia"
     exit 0
     ;;
@@ -524,7 +524,7 @@ case "${1:-}" in
     check_internet
     check_aur_helper
     if [[ -z "${2:-}" ]]; then
-        log_error "Especifique uma categoria!"
+        log_error "Please specify a category!"
         exit 1
     fi
     install_packages "$2"

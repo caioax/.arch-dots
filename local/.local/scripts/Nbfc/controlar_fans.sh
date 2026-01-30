@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Configura variáveis de ambiente para o ambiente gráfico
+# Configure environment variables for the graphical session
 export DISPLAY=:0
 export XDG_RUNTIME_DIR=/run/user/$(id -u)
 export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
@@ -8,14 +8,14 @@ export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
 Mode="Auto"
 NO_NOTIFY=false
 
-# Função para enviar notificação
+# Function to send notification
 safe_notify() {
   if [ "$NO_NOTIFY" = false ] && [ -n "$DISPLAY" ] && [ -n "$DBUS_SESSION_BUS_ADDRESS" ] && command -v notify-send >/dev/null 2>&1; then
-    notify-send "FanMode: $Mode" "O modo das fans foi atualizado com sucesso!"
+    notify-send "FanMode: $Mode" "Fan mode updated successfully!"
   fi
 }
 
-# Processa argumentos
+# Process arguments
 for arg in "$@"; do
   case "$arg" in
   --no-notify)
@@ -33,7 +33,7 @@ for arg in "$@"; do
   esac
 done
 
-# Atualiza o modo das fans
+# Update fan mode
 if [ "$Mode" == "Auto" ]; then
   nbfc set -a
   safe_notify
@@ -41,5 +41,5 @@ elif [ "$Mode" == "Max" ]; then
   nbfc set -s 100
   safe_notify
 else
-  notify-send "Error" "Falha em atualizar o modo dos fans"
+  notify-send "Error" "Failed to update fan mode"
 fi

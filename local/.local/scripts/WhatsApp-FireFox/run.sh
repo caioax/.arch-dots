@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
-# Nome da workspace especial
+# Special workspace name
 SPECIAL="whatsapp"
 
-# Salva a workspace atual
+# Save the current workspace
 CURRENT_WS=$(hyprctl activewindow -j | jq -r '.workspace.id')
 
-# Abre a workspace especial (dispara on-created-empty, que abre o app)
+# Open the special workspace (triggers on-created-empty, which opens the app)
 hyprctl dispatch togglespecialworkspace $SPECIAL
 
-# Pequeno delay para garantir que o app começou a iniciar
+# Small delay to ensure the app has started launching
 sleep 0.5
 
-# Volta para a workspace original
+# Return to the original workspace
 hyprctl dispatch togglespecialworkspace $SPECIAL

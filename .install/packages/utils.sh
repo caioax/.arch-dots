@@ -2,7 +2,7 @@
 # =============================================================================
 # Utility Packages - System Utilities & Tools
 # =============================================================================
-# Ferramentas e utilitários do sistema
+# System tools and utilities
 # =============================================================================
 
 UTILS_PACKAGES=(
@@ -14,17 +14,17 @@ UTILS_PACKAGES=(
     "playerctl" # Media player controller
 
     # JSON Processing
-    "jq" # JSON processor (usado pelo workspace-manager)
+    "jq" # JSON processor (used by workspace-manager)
 
     # Calculator
-    "bc" # Calculator (usado por scripts)
+    "bc" # Calculator (used by scripts)
 
     # Notifications
     "libnotify" # Notification library (notify-send)
 
     # Network
     "networkmanager"         # Network management
-    "network-manager-applet" # NM applet (para quicksettings)
+    "network-manager-applet" # NM applet (for quicksettings)
 
     # Bluetooth
     "bluez"       # Bluetooth stack
@@ -41,8 +41,8 @@ UTILS_PACKAGES=(
     "brightnessctl" # Brightness control
 
     # Screenshot
-    "grim"  # Screenshot utility (usado pelo hyprshot)
-    "slurp" # Region selection (usado pelo hyprshot)
+    "grim"  # Screenshot utility (used by hyprshot)
+    "slurp" # Region selection (used by hyprshot)
 
     # Misc
     "polkit-kde-agent" # KDE Polkit agent
@@ -53,7 +53,7 @@ UTILS_PACKAGES=(
     "flatpak" # Flatpak
 )
 
-# Pacotes AUR
+# AUR packages
 UTILS_AUR_PACKAGES=(
-    # Nenhum pacote AUR obrigatório
+    # No mandatory AUR packages
 )

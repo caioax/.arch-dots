@@ -9,7 +9,7 @@ Singleton {
     id: root
 
     // ========================================================================
-    // PROPRIEDADES
+    // PROPERTIES
     // ========================================================================
 
     property bool pickerVisible: false
@@ -21,7 +21,7 @@ Singleton {
     readonly property string wallpaperDir: Quickshell.env("HOME") + "/.local/wallpapers"
     readonly property int selectedCount: selectedWallpapers.length
 
-    // Transições disponíveis no swww
+    // Available transitions in swww
     readonly property var transitions: [
         "wipe",
         "wave",
@@ -32,7 +32,7 @@ Singleton {
     ]
 
     // ========================================================================
-    // INICIALIZAÇÃO
+    // INITIALIZATION
     // ========================================================================
 
     Component.onCompleted: {
@@ -41,7 +41,7 @@ Singleton {
     }
 
     // ========================================================================
-    // FUNÇÕES PÚBLICAS
+    // PUBLIC FUNCTIONS
     // ========================================================================
 
     function show() {
@@ -62,7 +62,7 @@ Singleton {
         else show();
     }
 
-    // Seleção
+    // Selection
     function isSelected(path: string): bool {
         return selectedWallpapers.includes(path);
     }
@@ -86,7 +86,7 @@ Singleton {
         confirmDelete = false;
     }
 
-    // Aplicar wallpaper
+    // Apply wallpaper
     function setWallpaper(path: string) {
         const transition = transitions[Math.floor(Math.random() * transitions.length)];
         const duration = (Math.random() * 1.5 + 0.5).toFixed(1);
@@ -100,7 +100,7 @@ Singleton {
         ];
         setWallpaperProc.running = true;
 
-        // Salvar wallpaper atual no arquivo .current para persistência
+        // Save current wallpaper to .current file for persistence
         saveCurrentProc.command = ["bash", "-c", "echo '" + path + "' > '" + root.wallpaperDir + "/.current'"];
         saveCurrentProc.running = true;
 
@@ -124,15 +124,15 @@ Singleton {
         setWallpaper(available[randomIndex]);
     }
 
-    // Deletar
+    // Delete
     function requestDelete() {
         if (selectedWallpapers.length === 0) return;
 
         if (selectedWallpapers.length === 1) {
-            // Deleta direto se for só um
+            // Delete directly if only one
             deleteSelected();
         } else {
-            // Pede confirmação se for mais de um
+            // Ask for confirmation if more than one
             confirmDelete = true;
         }
     }
@@ -142,7 +142,7 @@ Singleton {
             deleteWallpaperProc.command = ["rm", path];
             deleteWallpaperProc.running = true;
 
-            // Remove da lista local
+            // Remove from local list
             root.wallpapers = root.wallpapers.filter(w => w !== path);
 
             if (currentWallpaper === path) {
@@ -157,7 +157,7 @@ Singleton {
         confirmDelete = false;
     }
 
-    // Adicionar
+    // Add
     function addWallpapers() {
         hide();
         addWallpapersProc.running = true;
@@ -172,7 +172,7 @@ Singleton {
     }
 
     // ========================================================================
-    // PROCESSOS
+    // PROCESSES
     // ========================================================================
 
     Process {

@@ -8,35 +8,35 @@ import Quickshell.Services.Mpris
 Singleton {
     id: root
 
-    // --- PROPRIEDADES ---
+    // --- PROPERTIES ---
     readonly property var players: Mpris.players.values
     property var activePlayer: null
     readonly property bool hasPlayer: activePlayer !== null
 
-    // Metadados seguros
-    readonly property string title: activePlayer?.metadata?.["xesam:title"] ?? "Desconhecido"
-    readonly property string artist: activePlayer?.metadata?.["xesam:artist"] ?? "Desconhecido"
+    // Safe metadata
+    readonly property string title: activePlayer?.metadata?.["xesam:title"] ?? "Unknown"
+    readonly property string artist: activePlayer?.metadata?.["xesam:artist"] ?? "Unknown"
     readonly property string artUrl: activePlayer?.metadata?.["mpris:artUrl"] ?? ""
     readonly property bool isPlaying: activePlayer?.isPlaying ?? false
 
-    // A lista que a UI vai usar (Visual)
+    // The list the UI will use (Visual)
     property var orderedPlayers: []
 
     // --- TRIGGERS ---
 
-    // Sempre que o player ativo mudar, reorganizamos a lista visual
+    // Whenever the active player changes, we reorganize the visual list
     onActivePlayerChanged: updateOrderedList()
 
-    // Se a lista bruta do sistema mudar, atualizamos tudo
+    // If the raw system list changes, we update everything
     Connections {
         target: Mpris.players
         function onValuesChanged() {
-            root.updateActivePlayer(); // Primeiro decide quem é o ativo
-            root.updateOrderedList();  // Depois ordena
+            root.updateActivePlayer(); // First decide who is the active one
+            root.updateOrderedList();  // Then sort
         }
     }
 
-    // --- MONITORAMENTO ---
+    // --- MONITORING ---
     Instantiator {
         model: Mpris.players.values
 
@@ -45,16 +45,16 @@ Singleton {
 
             property bool isPlaying: modelData.isPlaying ?? false
 
-            // Se alguém der Play/Pause, rodamos a lógica
+            // If someone triggers Play/Pause, we run the logic
             onIsPlayingChanged: root.updateActivePlayer()
         }
 
-        // Garante atualização ao abrir/fechar players
+        // Ensures update when opening/closing players
         onObjectAdded: root.updateActivePlayer()
         onObjectRemoved: root.updateActivePlayer()
     }
 
-    // --- LÓGICA DE DECISÃO (O Cérebro) ---
+    // --- DECISION LOGIC (The Brain) ---
     function updateActivePlayer() {
         const rawList = Mpris.players.values;
 
@@ -63,26 +63,26 @@ Singleton {
             return;
         }
 
-        // Procurando se tem algum player ativo
+        // Looking for any active player
         const playing = rawList.find(p => p.isPlaying);
 
         if (playing) {
-            // Se achou alguém tocando, ele assume imediatamente.
+            // If found someone playing, it takes over immediately.
             root.activePlayer = playing;
             return;
         }
 
-        // Se ninguém está tocando, verifica se o activePlayer atual ainda existe na lista.
-        // Se existir, não mudamos nada. Ele continua lá, pausado.
+        // If nobody is playing, check if the current activePlayer still exists in the list.
+        // If it does, we don't change anything. It stays there, paused.
         if (root.activePlayer && rawList.includes(root.activePlayer)) {
             return;
         }
 
-        // Se ninguém toca e o player anterior foi fechado, pega o primeiro que sobrar.
+        // If nobody is playing and the previous player was closed, pick the first one left.
         root.activePlayer = rawList[0];
     }
 
-    // --- LÓGICA VISUAL (A Ordem) ---
+    // --- VISUAL LOGIC (The Order) ---
     function updateOrderedList() {
         const rawList = Mpris.players.values;
 
@@ -91,12 +91,12 @@ Singleton {
             return;
         }
 
-        // Filtra os outros e coloca o ativo no topo [0]
+        // Filter the others and put the active one on top [0]
         const others = rawList.filter(p => p !== root.activePlayer);
         root.orderedPlayers = [root.activePlayer].concat(others);
     }
 
-    // --- CONTROLES ---
+    // --- CONTROLS ---
     function playPause() {
         if (!hasPlayer)
             return;

@@ -1,88 +1,90 @@
 # Installation Scripts
 
-Scripts de instalação organizados para as dotfiles.
+Organized installation scripts for the dotfiles.
 
-## Estrutura
+## Structure
 
 ```
 .install/
-├── packages/           # Listas de pacotes por categoria
+├── packages/           # Package lists by category
 │   ├── core.sh         # Hyprland, UWSM, portal
 │   ├── terminal.sh     # Kitty, Zsh, Tmux
-│   ├── editor.sh       # Neovim + ferramentas dev
+│   ├── editor.sh       # Neovim + dev tools
 │   ├── apps.sh         # Dolphin, Zen Browser, Spotify
 │   ├── utils.sh        # Clipboard, audio, bluetooth
-│   ├── fonts.sh        # Nerd Fonts, cursores, ícones
+│   ├── fonts.sh        # Nerd Fonts, cursors, icons
 │   ├── quickshell.sh   # QuickShell
 │   ├── theming.sh      # Qt/GTK theming
-│   └── nvidia.sh       # Drivers NVIDIA (opcional)
-└── setup/              # Scripts de configuração
-    ├── stow.sh         # Cria symlinks com GNU Stow
-    └── hyprland.sh     # Configura arquivos locais do Hyprland
+│   └── nvidia.sh       # NVIDIA drivers (optional)
+└── setup/              # Configuration scripts
+    ├── stow.sh         # Creates symlinks with GNU Stow
+    └── hyprland.sh     # Configures local Hyprland files
 ```
 
-## Uso
+## Usage
 
-### Instalação completa (interativa)
+### Full installation (interactive)
 
 ```bash
 ./install.sh
 ```
 
-### Apenas criar symlinks
+### Create symlinks only
 
 ```bash
 ./install.sh --stow-only
 ```
 
-### Apenas configurar Hyprland
+### Configure Hyprland only
 
 ```bash
 ./install.sh --setup-only
 ```
 
-### Instalar categoria específica
+### Install a specific category
 
 ```bash
 ./install.sh --packages core
 ./install.sh --packages terminal
 ```
 
-## Categorias de Pacotes
+## Package Categories
 
-| Categoria  | Descrição                                      |
+| Category   | Description                                    |
 | ---------- | ---------------------------------------------- |
-| core       | Hyprland, UWSM, swww, portal (ESSENCIAL)       |
+| core       | Hyprland, UWSM, swww, portal (ESSENTIAL)      |
 | terminal   | Kitty, Zsh, Tmux, Fastfetch                    |
-| editor     | Neovim + ferramentas de desenvolvimento        |
+| editor     | Neovim + development tools                     |
 | apps       | Dolphin, Zen Browser, Spotify, Rofi            |
 | utils      | Clipboard, audio, bluetooth, brightnessctl     |
 | fonts      | Nerd Fonts, Bibata cursor, Tela icons          |
 | quickshell | QuickShell bar/shell + Qt6                     |
 | theming    | Qt5ct, Qt6ct, Kvantum, nwg-look                |
-| nvidia     | Drivers NVIDIA (instalar apenas se necessário) |
+| nvidia     | NVIDIA drivers (install only if needed)        |
 
-## Templates
+## Templates and Data
 
-Os templates de configuração estão em `.data/hyprland/templates/`:
+On first install, templates from `.data/` are copied to generate machine-specific configuration files. Wallpapers from `.data/wallpapers/` are copied to `~/.local/wallpapers/`.
 
-- `monitors.conf` - Configuração genérica de monitor
-- `workspaces.conf` - Mapeamento de workspaces
-- `extra_environment.conf` - Variáveis de ambiente locais
-- `extra_environment_nvidia.conf` - Variáveis para NVIDIA
-- `autostart.conf` - Autostart local
-- `extra_keybinds.conf` - Keybinds locais
+Configuration templates are in `.data/hyprland/templates/`:
 
-Os templates NVIDIA do UWSM estão em `.data/hyprland/uwsm/`:
+- `monitors.conf` - Generic monitor configuration
+- `workspaces.conf` - Workspace mapping
+- `extra_environment.conf` - Local environment variables
+- `extra_environment_nvidia.conf` - NVIDIA variables
+- `autostart.conf` - Local autostart
+- `extra_keybinds.conf` - Local keybinds
 
-- `global_hardware.sh` - Variáveis globais Wayland
-- `hyprland_hardware.sh` - Configurações específicas Hyprland
+NVIDIA UWSM templates are in `.data/hyprland/uwsm/`:
 
-## Diretórios de Stow
+- `global_hardware.sh` - Global Wayland variables
+- `hyprland_hardware.sh` - Hyprland-specific settings
 
-O script `stow.sh` cria symlinks para:
+## Stow Directories
 
-| Diretório  | Destino               |
+The `stow.sh` script creates symlinks for:
+
+| Directory  | Target                |
 | ---------- | --------------------- |
 | hyprland   | ~/.config/hypr        |
 | quickshell | ~/.config/quickshell  |
@@ -92,4 +94,5 @@ O script `stow.sh` cria symlinks para:
 | tmux       | ~/.tmux.conf          |
 | local      | ~/.local/scripts      |
 | fastfetch  | ~/.config/fastfetch   |
+| theming    | ~/.config/gtk-3.0, gtk-4.0, qt5ct, qt6ct |
 | kde        | ~/.config/kdeglobals  |

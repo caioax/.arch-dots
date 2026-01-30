@@ -8,17 +8,17 @@ import Quickshell.Bluetooth
 Singleton {
     id: root
 
-    // Pega o adaptador padrão do sistema. Pode ser null se não houver bluetooth.
+    // Gets the system's default adapter. Can be null if there is no bluetooth.
     property var adapter: Bluetooth.defaultAdapter
 
-    // Propriedades reativas (retornam false se não tiver adaptador)
+    // Reactive properties (return false if there is no adapter)
     readonly property bool isPowered: (adapter && adapter.enabled) === true
     readonly property bool isDiscovering: (adapter && adapter.discovering) === true
 
-    // Propriedade para saber se estamos visíveis para outros (útil para a UI)
+    // Property to know if we are visible to others (useful for the UI)
     readonly property bool isDiscoverable: (adapter && adapter.discoverable) === true
 
-    // Icone dos status atual do bluetooth
+    // Icon for the current bluetooth status
     readonly property string systemIcon: {
         if (!isPowered)
             return "󰂲";
@@ -29,52 +29,52 @@ Singleton {
         return "";
     }
 
-    // Lista apenas dos dispoditivos conectados
+    // List of connected devices only
     readonly property var connectedDevices: {
         return devicesList.filter(dev => dev.connected);
     }
 
-    // Contagem (Para usar na UI)
+    // Count (For use in the UI)
     readonly property int connectedDevicesCount: connectedDevices.length
 
-    // Texto inteligente (Para o Sublabel do Dashboard)
+    // Smart text (For the Dashboard sublabel)
     readonly property string statusText: {
         if (!isPowered)
-            return "Desligado";
+            return "Off";
 
         const count = connectedDevices.length;
 
         if (count === 0)
-            return "Ligado";
+            return "On";
 
         if (count === 1) {
-            // Se for apenas 1, retorna o nome dele
+            // If there is only 1, return its name
             const dev = connectedDevices[0];
-            return dev.alias || dev.name || "Desconhecido";
+            return dev.alias || dev.name || "Unknown";
         }
 
-        // Se for mais de 1, retorna a contagem
-        return count + " dispositivos";
+        // If there is more than 1, return the count
+        return count + " devices";
     }
 
-    // A lista inteligente de dispositivos
+    // The smart device list
     readonly property var devicesList: {
         if (!adapter || !adapter.devices)
             return [];
 
-        // O 'values' do Quickshell não é um Array puro JS, então convertemos
-        // para garantir que o .sort() funcione sem erros.
+        // Quickshell's 'values' is not a pure JS Array, so we convert it
+        // to ensure that .sort() works without errors.
         let list = Array.from(adapter.devices.values);
 
-        // Função de Ordenação
+        // Sorting function
         return list.sort((a, b) => {
-            // Conectados aparecem primeiro no topo
+            // Connected devices appear first at the top
             if (a.connected && !b.connected)
                 return -1;
             if (!a.connected && b.connected)
                 return 1;
 
-            // Dispositivos conhecidos (Pareados ou Confiáveis) aparecem antes dos novos
+            // Known devices (Paired or Trusted) appear before new ones
             const aKnown = a.paired || a.trusted;
             const bKnown = b.paired || b.trusted;
             if (aKnown && !bKnown)
@@ -82,42 +82,42 @@ Singleton {
             if (!aKnown && bKnown)
                 return 1;
 
-            // Por fim, ordem alfabética pelo nome
+            // Finally, alphabetical order by name
             const nameA = (a.alias || a.name || "").toLowerCase();
             const nameB = (b.alias || b.name || "").toLowerCase();
             return nameA.localeCompare(nameB);
         });
     }
 
-    // --- AÇÕES ---
+    // --- ACTIONS ---
 
-    // Alternar Energia (On/Off)
+    // Toggle Power (On/Off)
     function togglePower() {
         if (adapter) {
             adapter.enabled = !adapter.enabled;
         }
     }
 
-    // Alternar Busca (Scan)
+    // Toggle Search (Scan)
     function toggleScan() {
         if (!adapter)
             return;
 
         if (adapter.discovering) {
-            // Se o usuário clicou para parar manualmente
+            // If the user clicked to stop manually
             adapter.discovering = false;
             scanTimer.stop();
         } else {
-            // Se o usuário clicou para iniciar
+            // If the user clicked to start
             adapter.discovering = true;
             scanTimer.restart();
         }
     }
 
-    // Timer para desligar o Scan automaticamente
+    // Timer to automatically stop the Scan
     Timer {
         id: scanTimer
-        interval: 10000 // 10 Segundos
+        interval: 10000 // 10 Seconds
         repeat: false
         onTriggered: {
             if (root.adapter && root.adapter.discovering) {
@@ -126,7 +126,7 @@ Singleton {
         }
     }
 
-    // Conectar/Desconectar
+    // Connect/Disconnect
     function toggleConnection(device) {
         if (!device)
             return;
@@ -137,22 +137,22 @@ Singleton {
         }
 
         if (device.state === BluetoothDeviceState.Connecting) {
-            console.log("Aguarde, dispositivo já está conectando...");
+            console.log("Please wait, device is already connecting...");
         }
 
-        // Tenta marcar como confiável antes de conectar.
-        // Vital para fones de ouvido no Linux sem agente de PIN visual.
+        // Try to mark as trusted before connecting.
+        // Vital for headphones on Linux without a visual PIN agent.
         try {
             device.trusted = true;
         } catch (e) {
-            console.warn("Não foi possível definir trusted automaticamente." + e);
+            console.warn("Could not set trusted automatically." + e);
         }
 
         if (!device.paired) {
             try {
                 device.pair();
             } catch (e) {
-                console.error("Erro ao parear: " + e);
+                console.error("Error pairing: " + e);
             }
             return;
         }
@@ -160,38 +160,38 @@ Singleton {
         device.connect();
     }
 
-    // Tornar visível/invisivel para outros devices
+    // Make visible/invisible to other devices
     function toggleDiscoverable() {
         adapter.discoverable = !adapter.discoverable;
     }
 
-    // Função para ver se o device esta tentando se conectar
+    // Function to check if the device is trying to connect
     function getIsConnecting(device) {
         return device.state === BluetoothDeviceState.Connecting;
     }
 
-    // Esquecer dispositivo
+    // Forget device
     function forgetDevice(device) {
         if (device) {
             device.forget();
         }
     }
 
-    // Função para pegar ícones baseada no tipo real do device
+    // Function to get icons based on the actual device type
     function getDeviceIcon(device) {
         if (!device)
-            return ""; // Bluetooth padrão
+            return ""; // Default Bluetooth
 
-        // 1. Tenta pegar a propriedade oficial do ícone do BlueZ e o nome
+        // 1. Try to get the official BlueZ icon property and name
         const iconProp = (device.icon || "").toLowerCase();
         const name = (device.name || device.alias || "").toLowerCase();
 
         const safeName = name || "";
 
-        // 2. Lista de palavras-chave para Áudio
+        // 2. Audio keyword list
         const audioKeywords = ["headset", "headphone", "airpod", "buds", "freebuds", "wh-", "wf-", "jbl", "audio", "soundcore"];
 
-        // Verifica se é áudio pela propriedade técnica OU pelo nome
+        // Check if it is audio by technical property OR by name
         if (iconProp.includes("headset") || iconProp.includes("audio") || audioKeywords.some(k => name.includes(k)))
             return "";
         if (iconProp.includes("mouse") || safeName.includes("mouse"))
@@ -207,6 +207,6 @@ Singleton {
         if (iconProp.includes("tv") || safeName.includes("tv"))
             return " ";
 
-        return ""; // Padrão
+        return ""; // Default
     }
 }

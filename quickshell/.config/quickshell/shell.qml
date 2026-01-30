@@ -12,7 +12,7 @@ ShellRoot {
     id: root
 
     // =========================================================================
-    // ESTADO GLOBAL DOS MÓDULOS
+    // GLOBAL MODULE STATE
     // =========================================================================
 
     property bool screenshotActive: false
@@ -37,13 +37,13 @@ ShellRoot {
     }
 
     // =========================================================================
-    // COMPONENTES DA UI - LAZY LOADING
+    // UI COMPONENTS - LAZY LOADING
     // =========================================================================
 
-    // Bar - sempre ativo (componente principal)
+    // Bar - always active (main component)
     Bar {}
 
-    // Notifications - carrega sob demanda quando há notificações
+    // Notifications - loads on demand when there are notifications
     Loader {
         id: notificationLoader
         active: NotificationService.activePopupCount > 0 || NotificationService.popups.length > 0
@@ -51,11 +51,11 @@ ShellRoot {
 
         onStatusChanged: {
             if (status === Loader.Ready)
-                console.log("[Shell] NotificationOverlay carregado");
+                console.log("[Shell] NotificationOverlay loaded");
         }
     }
 
-    // Power Overlay - carrega sob demanda quando solicitado
+    // Power Overlay - loads on demand when requested
     Loader {
         id: powerLoader
         active: PowerService.overlayVisible
@@ -63,11 +63,11 @@ ShellRoot {
 
         onStatusChanged: {
             if (status === Loader.Ready)
-                console.log("[Shell] PowerOverlay carregado");
+                console.log("[Shell] PowerOverlay loaded");
         }
     }
 
-    // Screenshot Manager - carrega sob demanda
+    // Screenshot Manager - loads on demand
     Loader {
         id: screenshotLoader
         active: root.screenshotActive
@@ -75,12 +75,12 @@ ShellRoot {
 
         onStatusChanged: {
             if (status === Loader.Ready) {
-                console.log("[Shell] ScreenshotManager carregado");
+                console.log("[Shell] ScreenshotManager loaded");
                 screenshotLoader.item.startCapture();
             }
         }
 
-        // Desativa quando o screenshot termina
+        // Deactivate when screenshot finishes
         Connections {
             target: screenshotLoader.item
             enabled: screenshotLoader.status === Loader.Ready
@@ -99,45 +99,45 @@ ShellRoot {
         source: "./modules/launcher/Launcher.qml"
     }
 
-    // OSD - carrega sob demanda
+    // OSD - loads on demand
     Loader {
         active: OsdService.visible
         source: "./modules/osd/OsdOverlay.qml"
     }
 
-    // Wallpaper Picker - carrega sob demanda
+    // Wallpaper Picker - loads on demand
     Loader {
         active: WallpaperService.pickerVisible
         source: "./modules/wallpaper/WallpaperPicker.qml"
     }
 
     // =========================================================================
-    // ATALHOS GLOBAIS
+    // GLOBAL SHORTCUTS
     // =========================================================================
 
-    // Atalho: Screenshot (Print)
+    // Shortcut: Screenshot (Print)
     GlobalShortcut {
         name: "take_screenshot"
-        description: "Captura de tela"
+        description: "Screenshot capture"
 
         onPressed: {
-            console.log("[Shell] Screenshot solicitado");
+            console.log("[Shell] Screenshot requested");
             root.screenshotActive = true;
         }
     }
 
-    // Atalho: Power Menu
+    // Shortcut: Power Menu
     GlobalShortcut {
         name: "power_menu"
-        description: "Menu de energia"
+        description: "Power menu"
 
         onPressed: {
-            console.log("[Shell] Power menu solicitado");
+            console.log("[Shell] Power menu requested");
             PowerService.showOverlay();
         }
     }
 
-    // Atalho: Launcher
+    // Shortcut: Launcher
     GlobalShortcut {
         name: "app_launcher"
         description: "App Launcher"
@@ -145,10 +145,10 @@ ShellRoot {
         onPressed: LauncherService.show()
     }
 
-    // Atalho: Volume Up
+    // Shortcut: Volume Up
     GlobalShortcut {
         name: "volume_up"
-        description: "Aumentar volume"
+        description: "Increase volume"
 
         onPressed: {
             AudioService.increaseVolume();
@@ -156,10 +156,10 @@ ShellRoot {
         }
     }
 
-    // Atalho: Volume Down
+    // Shortcut: Volume Down
     GlobalShortcut {
         name: "volume_down"
-        description: "Diminuir volume"
+        description: "Decrease volume"
 
         onPressed: {
             AudioService.decreaseVolume();
@@ -167,10 +167,10 @@ ShellRoot {
         }
     }
 
-    // Atalho: Volume Mute
+    // Shortcut: Volume Mute
     GlobalShortcut {
         name: "volume_mute"
-        description: "Silenciar volume"
+        description: "Mute volume"
 
         onPressed: {
             AudioService.toggleMute();
@@ -178,10 +178,10 @@ ShellRoot {
         }
     }
 
-    // Atalho: Brightness Up
+    // Shortcut: Brightness Up
     GlobalShortcut {
         name: "brightness_up"
-        description: "Aumentar brilho"
+        description: "Increase brightness"
 
         onPressed: {
             BrightnessService.increaseBrightness();
@@ -189,10 +189,10 @@ ShellRoot {
         }
     }
 
-    // Atalho: Brightness Down
+    // Shortcut: Brightness Down
     GlobalShortcut {
         name: "brightness_down"
-        description: "Diminuir brilho"
+        description: "Decrease brightness"
 
         onPressed: {
             BrightnessService.decreaseBrightness();
@@ -200,10 +200,10 @@ ShellRoot {
         }
     }
 
-    // Atalho: Wallpaper Picker
+    // Shortcut: Wallpaper Picker
     GlobalShortcut {
         name: "wallpaper_picker"
-        description: "Seletor de wallpaper"
+        description: "Wallpaper picker"
 
         onPressed: WallpaperService.toggle()
     }

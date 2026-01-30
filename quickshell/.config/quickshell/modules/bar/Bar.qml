@@ -26,18 +26,18 @@ Scope {
             // NameSpace
             WlrLayershell.namespace: "qs_modules"
 
-            // --- CONFIGURAÇÃO DA BARRA ---
+            // --- BAR CONFIGURATION ---
             implicitHeight: StateService.get("bar.height", 30)
             color: "transparent"
             screen: modelData
 
-            // Overlay garante que fique sobre jogos/fullscreen
+            // Overlay ensures it stays above games/fullscreen
             // WlrLayershell.layer: WlrLayer.Overlay
 
-            // Define o modo de exclusão
+            // Set the exclusion mode
             exclusionMode: enableAutoHide ? ExclusionMode.Ignore : ExclusionMode.Normal
 
-            // Garante o tamanho da área reservada quando em modo Normal
+            // Ensure reserved area size when in Normal mode
             exclusiveZone: enableAutoHide ? 0 : height
 
             anchors {
@@ -46,9 +46,9 @@ Scope {
                 right: true
             }
 
-            // --- LÓGICA DE AUTOHIDE ---
-            // Se o mouse estiver em cima, margem é 0 (mostra tudo).
-            // Se não, margem é -29 (esconde, deixando 1px no topo para pegar o mouse).
+            // --- AUTOHIDE LOGIC ---
+            // If mouse is hovering, margin is 0 (show everything).
+            // Otherwise, margin is -29 (hide, leaving 1px at the top to catch the mouse).
             margins.top: {
                 if (WindowManagerService.anyModuleOpen || !enableAutoHide || mouseSensor.hovered)
                     return 0;
@@ -56,7 +56,7 @@ Scope {
                 return (-1 * (height - 1));
             }
 
-            // Animação suave no movimento da janela
+            // Smooth window movement animation
             Behavior on margins.top {
                 NumberAnimation {
                     duration: Config.animDuration
@@ -64,9 +64,9 @@ Scope {
                 }
             }
 
-            // --- SENSOR DE MOUSE ---
-            // Cobre toda a janela. Como a janela nunca "some" (só sai da tela),
-            // o pedacinho de 1px que sobra ainda detecta o mouse.
+            // --- MOUSE SENSOR ---
+            // Covers the entire window. Since the window never "disappears" (only moves off-screen),
+            // the remaining 1px still detects the mouse.
             HoverHandler {
                 id: mouseSensor
             }
@@ -74,9 +74,9 @@ Scope {
             Rectangle {
                 id: barContent
                 anchors.fill: parent
-                color: Config.backgroundColor
+                color: Config.backgroundTransparentColor
 
-                // --- ESQUERDA ---
+                // --- LEFT ---
                 RowLayout {
                     anchors.left: parent.left
                     anchors.leftMargin: root.gapOut
@@ -87,7 +87,7 @@ Scope {
                     ActiveWindow {}
                 }
 
-                // --- CENTRO ---
+                // --- CENTER ---
                 RowLayout {
                     anchors.centerIn: parent
                     anchors.verticalCenter: parent.verticalCenter
@@ -96,7 +96,7 @@ Scope {
                     Workspaces {}
                 }
 
-                // --- DIREITA ---
+                // --- RIGHT ---
                 RowLayout {
                     anchors.right: parent.right
                     anchors.rightMargin: root.gapOut

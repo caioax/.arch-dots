@@ -10,7 +10,7 @@ import qs.services
 PopupWindow {
     id: root
 
-    // Configurações de tamanho
+    // Size settings
     readonly property int contentWidth: 400
     readonly property int contentHeight: 600
     readonly property int screenMargin: 15
@@ -111,7 +111,7 @@ PopupWindow {
                     Layout.fillWidth: true
                     spacing: 12
 
-                    // Ícone decorativo
+                    // Decorative icon
                     Rectangle {
                         Layout.preferredWidth: 40
                         Layout.preferredHeight: 40
@@ -127,13 +127,13 @@ PopupWindow {
                         }
                     }
 
-                    // Título e contador
+                    // Title and counter
                     ColumnLayout {
                         Layout.fillWidth: true
                         spacing: 2
 
                         Text {
-                            text: "Notificações"
+                            text: "Notifications"
                             font.family: Config.font
                             font.bold: true
                             font.pixelSize: Config.fontSizeLarge
@@ -144,8 +144,8 @@ PopupWindow {
                             visible: NotificationService.count > 0 || NotificationService.dndEnabled
                             text: {
                                 if (NotificationService.dndEnabled)
-                                    return "Não perturbe ativo";
-                                return NotificationService.count + (NotificationService.count === 1 ? " notificação" : " notificações");
+                                    return "Do not disturb active";
+                                return NotificationService.count + (NotificationService.count === 1 ? " notification" : " notifications");
                             }
                             font.family: Config.font
                             font.pixelSize: Config.fontSizeSmall
@@ -153,12 +153,12 @@ PopupWindow {
                         }
                     }
 
-                    // Espaçador
+                    // Spacer
                     Item {
                         Layout.fillWidth: true
                     }
 
-                    // Botão DND Toggle
+                    // DND Toggle Button
                     Rectangle {
                         id: dndBtn
                         Layout.preferredHeight: 32
@@ -208,7 +208,7 @@ PopupWindow {
                         }
                     }
 
-                    // Botão Limpar Tudo
+                    // Clear All Button
                     Rectangle {
                         id: clearAllBtn
                         visible: NotificationService.count > 0
@@ -230,7 +230,7 @@ PopupWindow {
                             }
 
                             Text {
-                                text: "Limpar"
+                                text: "Clear"
                                 font.family: Config.font
                                 font.pixelSize: Config.fontSizeSmall
                                 font.bold: true
@@ -248,14 +248,14 @@ PopupWindow {
                     }
                 }
 
-                // ========== SEPARADOR ==========
+                // ========== SEPARATOR ==========
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 1
                     color: Config.surface1Color
                 }
 
-                // ========== LISTA DE NOTIFICAÇÕES ==========
+                // ========== NOTIFICATION LIST ==========
                 Item {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
@@ -328,7 +328,7 @@ PopupWindow {
                         }
                     }
 
-                    // Estado vazio
+                    // Empty state
                     Column {
                         anchors.centerIn: parent
                         spacing: 12
@@ -353,7 +353,7 @@ PopupWindow {
 
                         Text {
                             anchors.horizontalCenter: parent.horizontalCenter
-                            text: NotificationService.dndEnabled ? "Modo Não Perturbe" : "Nenhuma notificação"
+                            text: NotificationService.dndEnabled ? "Do Not Disturb" : "No notifications"
                             font.family: Config.font
                             font.pixelSize: Config.fontSizeNormal
                             color: NotificationService.dndEnabled ? Config.warningColor : Config.subtextColor
@@ -362,7 +362,7 @@ PopupWindow {
 
                         Text {
                             anchors.horizontalCenter: parent.horizontalCenter
-                            text: NotificationService.dndEnabled ? "Notificações silenciadas" : "Você está em dia!"
+                            text: NotificationService.dndEnabled ? "Notifications silenced" : "You're all caught up!"
                             font.family: Config.font
                             font.pixelSize: Config.fontSizeSmall
                             color: Config.subtextColor

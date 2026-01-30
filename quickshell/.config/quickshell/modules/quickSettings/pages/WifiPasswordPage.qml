@@ -12,13 +12,13 @@ Item {
 
     implicitHeight: 350
 
-    // Propriedades recebidas
+    // Received properties
     property string targetSsid: ""
 
     signal cancelled
     signal connectClicked(string password)
 
-    // Intercepta cliques no fundo para perder o foco do input se clicar fora
+    // Intercept background clicks to remove input focus when clicking outside
     MouseArea {
         anchors.fill: parent
         onClicked: parent.forceActiveFocus()
@@ -26,10 +26,10 @@ Item {
 
     ColumnLayout {
         anchors.centerIn: parent
-        width: parent.width * 0.85 // Ocupa 85% da largura da janela
+        width: parent.width * 0.85 // Takes 85% of the window width
         spacing: 20
 
-        // --- Ícone de Destaque ---
+        // --- Highlight Icon ---
         Text {
             text: ""
             font.family: Config.font
@@ -38,13 +38,13 @@ Item {
             Layout.alignment: Qt.AlignHCenter
         }
 
-        // --- Títulos ---
+        // --- Titles ---
         ColumnLayout {
             Layout.alignment: Qt.AlignHCenter
             spacing: 5
 
             Text {
-                text: "Senha Necessária"
+                text: "Password Required"
                 color: Config.subtextColor
                 font.pixelSize: Config.fontSizeNormal
                 font.bold: true
@@ -61,13 +61,13 @@ Item {
             }
         }
 
-        // --- Campo de Senha ---
+        // --- Password Field ---
         TextField {
             id: passInput
             Layout.fillWidth: true
             Layout.preferredHeight: 45
 
-            placeholderText: "Digite a senha da rede..."
+            placeholderText: "Enter network password..."
             placeholderTextColor: Qt.alpha(Config.subtextColor, 0.5)
 
             color: Config.textColor
@@ -76,7 +76,7 @@ Item {
 
             verticalAlignment: TextInput.AlignVCenter
             leftPadding: 15
-            rightPadding: 40 // Espaço para o ícone do olho
+            rightPadding: 40 // Space for the eye icon
 
             echoMode: showPassToggle.checked ? TextInput.Normal : TextInput.Password
             passwordCharacter: "•"
@@ -87,7 +87,7 @@ Item {
                 border.width: 1
                 border.color: passInput.activeFocus ? Config.accentColor : Config.surface2Color
 
-                // Animação suave na borda ao focar
+                // Smooth border animation on focus
                 Behavior on border.color {
                     ColorAnimation {
                         duration: 150
@@ -95,14 +95,14 @@ Item {
                 }
             }
 
-            // Botão de Mostrar/Ocultar Senha (Olho)
+            // Show/Hide Password Button (Eye)
             Text {
                 id: eyeIcon
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
 
-                text: showPassToggle.checked ? "" : "" // Icones NerdFont (Olho aberto/fechado)
+                text: showPassToggle.checked ? "" : "" // NerdFont icons (eye open/closed)
                 font.family: Config.font
                 font.pixelSize: 16
                 color: showPassHover.containsMouse ? Config.textColor : Config.subtextColor
@@ -116,17 +116,17 @@ Item {
                 }
             }
 
-            // Controle de estado invisível para o toggle
+            // Invisible state control for the toggle
             Item {
                 id: showPassToggle
                 property bool checked: false
             }
 
-            // Pede foco ao abrir
+            // Request focus on open
             onVisibleChanged: if (visible)
                 forceActiveFocus()
 
-            // Enter conecta
+            // Enter connects
             onAccepted: {
                 if (text.length > 0) {
                     root.connectClicked(text);
@@ -135,13 +135,13 @@ Item {
             }
         }
 
-        // --- Botões de Ação ---
+        // --- Action Buttons ---
         RowLayout {
             Layout.fillWidth: true
             Layout.topMargin: 10
             spacing: 15
 
-            // Botão Cancelar
+            // Cancel Button
             Button {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 40
@@ -160,7 +160,7 @@ Item {
                 }
 
                 contentItem: Text {
-                    text: "Cancelar"
+                    text: "Cancel"
                     color: Config.subtextColor
                     font.family: Config.font
                     horizontalAlignment: Text.AlignHCenter
@@ -174,11 +174,11 @@ Item {
                 }
             }
 
-            // Botão Conectar
+            // Connect Button
             Button {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 40
-                enabled: passInput.text.length >= 8 // Validação básica WPA2 (min 8 chars)
+                enabled: passInput.text.length >= 8 // Basic WPA2 validation (min 8 chars)
                 opacity: enabled ? 1.0 : 0.5
 
                 background: Rectangle {
@@ -193,7 +193,7 @@ Item {
                 }
 
                 contentItem: Text {
-                    text: "Conectar"
+                    text: "Connect"
                     color: Config.textReverseColor
                     font.bold: true
                     font.family: Config.font

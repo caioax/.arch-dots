@@ -17,7 +17,7 @@ Scope {
             required property var modelData
             screen: modelData
 
-            // Só mostra se houver popups ativos
+            // Only shows if there are active popups
             visible: NotificationService.activePopupCount > 0
 
             WlrLayershell.layer: WlrLayer.Overlay
@@ -39,7 +39,7 @@ Scope {
 
             color: "transparent"
 
-            // Máscara vazia para quando não há notificações
+            // Empty mask for when there are no notifications
             Region {
                 id: emptyRegion
             }
@@ -50,13 +50,13 @@ Scope {
                 id: notifListView
                 anchors.fill: parent
 
-                // Usa a lista de popups ativos
+                // Uses the list of active popups
                 model: NotificationService.popups
 
                 spacing: 0
                 interactive: false
 
-                // Animação de reposicionamento
+                // Repositioning animation
                 displaced: Transition {
                     NumberAnimation {
                         properties: "y"

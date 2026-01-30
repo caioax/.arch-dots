@@ -2,7 +2,7 @@
 # =============================================================================
 # Core Packages - Window Manager & Session
 # =============================================================================
-# Pacotes essenciais para o ambiente Hyprland funcionar
+# Essential packages for the Hyprland environment to work
 # =============================================================================
 
 CORE_PACKAGES=(
@@ -28,7 +28,7 @@ CORE_PACKAGES=(
     "xdg-utils"                   # XDG utilities
 )
 
-# Pacotes AUR (requerem yay/paru)
+# AUR packages (require yay/paru)
 CORE_AUR_PACKAGES=(
-    # Nenhum pacote AUR obrigatório para core
+    # No mandatory AUR packages for core
 )

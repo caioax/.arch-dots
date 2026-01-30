@@ -7,19 +7,19 @@ import qs.config
 Button {
     id: root
 
-    // --- Propriedades ---
-    property bool active: false          // O estado principal (true = ligado/colorido)
-    property string iconOn: ""           // Ícone quando ativo
-    property string iconOff: ""          // Ícone quando inativo (opcional)
-    property string tooltipText: ""      // Texto do tooltip
-    property int size: 30                // Tamanho do botão
+    // --- Properties ---
+    property bool active: false          // The main state (true = on/colored)
+    property string iconOn: ""           // Icon when active
+    property string iconOff: ""          // Icon when inactive (optional)
+    property string tooltipText: ""      // Tooltip text
+    property int size: 30                // Button size
 
-    // --- Ajuste Fino (Offsets) ---
-    // Use se o ícone da fonte não estiver visualmente centralizado
+    // --- Fine Tuning (Offsets) ---
+    // Use if the font icon is not visually centered
     property real iconOffsetX: 0
     property real iconOffsetY: 0
 
-    // Se iconOff não for definido, usa o mesmo ícone para os dois estados
+    // If iconOff is not defined, uses the same icon for both states
     readonly property string currentIcon: active ? iconOn : (iconOff !== "" ? iconOff : iconOn)
 
     // Layout
@@ -28,7 +28,7 @@ Button {
     Layout.preferredWidth: size
     Layout.preferredHeight: size
 
-    // --- Fundo ---
+    // --- Background ---
     background: Rectangle {
         radius: root.width / 2
 
@@ -47,7 +47,7 @@ Button {
         }
     }
 
-    // --- Ícone ---
+    // --- Icon ---
     contentItem: Item {
         anchors.fill: parent
 
@@ -62,10 +62,10 @@ Button {
             font.pixelSize: Config.fontSizeNormal
             font.bold: true
 
-            // Se ativo, usa cor de contraste (preto/escuro). Se inativo, usa cor de texto normal.
+            // If active, uses contrast color (black/dark). If inactive, uses normal text color.
             color: root.active ? Config.textReverseColor : Config.textColor
 
-            // Leve transparência quando inativo para indicar que está "desligado"
+            // Slight transparency when inactive to indicate it is "off"
             opacity: root.active ? 1.0 : 0.6
         }
     }

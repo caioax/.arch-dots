@@ -8,7 +8,7 @@ import subprocess
 import time
 import os
 
-# Configuração
+# Configuration
 BUS_NAME = 'org.bluez'
 AGENT_INTERFACE = 'org.bluez.Agent1'
 AGENT_PATH = '/org/bluez/agent'
@@ -16,19 +16,19 @@ LOCK_FILE = "/tmp/QsAnyModuleIsOpen"
 
 def close_quick_settings():
     """
-    Verifica se o menu está aberto (pela existência do arquivo)
-    e só então simula o ESC.
+    Checks if the menu is open (by the existence of the file)
+    and only then simulates the ESC key.
     """
     if os.path.exists(LOCK_FILE):
         try:
-            # O menu está aberto, então enviamos o ESC
+            # The menu is open, so we send ESC
             subprocess.run(["wtype", "-k", "Escape"], stderr=subprocess.DEVNULL)
             time.sleep(0.1)
         except Exception as e:
-            print(f"Erro no wtype: {e}")
+            print(f"wtype error: {e}")
     else:
-        # O menu NÃO está aberto. Não fazemos nada.
-        # O script segue direto para abrir o kdialog.
+        # The menu is NOT open. Do nothing.
+        # The script proceeds directly to open the kdialog.
         pass
 
 class Agent(dbus.service.Object):
@@ -41,16 +41,16 @@ class Agent(dbus.service.Object):
 
     @dbus.service.method(AGENT_INTERFACE, in_signature="os", out_signature="")
     def AuthorizeService(self, device, uuid):
-        # Aceita conexões de serviço automaticamente
+        # Automatically accept service connections
         return
 
     @dbus.service.method(AGENT_INTERFACE, in_signature="o", out_signature="s")
     def RequestPinCode(self, device):
         close_quick_settings()
-        # Para teclados antigos que pedem PIN manual
+        # For older keyboards that require manual PIN entry
         try:
             output = subprocess.check_output(
-                ["kdialog", "--title", "Bluetooth", "--inputbox", "Digite o PIN do dispositivo:"]
+                ["kdialog", "--title", "Bluetooth", "--inputbox", "Enter the device PIN:"]
             )
             return output.decode().strip()
         except subprocess.CalledProcessError:
@@ -60,16 +60,16 @@ class Agent(dbus.service.Object):
     def RequestConfirmation(self, device, passkey):
         close_quick_settings()
 
-        # O caso mais comum (Celulares, Fones modernos)
-        # Mostra o numero e pede Sim/Não
-        message = f"Dispositivo deseja parear.\nPIN: {passkey:06d}\nConfirma?"
+        # Most common case (phones, modern headphones)
+        # Shows the number and asks Yes/No
+        message = f"Device wants to pair.\nPIN: {passkey:06d}\nConfirm?"
         try:
             subprocess.check_call(
-                ["kdialog", "--title", "Pareamento Bluetooth", "--yesno", message]
+                ["kdialog", "--title", "Bluetooth Pairing", "--yesno", message]
             )
             return
         except subprocess.CalledProcessError:
-            raise Exception("Rejected") # Usuário clicou em Não
+            raise Exception("Rejected") # User clicked No
 
     @dbus.service.method(AGENT_INTERFACE, in_signature="o", out_signature="")
     def RequestAuthorization(self, device):
@@ -77,7 +77,7 @@ class Agent(dbus.service.Object):
 
         try:
             subprocess.check_call(
-                ["kdialog", "--title", "Bluetooth", "--yesno", "Autorizar pareamento com este dispositivo?"]
+                ["kdialog", "--title", "Bluetooth", "--yesno", "Authorize pairing with this device?"]
             )
             return
         except:
@@ -85,25 +85,25 @@ class Agent(dbus.service.Object):
 
     @dbus.service.method(AGENT_INTERFACE, in_signature="", out_signature="")
     def Cancel(self):
-        print("Cancelado pelo sistema")
+        print("Cancelled by system")
 
 if __name__ == '__main__':
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
     bus = dbus.SystemBus()
-    
-    # Inicia o Agente
+
+    # Start the Agent
     agent = Agent(bus, AGENT_PATH)
-    
-    # Registra o Agente no BlueZ
+
+    # Register the Agent with BlueZ
     obj = bus.get_object(BUS_NAME, "/org/bluez")
     manager = dbus.Interface(obj, "org.bluez.AgentManager1")
-    
-    # Registra como o agente padrão (NoInputNoOutput, DisplayOnly, DisplayYesNo, KeyboardDisplay, KeyboardOnly)
-    # KeyboardDisplay é o mais versátil para PCs
+
+    # Register as default agent (NoInputNoOutput, DisplayOnly, DisplayYesNo, KeyboardDisplay, KeyboardOnly)
+    # KeyboardDisplay is the most versatile for PCs
     manager.RegisterAgent(AGENT_PATH, "KeyboardDisplay")
     manager.RequestDefaultAgent(AGENT_PATH)
 
-    print("Agente Bluetooth rodando... Aguardando requisições.")
-    
+    print("Bluetooth agent running... Waiting for requests.")
+
     mainloop = GLib.MainLoop()
     mainloop.run()

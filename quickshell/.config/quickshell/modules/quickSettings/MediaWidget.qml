@@ -15,12 +15,12 @@ Rectangle {
     radius: Config.radiusLarge
     color: Config.surface1Color
 
-    // --- FUNDO ---
+    // --- BACKGROUND ---
     Item {
         anchors.fill: parent
         layer.enabled: true
 
-        // A Imagem Real (Escondida, serve de fonte)
+        // The Actual Image (Hidden, serves as source)
         Image {
             id: bgSource
             anchors.fill: parent
@@ -29,7 +29,7 @@ Rectangle {
             visible: false
         }
 
-        // A Máscara (Para obter o formato na imagem: Retângulo arredondado)
+        // The Mask (To get the shape on the image: Rounded rectangle)
         Rectangle {
             id: bgMask
             anchors.fill: parent
@@ -45,25 +45,25 @@ Rectangle {
         }
     }
 
-    // --- CONTEÚDO ---
+    // --- CONTENT ---
     RowLayout {
         anchors.fill: parent
         anchors.margins: 15
         spacing: 15
 
-        // --- CAPA DO ÁLBUM (Pequena) ---
+        // --- ALBUM COVER (Small) ---
         Item {
             Layout.preferredWidth: 80
             Layout.preferredHeight: 80
 
-            // Fundo cinza de fallback
+            // Gray fallback background
             Rectangle {
                 anchors.fill: parent
                 radius: Config.radius
                 color: Config.surface2Color
             }
 
-            // Imagem da capa (Fonte)
+            // Cover image (Source)
             Image {
                 id: coverSource
                 anchors.fill: parent
@@ -72,7 +72,7 @@ Rectangle {
                 visible: false
             }
 
-            // Máscara da capa
+            // Cover mask
             Rectangle {
                 id: coverMask
                 anchors.fill: parent
@@ -80,14 +80,14 @@ Rectangle {
                 visible: false
             }
 
-            // Juntando os dois
+            // Combining the two
             OpacityMask {
                 anchors.fill: parent
                 source: coverSource
                 maskSource: coverMask
             }
 
-            // Ícone de fallback (Por cima de tudo)
+            // Fallback icon (On top of everything)
             Text {
                 visible: MprisService.artUrl == ""
                 anchors.centerIn: parent
@@ -98,14 +98,14 @@ Rectangle {
             }
         }
 
-        // --- INFORMAÇÕES E CONTROLES ---
+        // --- INFO AND CONTROLS ---
         ColumnLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
             spacing: 5
             Layout.alignment: Qt.AlignVCenter
 
-            // Faixa e Artista
+            // Track and Artist
             ColumnLayout {
                 spacing: 0
                 Text {
@@ -126,7 +126,7 @@ Rectangle {
                 }
             }
 
-            // Botões
+            // Buttons
             RowLayout {
                 spacing: 15
                 Layout.alignment: Qt.AlignLeft
@@ -182,7 +182,7 @@ Rectangle {
         }
     }
 
-    // --- COMPONENTE DOS BOTÕES ---
+    // --- BUTTONS COMPONENT ---
     component ControlButton: Item {
         id: btn
         property string icon: ""

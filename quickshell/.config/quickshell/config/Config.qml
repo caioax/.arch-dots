@@ -8,15 +8,16 @@ import qs.services
 Singleton {
     id: root
 
-    // Helper function para encurtar a chamada do serviço
+    // Helper function to shorten the service call
     function conf(path, fallback) {
         return StateService.get(path, fallback);
     }
 
     // ========================================================================
-    // PALETTE (Cores do Tokyo Night)
+    // PALETTE (Tokyo Night Colors)
     // ========================================================================
     readonly property color backgroundColor: conf("palette.background", "#1a1b26")
+    readonly property color backgroundTransparentColor: Qt.alpha(backgroundColor, 0.80)
     readonly property color surface0Color: conf("palette.surface0", "#24283b")
     readonly property color surface1Color: conf("palette.surface1", "#292e42")
     readonly property color surface2Color: conf("palette.surface2", "#414868")

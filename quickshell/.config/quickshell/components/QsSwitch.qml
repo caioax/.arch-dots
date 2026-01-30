@@ -44,6 +44,6 @@ Switch {
         }
     }
 
-    // Removemos o texto padrão para não atrapalhar o layout
+    // Remove the default text so it doesn't interfere with the layout
     contentItem: Item {}
 }

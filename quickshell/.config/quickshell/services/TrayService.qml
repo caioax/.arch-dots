@@ -5,18 +5,18 @@ import Quickshell.Services.SystemTray
 QtObject {
     id: root
 
-    // Lista de itens na tray
+    // List of tray items
     readonly property var items: SystemTray.items.values
 
-    // Verifica se tem ou não itens na tray
+    // Checks whether there are items in the tray
     readonly property bool hasItems: items.length > 0
 
-    // --- LÓGICA DE ÍCONES ---
+    // --- ICON LOGIC ---
     function getIconSource(iconString) {
         if (!iconString)
             return "image://icon/image-missing";
 
-        // Correção para parâmetros de URL (comum em apps Electron/Steam)
+        // Fix for URL parameters (common in Electron/Steam apps)
         if (iconString.includes("?path=")) {
             const split = iconString.split("?path=");
             if (split.length === 2) {
@@ -30,25 +30,25 @@ QtObject {
             }
         }
 
-        // Caminhos absolutos
+        // Absolute paths
         if (iconString.startsWith("/"))
             return "file://" + iconString;
         if (iconString.startsWith("file://"))
             return iconString;
 
-        // Ícones do tema (Freedesktop)
+        // Theme icons (Freedesktop)
         if (!iconString.includes(":"))
             return "image://icon/" + iconString;
 
         return iconString;
     }
 
-    // Mantém referência do menu aberto atualmente para garantir que só 1 exista no sistema todo
+    // Keeps reference to the currently open menu to ensure only 1 exists in the entire system
     property var activeMenu: null
 
     function registerActiveMenu(menuInstance) {
         if (activeMenu && activeMenu !== menuInstance) {
-            // Se já tem um menu aberto e tentamos abrir outro, fecha o anterior
+            // If there is already an open menu and we try to open another, close the previous one
             if (typeof activeMenu.close === "function") {
                 activeMenu.close();
             } else {

@@ -11,12 +11,12 @@ Singleton {
     readonly property var sink: Pipewire.defaultAudioSink
     readonly property PwNode source: Pipewire.defaultAudioSource
 
-    // Mantém os objetos vivos na memória
+    // Keeps the objects alive in memory
     PwObjectTracker {
         objects: [root.sink, root.source]
     }
 
-    // Checar se o sink esta pronto para operar
+    // Check if the sink is ready to operate
     readonly property bool sinkReady: sink !== null && sink.audio !== null
     readonly property bool sourceReady: source !== null && source.audio !== null
 

@@ -8,33 +8,33 @@ Singleton {
     id: root
 
     // ========================================================================
-    // CONFIGURAÇÃO CENTRALIZADA DE ATALHOS
+    // CENTRALIZED SHORTCUT CONFIGURATION
     // ========================================================================
 
-    // Aqui você define todos os atalhos do sistema
-    // Formato: { name: string, description: string }
+    // Here you define all system shortcuts
+    // Format: { name: string, description: string }
 
     readonly property var shortcuts: ({
             screenshot: {
                 name: "take_screenshot",
-                description: "Captura de tela (região/janela/tela)"
+                description: "Screenshot (region/window/screen)"
             },
             power: {
                 name: "power_menu",
-                description: "Menu de energia (desligar/reiniciar/etc)"
+                description: "Power menu (shutdown/reboot/etc)"
             },
             quickSettings: {
                 name: "quick_settings",
-                description: "Configurações rápidas"
+                description: "Quick settings"
             },
             notifications: {
                 name: "notifications",
-                description: "Central de notificações"
+                description: "Notification center"
             }
         })
 
     // ========================================================================
-    // SINAIS PARA AÇÕES
+    // SIGNALS FOR ACTIONS
     // ========================================================================
 
     signal screenshotRequested
@@ -43,7 +43,7 @@ Singleton {
     signal notificationsRequested
 
     // ========================================================================
-    // FUNÇÕES PÚBLICAS
+    // PUBLIC FUNCTIONS
     // ========================================================================
 
     function triggerAction(shortcutName: string) {

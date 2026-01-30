@@ -8,11 +8,11 @@ import Quickshell.Io
 Singleton {
     id: root
 
-    // Propriedade booleana principal para outros módulos consultarem
+    // Main boolean property for other modules to query
     readonly property bool anyModuleOpen: openWindowsCount > 0
     property int openWindowsCount: 0
 
-    // Lista para saber EXATAMENTE o que está aberto
+    // List to know EXACTLY what is open
     property var activeModules: ({})
 
     function registerOpen(moduleName) {
@@ -41,12 +41,12 @@ Singleton {
         }
     }
 
-    // Limpeza incial para evidar resquícios em casos de erros
+    // Initial cleanup to avoid remnants in case of errors
     Component.onCompleted: {
         removeFile.running = true;
     }
 
-    // Arquivo de controle
+    // Control file
     Process {
         id: createFile
         command: ["touch", "/tmp/QsAnyModuleIsOpen"]

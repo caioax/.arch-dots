@@ -5,22 +5,22 @@ import qs.config
 Text {
     id: root
 
-    // --- Propriedades Configuráveis ---
-    property bool running: true          // Controla se gira e aparece
+    // --- Configurable Properties ---
+    property bool running: true          // Controls whether it spins and appears
     property int size: Config.fontSizeIcon
 
-    // Cor padrão é a do texto normal, mas pode ser sobrescrita
+    // Default color is normal text color, but can be overridden
     color: Config.textColor
 
-    // --- Configuração Visual ---
+    // --- Visual Configuration ---
     text: ""
     font.family: Config.font
     font.pixelSize: size
 
-    // Visibilidade atrelada ao funcionamento
+    // Visibility tied to running state
     visible: running
 
-    // --- Animação ---
+    // --- Animation ---
     RotationAnimator on rotation {
         from: 0
         to: 360

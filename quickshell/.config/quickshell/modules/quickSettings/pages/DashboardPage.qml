@@ -23,12 +23,12 @@ Item {
         anchors.right: parent.right
         spacing: 16
 
-        // HEADER (Perfil e Info)
+        // HEADER (Profile and Info)
         RowLayout {
             Layout.fillWidth: true
             spacing: 12
 
-            // Avatar / Ícone do Sistema
+            // Avatar / System Icon
             Rectangle {
                 Layout.preferredWidth: 48
                 Layout.preferredHeight: 48
@@ -53,7 +53,7 @@ Item {
                 }
             }
 
-            // Texto de Boas-vindas
+            // Welcome Text
             ColumnLayout {
                 Layout.fillWidth: true
                 spacing: 2
@@ -73,12 +73,12 @@ Item {
                 }
             }
 
-            // Espaçador
+            // Spacer
             Item {
                 Layout.fillWidth: true
             }
 
-            // Indicador de Bateria (só aparece se tiver bateria)
+            // Battery indicator (only shows if battery is present)
             Rectangle {
                 visible: BatteryService.hasBattery
                 Layout.preferredHeight: 36
@@ -116,7 +116,7 @@ Item {
                 }
             }
 
-            // Botão Power
+            // Power Button
             Rectangle {
                 Layout.preferredWidth: 36
                 Layout.preferredHeight: 36
@@ -162,7 +162,7 @@ Item {
             Layout.fillWidth: true
         }
 
-        // GRID DE BOTÕES (Estilo ToggleButton grande)
+        // BUTTON GRID (Large ToggleButton style)
         GridLayout {
             columns: 2
             columnSpacing: 10
@@ -174,7 +174,7 @@ Item {
                 icon: NetworkService.systemIcon
                 label: "Wi-Fi"
                 subLabel: NetworkService.statusText
-                property string ssid: NetworkService.accessPoints.find(ap => ap.active)?.ssid || "Conectado"
+                property string ssid: NetworkService.accessPoints.find(ap => ap.active)?.ssid || "Connected"
                 active: NetworkService.wifiEnabled
                 hasDetails: true
                 onToggled: NetworkService.toggleWifi()
@@ -195,8 +195,8 @@ Item {
             // Night Light
             QuickSettingsTile {
                 icon: BrightnessService.nightLightEnabled ? "󰌵" : "󰌶"
-                label: "Luz noturna"
-                subLabel: BrightnessService.nightLightEnabled ? (BrightnessService.nightLightTemperature + "K") : "Desligado"
+                label: "Night light"
+                subLabel: BrightnessService.nightLightEnabled ? (BrightnessService.nightLightTemperature + "K") : "Off"
                 active: BrightnessService.nightLightEnabled
                 hasDetails: true
                 onToggled: BrightnessService.toggleNightLight()
@@ -206,8 +206,8 @@ Item {
             // DND (Do Not Disturb)
             QuickSettingsTile {
                 icon: NotificationService.dndEnabled ? "󰂛" : "󰂚"
-                label: "Não perturbe"
-                subLabel: NotificationService.dndEnabled ? "Ativado" : "Desativado"
+                label: "Do not disturb"
+                subLabel: NotificationService.dndEnabled ? "Enabled" : "Disabled"
                 active: NotificationService.dndEnabled
                 hasDetails: false
                 onToggled: NotificationService.toggleDnd()
@@ -227,7 +227,7 @@ Item {
                 onIconClicked: AudioService.toggleMute()
             }
 
-            // Brilho (só aparece se disponível)
+            // Brightness (only shows if available)
             QsSlider {
                 visible: BrightnessService.available
                 icon: BrightnessService.icon

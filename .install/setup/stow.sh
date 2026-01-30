@@ -2,12 +2,12 @@
 # =============================================================================
 # Stow Setup - Symlink Dotfiles
 # =============================================================================
-# Usa GNU Stow para criar symlinks das dotfiles
+# Uses GNU Stow to create dotfile symlinks
 # =============================================================================
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
-# Cores
+# Colors
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
@@ -20,7 +20,7 @@ log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 log_step() { echo -e "${CYAN}[>>]${NC} $1"; }
 
 # =============================================================================
-# Diretórios para fazer stow
+# Directories to stow
 # =============================================================================
 STOW_DIRS=(
     "hyprland"      # Hyprland config
@@ -36,29 +36,29 @@ STOW_DIRS=(
 )
 
 # =============================================================================
-# Verificar se stow está instalado
+# Check if stow is installed
 # =============================================================================
 check_stow() {
     if ! command -v stow &>/dev/null; then
-        log_error "GNU Stow não está instalado!"
-        log_info "Instale com: sudo pacman -S stow"
+        log_error "GNU Stow is not installed!"
+        log_info "Install with: sudo pacman -S stow"
         return 1
     fi
     return 0
 }
 
 # =============================================================================
-# Criar diretórios necessários
+# Create required directories
 # =============================================================================
 create_dirs() {
-    log_info "Criando diretórios necessários..."
+    log_info "Creating required directories..."
     mkdir -p "$HOME/.config"
     mkdir -p "$HOME/.local/scripts"
     mkdir -p "$HOME/.local/bin"
 }
 
 # =============================================================================
-# Obter destinos do stow para cada diretório
+# Get stow targets for each directory
 # =============================================================================
 get_stow_targets() {
     local dir=$1
@@ -92,14 +92,14 @@ get_stow_targets() {
 }
 
 # =============================================================================
-# Remover destinos existentes com confirmação
+# Remove existing targets with confirmation
 # =============================================================================
 remove_existing_targets() {
-    log_info "Verificando destinos existentes..."
+    log_info "Checking existing targets..."
 
     local ITEMS_TO_REMOVE=()
 
-    # Coletar todos os itens existentes
+    # Collect all existing items
     for dir in "${STOW_DIRS[@]}"; do
         local targets
         targets=($(get_stow_targets "$dir"))
@@ -111,52 +111,52 @@ remove_existing_targets() {
         done
     done
 
-    # Se não há itens para remover, retornar
+    # If no items to remove, return
     if [[ ${#ITEMS_TO_REMOVE[@]} -eq 0 ]]; then
-        log_info "Nenhum destino existente encontrado. Pronto para stow!"
+        log_info "No existing targets found. Ready for stow!"
         return 0
     fi
 
-    # Mostrar itens encontrados
+    # Show found items
     echo ""
-    log_warn "Os seguintes arquivos/pastas de destino foram encontrados:"
+    log_warn "The following target files/directories were found:"
     echo ""
     for item in "${ITEMS_TO_REMOVE[@]}"; do
         if [[ -L "$item" ]]; then
             echo -e "  ${CYAN}[symlink]${NC} $item"
         elif [[ -d "$item" ]]; then
-            echo -e "  ${YELLOW}[pasta]${NC}   $item"
+            echo -e "  ${YELLOW}[dir]${NC}     $item"
         else
-            echo -e "  ${GREEN}[arquivo]${NC} $item"
+            echo -e "  ${GREEN}[file]${NC}    $item"
         fi
     done
     echo ""
 
-    # Pedir confirmação
-    echo -ne "${RED}Deseja REMOVER esses itens para criar os novos symlinks? [Y/n]: ${NC}"
+    # Ask for confirmation
+    echo -ne "${RED}Do you want to REMOVE these items to create new symlinks? [Y/n]: ${NC}"
     read -r confirm
 
     if [[ ! $confirm =~ ^[Nn]$ ]]; then
-        log_info "Removendo destinos existentes..."
+        log_info "Removing existing targets..."
         for item in "${ITEMS_TO_REMOVE[@]}"; do
             if [[ -e "$item" || -L "$item" ]]; then
-                log_step "  Removendo: $item"
+                log_step "  Removing: $item"
                 rm -rf "$item"
             fi
         done
-        log_info "Destinos removidos com sucesso!"
+        log_info "Targets removed successfully!"
     else
-        log_error "Remoção cancelada. O stow não pode criar symlinks sobre arquivos existentes."
-        log_info "Remova os arquivos manualmente ou execute o script novamente."
+        log_error "Removal cancelled. Stow cannot create symlinks over existing files."
+        log_info "Remove the files manually or run the script again."
         return 1
     fi
 }
 
 # =============================================================================
-# Executar stow
+# Execute stow
 # =============================================================================
 execute_stow() {
-    log_info "Executando stow para criar symlinks..."
+    log_info "Running stow to create symlinks..."
 
     cd "$DOTFILES_DIR"
 
@@ -164,19 +164,19 @@ execute_stow() {
         if [[ -d "$dir" ]]; then
             log_step "  Stowing: $dir"
             if ! stow -R "$dir" 2>&1; then
-                log_error "    Falha ao fazer stow de $dir"
-                log_info "    Verifique se há conflitos e tente novamente."
+                log_error "    Failed to stow $dir"
+                log_info "    Check for conflicts and try again."
             fi
         else
-            log_warn "  Diretório não encontrado: $dir"
+            log_warn "  Directory not found: $dir"
         fi
     done
 
-    log_info "Symlinks criados com sucesso!"
+    log_info "Symlinks created successfully!"
 }
 
 # =============================================================================
-# Main (para execução direta)
+# Main (for direct execution)
 # =============================================================================
 run_stow_main() {
     echo ""
@@ -198,11 +198,11 @@ run_stow_main() {
     execute_stow
 
     echo ""
-    log_info "Stow concluído com sucesso!"
+    log_info "Stow completed successfully!"
     echo ""
 }
 
-# Executar se chamado diretamente
+# Run if called directly
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     run_stow_main "$@"
 fi

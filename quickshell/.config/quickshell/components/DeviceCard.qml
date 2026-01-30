@@ -7,13 +7,13 @@ import qs.config
 Rectangle {
     id: root
 
-    // --- Propriedades Obrigatórias ---
+    // --- Required Properties ---
     property string title: ""
     property string subtitle: ""
     property string icon: ""
     property string statusText: ""
 
-    // --- Estados ---
+    // --- States ---
     property bool active: false
     property bool connecting: false
     property bool secured: false
@@ -22,7 +22,7 @@ Rectangle {
     property bool showMenu: false
     property var menuModel: []
 
-    // --- Sinais ---
+    // --- Signals ---
     signal clicked
     signal menuAction(string actionId)
 
@@ -31,7 +31,7 @@ Rectangle {
     height: 60
     radius: Config.radiusLarge
 
-    // Borda colorida baseada no estado
+    // Colored border based on state
     border.width: 1
     border.color: {
         if (root.active)
@@ -41,7 +41,7 @@ Rectangle {
         return "transparent";
     }
 
-    // Cor de fundo com hover
+    // Background color with hover
     color: {
         if (mouseArea.containsMouse)
             return Config.surface1Color;
@@ -53,7 +53,7 @@ Rectangle {
         }
     }
 
-    // Clique Principal
+    // Main Click
     MouseArea {
         id: mouseArea
         anchors.fill: parent
@@ -66,7 +66,7 @@ Rectangle {
         anchors.margins: 15
         spacing: 15
 
-        // Círculo com Ícone
+        // Circle with Icon
         Rectangle {
             implicitWidth: 36
             implicitHeight: 36
@@ -82,7 +82,7 @@ Rectangle {
             Item {
                 anchors.fill: parent
 
-                // Texto (Ícone)
+                // Text (Icon)
                 Text {
                     anchors.centerIn: parent
                     visible: !root.connecting
@@ -102,7 +102,7 @@ Rectangle {
             }
         }
 
-        // Informações (Texto)
+        // Information (Text)
         ColumnLayout {
             Layout.fillWidth: true
             spacing: 2
@@ -119,7 +119,7 @@ Rectangle {
             RowLayout {
                 spacing: 5
 
-                // Subtítulo
+                // Subtitle
                 Text {
                     visible: root.subtitle !== ""
                     text: root.subtitle
@@ -128,7 +128,7 @@ Rectangle {
                     elide: Text.ElideRight
                 }
 
-                // Bolinha separadora (só se tiver subtítulo E status)
+                // Separator dot (only if there is subtitle AND status)
                 Text {
                     visible: root.subtitle !== "" && root.statusText !== ""
                     text: "•"
@@ -136,7 +136,7 @@ Rectangle {
                     font.pixelSize: Config.fontSizeSmall
                 }
 
-                // Status (Conectado, Pareado...)
+                // Status (Connected, Paired...)
                 Text {
                     text: root.statusText
                     color: {
@@ -152,7 +152,7 @@ Rectangle {
             }
         }
 
-        // Ícone de Cadeado (Exclusivo Wi-Fi)
+        // Lock Icon (Wi-Fi only)
         Text {
             visible: root.secured && !root.active && !root.connecting
             text: ""
@@ -161,7 +161,7 @@ Rectangle {
             font.pixelSize: Config.fontSizeSmall
         }
 
-        // Botão do menu ---
+        // Menu button ---
         Rectangle {
             id: menuButton
             visible: root.showMenu && !root.connecting
@@ -172,7 +172,7 @@ Rectangle {
 
             Text {
                 anchors.centerIn: parent
-                text: "" // Ícone de 3 pontos verticais (mdi-dots-vertical)
+                text: "" // 3 vertical dots icon (mdi-dots-vertical)
                 font.family: Config.font
                 color: Config.textColor
                 font.pixelSize: Config.fontSizeNormal
@@ -186,11 +186,11 @@ Rectangle {
                 onClicked: menuPopup.open()
             }
 
-            // --- Popup do menu ---
+            // --- Menu popup ---
             Popup {
                 id: menuPopup
-                x: -width + 30 // Alinha à direita do botão
-                y: 35 // Abre para baixo
+                x: -width + 30 // Align to the right of the button
+                y: 35 // Opens downward
                 width: 140
                 height: menuColumn.implicitHeight + 10
 

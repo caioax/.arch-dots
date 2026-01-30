@@ -7,13 +7,13 @@ import qs.config
 Button {
     id: root
 
-    // --- Propriedades ---
-    property string iconText: ""        // O ícone (texto)
-    property string tooltipText: "Voltar" // Texto de ajuda ao passar o mouse
-    property int size: 40                // Tamanho do botão
+    // --- Properties ---
+    property string iconText: ""        // The icon (text)
+    property string tooltipText: "Back" // Tooltip text on hover
+    property int size: 40                // Button size
 
-    // --- Ajuste Fino (Offsets) ---
-    // Use se o ícone da fonte não estiver visualmente centralizado
+    // --- Fine Tuning (Offsets) ---
+    // Use if the font icon is not visually centered
     property real iconOffsetX: -2
     property real iconOffsetY: 0
 
@@ -23,11 +23,11 @@ Button {
     Layout.preferredWidth: size
     Layout.preferredHeight: size
 
-    // --- Fundo ---
+    // --- Background ---
     background: Rectangle {
-        radius: root.height / 2 // Garante círculo perfeito
+        radius: root.height / 2 // Ensures a perfect circle
 
-        // Cor muda no Hover (passar o mouse)
+        // Color changes on hover
         color: root.hovered ? Config.surface2Color : "transparent"
 
         // Behavior on color {
@@ -37,12 +37,12 @@ Button {
         // }
     }
 
-    // --- Conteúdo (Ícone) ---
+    // --- Content (Icon) ---
     Text {
-        // Centraliza em relação ao wrapper
+        // Center relative to the wrapper
         anchors.centerIn: parent
 
-        // Aplica os offsets manuais
+        // Apply manual offsets
         anchors.horizontalCenterOffset: root.iconOffsetX
         anchors.verticalCenterOffset: root.iconOffsetY
 

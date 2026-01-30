@@ -11,7 +11,7 @@ import "./pages/"
 PopupWindow {
     id: root
 
-    // Configurações de tamanho
+    // Size settings
     readonly property int contentWidth: 400
     readonly property int defaultHeight: 300
     readonly property int internalMargin: 32
@@ -20,7 +20,7 @@ PopupWindow {
     implicitWidth: contentWidth + screenMargin
     implicitHeight: (pageStack.children[pageStack.currentIndex]?.implicitHeight ?? defaultHeight) + internalMargin
 
-    // Animação suave quando a altura muda (troca de página)
+    // Smooth animation when height changes (page switch)
     Behavior on implicitHeight {
         NumberAnimation {
             duration: 200
@@ -40,7 +40,7 @@ PopupWindow {
         closeTimer.restart();
     }
 
-    // Timer de saída
+    // Exit timer
     Timer {
         id: closeTimer
         interval: Config.animDuration
@@ -51,7 +51,7 @@ PopupWindow {
         }
     }
 
-    // --- Foco ---
+    // --- Focus ---
     HyprlandFocusGrab {
         id: focusGrab
         windows: [root]
@@ -68,7 +68,7 @@ PopupWindow {
         }
     }
 
-    // Gestão de estado ao abrir/fechar
+    // State management on open/close
     onVisibleChanged: {
         if (visible) {
             isClosing = false;
@@ -92,7 +92,7 @@ PopupWindow {
             width: root.contentWidth
             height: root.implicitHeight
             anchors.centerIn: parent
-            color: Config.backgroundColor
+            color: Config.backgroundTransparentColor
             radius: Config.radiusLarge
             clip: true
 
@@ -124,14 +124,14 @@ PopupWindow {
                 currentIndex: 0
 
                 // ==========================
-                // PÁGINA 0: DASHBOARD
+                // PAGE 0: DASHBOARD
                 // ==========================
                 DashboardPage {
                     onCloseWindow: root.closeWindow()
                 }
 
                 // ==========================
-                // PÁGINA 1: WI-FI
+                // PAGE 1: WI-FI
                 // ==========================
                 WifiPage {
                     onBackRequested: pageStack.currentIndex = 0
@@ -142,7 +142,7 @@ PopupWindow {
                 }
 
                 // ==========================
-                // PÁGINA 2: SENHA WI-FI
+                // PAGE 2: WI-FI PASSWORD
                 // ==========================
                 WifiPasswordPage {
                     id: wifiPasswordPage
@@ -154,14 +154,14 @@ PopupWindow {
                 }
 
                 // ==========================
-                // PÁGINA 3: BLUETOOTH
+                // PAGE 3: BLUETOOTH
                 // ==========================
                 BluetoothPage {
                     onBackRequested: pageStack.currentIndex = 0
                 }
 
                 // ==========================
-                // PÁGINA 4: LUZ NOTURNA
+                // PAGE 4: NIGHT LIGHT
                 // ==========================
                 NightLightPage {
                     onBackRequested: pageStack.currentIndex = 0

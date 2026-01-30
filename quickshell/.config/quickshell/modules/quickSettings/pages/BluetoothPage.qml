@@ -18,18 +18,18 @@ Item {
         anchors.fill: parent
         spacing: 15
 
-        // Cabeçalho (Header)
+        // Header
         RowLayout {
             Layout.fillWidth: true
             Layout.margins: 10
             spacing: 10
 
-            // Botão Voltar
+            // Back Button
             BackButton {
                 onClicked: root.backRequested()
             }
 
-            // Titulo
+            // Title
             Text {
                 text: "Bluetooth"
                 color: Config.textColor
@@ -38,7 +38,7 @@ Item {
                 Layout.fillWidth: true
             }
 
-            // Botão de Escanear
+            // Scan Button
             RefreshButton {
                 visible: BluetoothService.isPowered
                 loading: BluetoothService.isDiscovering
@@ -46,7 +46,7 @@ Item {
                 onClicked: BluetoothService.toggleScan()
             }
 
-            // Botão de Visibilidade
+            // Visibility Button
             ToggleButton {
                 visible: BluetoothService.isPowered
                 active: BluetoothService.isDiscoverable
@@ -55,12 +55,12 @@ Item {
                 iconOn: ""
                 iconOff: ""
 
-                tooltipText: active ? "Visível para todos" : "Invisível"
+                tooltipText: active ? "Visible to all" : "Invisible"
 
                 onClicked: BluetoothService.toggleDiscoverable()
             }
 
-            // Switch de Ligar/Desligar
+            // On/Off Switch
             QsSwitch {
                 checked: BluetoothService.isPowered
                 onToggled: {
@@ -70,7 +70,7 @@ Item {
                 }
             }
 
-            // Timer para começar o Scan após ligar o bluetooth
+            // Timer to start scanning after turning on bluetooth
             Timer {
                 id: startScanTimer
                 interval: 300
@@ -79,7 +79,7 @@ Item {
             }
         }
 
-        // Lista de Dispositivos
+        // Device List
         ListView {
             id: deviceList
             clip: true
@@ -94,34 +94,34 @@ Item {
             delegate: DeviceCard {
                 required property var modelData
 
-                // Dados
+                // Data
                 title: modelData.alias || modelData.name || "Unknown"
                 subtitle: modelData.address || ""
                 icon: BluetoothService.getDeviceIcon(modelData)
 
-                // Estados
+                // States
                 active: modelData.connected
                 connecting: BluetoothService.getIsConnecting(modelData)
 
-                // Texto de status
+                // Status text
                 statusText: {
                     if (connecting)
-                        return "Conectando...";
+                        return "Connecting...";
                     if (active)
-                        return "Conectado";
+                        return "Connected";
                     if (modelData.paired)
-                        return "Pareado";
+                        return "Paired";
                     return "";
                 }
 
-                // Configurações do menu
+                // Menu settings
                 showMenu: modelData.paired || modelData.trusted || modelData.connected
 
                 menuModel: {
                     var list = [];
                     if (modelData.connected) {
                         list.push({
-                            text: "Desconectar",
+                            text: "Disconnect",
                             action: "disconnect",
                             icon: "",
                             textColor: Config.warningColor,
@@ -129,7 +129,7 @@ Item {
                         });
                     } else {
                         list.push({
-                            text: "Conectar",
+                            text: "Connect",
                             action: "connect",
                             icon: "",
                             textColor: Config.successColor,
@@ -137,7 +137,7 @@ Item {
                         });
                     }
                     list.push({
-                        text: "Esquecer",
+                        text: "Forget",
                         action: "forget",
                         icon: "",
                         textColor: Config.errorColor,
@@ -156,11 +156,11 @@ Item {
                     }
                 }
 
-                // Clique principal
+                // Main click
                 onClicked: BluetoothService.toggleConnection(modelData)
             }
 
-            // Mensagem de lista vazia
+            // Empty list message
             Text {
                 anchors.centerIn: parent
                 anchors.verticalCenterOffset: -40
@@ -170,7 +170,7 @@ Item {
                         return "Activate to connect";
 
                     if (BluetoothService.isDiscovering)
-                        return "Search...";
+                        return "Searching...";
 
                     return "No devices found";
                 }

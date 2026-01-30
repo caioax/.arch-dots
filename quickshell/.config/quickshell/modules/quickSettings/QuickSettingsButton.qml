@@ -23,11 +23,11 @@ Rectangle {
         return "transparent";
     }
 
-    // Ícones
+    // Icons
     RowLayout {
         id: iconsLayout
         anchors.centerIn: parent
-        spacing: Config.spacing // Espaço entre os ícones
+        spacing: Config.spacing // Space between icons
 
         property string iconColor: quickSettingsWindow.visible ? Config.accentColor : Config.textColor
 
@@ -53,14 +53,14 @@ Rectangle {
         visible: false
     }
 
-    // Interação
-    // Detecta o mouse passando por cima (Hover)
+    // Interaction
+    // Detects mouse hovering over (Hover)
     HoverHandler {
         id: hoverHandler
-        cursorShape: Qt.PointingHandCursor // Muda o cursor para mãozinho
+        cursorShape: Qt.PointingHandCursor // Changes cursor to hand pointer
     }
 
-    // Detecta o clique
+    // Detects click
     TapHandler {
         id: tapHandler
         onTapped: {

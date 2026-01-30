@@ -7,7 +7,7 @@ import qs.config
 Rectangle {
     id: root
 
-    // --- Propriedades ---
+    // --- Properties ---
     property string icon: ""
     property string label: ""
     property string subLabel: ""
@@ -15,7 +15,7 @@ Rectangle {
     property bool active: false
     property bool hasDetails: false
 
-    // --- Sinais ---
+    // --- Signals ---
     signal toggled
     signal openDetails
 
@@ -24,7 +24,7 @@ Rectangle {
     implicitHeight: 50
     radius: Config.radiusLarge
 
-    // Cores e Animação
+    // Colors and Animation
     color: {
         if (active)
             return Config.accentColor;
@@ -39,7 +39,7 @@ Rectangle {
         }
     }
 
-    // Efeito de escala ao clicar
+    // Scale effect on click
     scale: mainMouse.pressed || detailsMouse.pressed ? 0.98 : 1.0
     Behavior on scale {
         NumberAnimation {
@@ -53,8 +53,8 @@ Rectangle {
         anchors.rightMargin: 5
         spacing: 0
 
-        // ÁREA DE TOGGLE (Ícone + Textos)
-        // Ocupa todo o espaço restante
+        // TOGGLE AREA (Icon + Text)
+        // Takes up all remaining space
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -63,16 +63,16 @@ Rectangle {
                 anchors.fill: parent
                 spacing: 12
 
-                // Ícone
+                // Icon
                 Text {
                     text: root.icon
                     font.family: Config.font
                     font.pixelSize: Config.fontSizeIcon
-                    // Se ativo, texto escuro (contraste). Se inativo, cor normal.
+                    // If active, dark text (contrast). If inactive, normal color.
                     color: root.active ? Config.textReverseColor : Config.textColor
                 }
 
-                // Textos (Título e Subtítulo)
+                // Text (Title and Subtitle)
                 ColumnLayout {
                     Layout.fillWidth: true
                     spacing: 0
@@ -87,13 +87,13 @@ Rectangle {
                         Layout.fillWidth: true
                     }
 
-                    // Só mostra sublabel se tiver texto
+                    // Only show sublabel if there is text
                     Text {
                         visible: root.subLabel !== ""
                         text: root.subLabel
                         font.family: Config.font
                         font.pixelSize: Config.fontSizeSmall
-                        // Leve transparência no subtexto
+                        // Slight transparency on subtext
                         color: root.active ? Qt.alpha(Config.textReverseColor, 0.8) : Config.subtextColor
                         elide: Text.ElideRight
                         Layout.fillWidth: true
@@ -101,7 +101,7 @@ Rectangle {
                 }
             }
 
-            // MouseArea Principal (Toggle)
+            // Main MouseArea (Toggle)
             MouseArea {
                 id: mainMouse
                 anchors.fill: parent
@@ -111,7 +111,7 @@ Rectangle {
             }
         }
 
-        // SEPARADOR (Apenas se tiver detalhes)
+        // SEPARATOR (Only if there are details)
         Rectangle {
             visible: root.hasDetails
             Layout.preferredWidth: 1
@@ -120,11 +120,11 @@ Rectangle {
             Layout.leftMargin: 5
             Layout.rightMargin: 5
 
-            // Cor do separador se adapta ao fundo
+            // Separator color adapts to the background
             color: root.active ? Qt.alpha(Config.textReverseColor, 0.3) : Config.surface2Color
         }
 
-        // BOTÃO DE DETALHES (Seta/Engrenagem)
+        // DETAILS BUTTON (Arrow/Gear)
         Item {
             visible: root.hasDetails
             Layout.preferredWidth: 30
@@ -138,7 +138,7 @@ Rectangle {
                 font.bold: true
                 color: root.active ? Config.textReverseColor : Config.textColor
 
-                // Animação sutil na seta quando passa o mouse nela
+                // Subtle animation on the arrow when hovering over it
                 opacity: detailsMouse.containsMouse ? 1.0 : 0.7
             }
 

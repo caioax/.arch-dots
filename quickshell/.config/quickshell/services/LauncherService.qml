@@ -8,7 +8,7 @@ Singleton {
     id: root
 
     // ========================================================================
-    // PROPRIEDADES
+    // PROPERTIES
     // ========================================================================
 
     property bool visible: false
@@ -16,11 +16,11 @@ Singleton {
     property int selectedIndex: 0
     property int maxItems: 50
 
-    // Lista de apps filtrada
+    // Filtered app list
     readonly property var filteredApps: {
         let apps = DesktopEntries.applications.values;
 
-        // Ordena alfabeticamente
+        // Sort alphabetically
         apps = apps.slice().sort((a, b) => {
             const nameA = (a.name || "").toLowerCase();
             const nameB = (b.name || "").toLowerCase();
@@ -33,7 +33,7 @@ Singleton {
 
         const q = query.toLowerCase();
 
-        // Separa em dois grupos: match no nome vs match na descrição
+        // Separate into two groups: name match vs description match
         let nameMatches = [];
         let descMatches = [];
 
@@ -49,12 +49,12 @@ Singleton {
             }
         }
 
-        // Nome primeiro, depois descrição
+        // Name first, then description
         return [...nameMatches, ...descMatches].slice(0, maxItems);
     }
 
     // ========================================================================
-    // FUNÇÕES PÚBLICAS
+    // PUBLIC FUNCTIONS
     // ========================================================================
 
     function show() {
@@ -79,10 +79,10 @@ Singleton {
 
         console.log("[Launcher] Launching:", entry.name);
 
-        // Remove field codes do .desktop (%u, %U, %f, %F, %i, %c, %k, etc)
+        // Remove field codes from .desktop (%u, %U, %f, %F, %i, %c, %k, etc)
         let cmd = entry.execString;
         cmd = cmd.replace(/%[uUfFdDnNickvm]/g, "").trim();
-        cmd = cmd.replace(/\s+/g, " "); // Remove espaços extras
+        cmd = cmd.replace(/\s+/g, " "); // Remove extra spaces
 
         Quickshell.execDetached(["sh", "-c", cmd]);
         hide();
@@ -95,7 +95,7 @@ Singleton {
     }
 
     // ========================================================================
-    // NAVEGAÇÃO
+    // NAVIGATION
     // ========================================================================
 
     function navigateUp() {
@@ -110,7 +110,7 @@ Singleton {
         }
     }
 
-    // Reset selectedIndex quando query muda
+    // Reset selectedIndex when query changes
     onQueryChanged: {
         selectedIndex = 0;
     }

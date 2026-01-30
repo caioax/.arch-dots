@@ -18,41 +18,41 @@ Item {
         anchors.fill: parent
         spacing: 15
 
-        // Cabeçalho (Header)
+        // Header
         RowLayout {
             Layout.fillWidth: true
             Layout.margins: 10
             spacing: 10
 
-            // Botão voltar
+            // Back button
             BackButton {
                 onClicked: root.backRequested()
             }
 
-            // Titulo
+            // Title
             Text {
-                text: "Luz Noturna"
+                text: "Night Light"
                 color: Config.textColor
                 font.bold: true
                 font.pixelSize: Config.fontSizeIcon
                 Layout.fillWidth: true
             }
 
-            // Switch de Ligar/Desligar
+            // On/Off Switch
             QsSwitch {
                 checked: BrightnessService.nightLightEnabled
                 onToggled: BrightnessService.toggleNightLight()
             }
         }
 
-        // Conteúdo
+        // Content
         ColumnLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.margins: 15
             spacing: 20
 
-            // Ícone grande
+            // Large icon
             Rectangle {
                 Layout.alignment: Qt.AlignHCenter
                 Layout.preferredWidth: 80
@@ -82,7 +82,7 @@ Item {
 
                 Text {
                     Layout.alignment: Qt.AlignHCenter
-                    text: BrightnessService.nightLightEnabled ? "Ativado" : "Desativado"
+                    text: BrightnessService.nightLightEnabled ? "Enabled" : "Disabled"
                     font.family: Config.font
                     font.pixelSize: Config.fontSizeLarge
                     font.bold: true
@@ -92,20 +92,20 @@ Item {
                 Text {
                     Layout.alignment: Qt.AlignHCenter
                     text: BrightnessService.nightLightEnabled 
-                        ? "Temperatura: " + BrightnessService.nightLightTemperature + "K"
-                        : "Reduz a luz azul da tela"
+                        ? "Temperature: " + BrightnessService.nightLightTemperature + "K"
+                        : "Reduces blue light from the screen"
                     font.family: Config.font
                     font.pixelSize: Config.fontSizeSmall
                     color: Config.subtextColor
                 }
             }
 
-            // Espaçador
+            // Spacer
             Item {
                 Layout.fillHeight: true
             }
 
-            // Slider de Intensidade
+            // Intensity Slider
             ColumnLayout {
                 Layout.fillWidth: true
                 spacing: 10
@@ -115,7 +115,7 @@ Item {
                     Layout.fillWidth: true
 
                     Text {
-                        text: "Intensidade"
+                        text: "Intensity"
                         font.family: Config.font
                         font.pixelSize: Config.fontSizeNormal
                         font.bold: true
@@ -134,19 +134,19 @@ Item {
                     }
                 }
 
-                // Slider customizado para intensidade
+                // Custom intensity slider
                 Item {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 40
 
-                    // Labels das extremidades
+                    // Edge labels
                     RowLayout {
                         anchors.top: parent.top
                         anchors.left: parent.left
                         anchors.right: parent.right
 
                         Text {
-                            text: "Mais quente"
+                            text: "Warmer"
                             font.family: Config.font
                             font.pixelSize: 10
                             color: Config.warningColor
@@ -157,14 +157,14 @@ Item {
                         }
 
                         Text {
-                            text: "Menos quente"
+                            text: "Cooler"
                             font.family: Config.font
                             font.pixelSize: 10
                             color: Config.subtextColor
                         }
                     }
 
-                    // Barra do slider
+                    // Slider track
                     Rectangle {
                         id: sliderTrack
                         anchors.bottom: parent.bottom
@@ -173,7 +173,7 @@ Item {
                         height: 8
                         radius: 4
 
-                        // Gradiente de cor quente para fria
+                        // Warm to cool color gradient
                         gradient: Gradient {
                             orientation: Gradient.Horizontal
                             GradientStop {
@@ -190,7 +190,7 @@ Item {
                             }
                         }
 
-                        // Thumb (bolinha)
+                        // Thumb (handle)
                         Rectangle {
                             id: sliderThumb
                             width: 20
@@ -198,7 +198,7 @@ Item {
                             radius: 10
                             y: (parent.height - height) / 2
 
-                            // Posição baseada na intensidade (invertida: 0 = quente = esquerda)
+                            // Position based on intensity (inverted: 0 = warm = left)
                             x: (1 - BrightnessService.nightLightIntensity) * (parent.width - width)
 
                             color: Config.textColor
@@ -211,7 +211,7 @@ Item {
                                 }
                             }
 
-                            // Sombra
+                            // Shadow
                             Rectangle {
                                 anchors.fill: parent
                                 anchors.margins: -2
@@ -237,7 +237,7 @@ Item {
                             function updateFromMouse(mouseX) {
                                 let percent = (mouseX - 10) / (sliderTrack.width - 20);
                                 percent = Math.max(0, Math.min(1, percent));
-                                // Invertido: esquerda = quente (0), direita = frio (1)
+                                // Inverted: left = warm (0), right = cool (1)
                                 BrightnessService.setNightLightIntensity(1 - percent);
                             }
                         }
@@ -245,7 +245,7 @@ Item {
                 }
             }
 
-            // Presets de temperatura
+            // Temperature presets
             ColumnLayout {
                 Layout.fillWidth: true
                 spacing: 10
@@ -265,10 +265,10 @@ Item {
 
                     Repeater {
                         model: [
-                            { label: "Vela", temp: 2500, color: "#ff6b00" },
-                            { label: "Quente", temp: 3500, color: "#ff9500" },
-                            { label: "Neutro", temp: 4500, color: "#ffcc00" },
-                            { label: "Frio", temp: 5500, color: "#fff5e6" }
+                            { label: "Candle", temp: 2500, color: "#ff6b00" },
+                            { label: "Warm", temp: 3500, color: "#ff9500" },
+                            { label: "Neutral", temp: 4500, color: "#ffcc00" },
+                            { label: "Cool", temp: 5500, color: "#fff5e6" }
                         ]
 
                         delegate: Rectangle {
@@ -322,7 +322,7 @@ Item {
                 }
             }
 
-            // Espaçador final
+            // Spacer final
             Item {
                 Layout.fillHeight: true
             }

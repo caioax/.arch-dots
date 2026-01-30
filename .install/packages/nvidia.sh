@@ -1,9 +1,9 @@
 #!/bin/bash
 # =============================================================================
-# NVIDIA Packages - NVIDIA GPU Support (OPCIONAL)
+# NVIDIA Packages - NVIDIA GPU Support (OPTIONAL)
 # =============================================================================
-# Pacotes para suporte a GPUs NVIDIA em sistemas híbridos
-# Instale apenas se você tem uma GPU NVIDIA
+# Packages for NVIDIA GPU support in hybrid systems
+# Install only if you have an NVIDIA GPU
 # =============================================================================
 
 NVIDIA_PACKAGES=(
@@ -20,10 +20,10 @@ NVIDIA_PACKAGES=(
     # "libva-utils"        # VA-API utilities (vainfo)
 )
 
-# Pacotes AUR
+# AUR packages
 NVIDIA_AUR_PACKAGES=(
-    # Nenhum pacote AUR obrigatório
+    # No mandatory AUR packages
 )
 
-# Nota: Após instalar os drivers NVIDIA, o script de setup irá
-# configurar as variáveis de ambiente necessárias automaticamente.
+# Note: After installing NVIDIA drivers, the setup script will
+# configure the necessary environment variables automatically.

@@ -2,7 +2,7 @@
 # =============================================================================
 # Terminal Packages - Terminal Emulators & Shells
 # =============================================================================
-# Pacotes para terminal, shells e multiplexadores
+# Packages for terminal, shells and multiplexers
 # =============================================================================
 
 TERMINAL_PACKAGES=(
@@ -19,7 +19,7 @@ TERMINAL_PACKAGES=(
     "fastfetch"             # Fast system info display
 )
 
-# Pacotes AUR
+# AUR packages
 TERMINAL_AUR_PACKAGES=(
-    # Oh-My-Zsh e plugins são instalados automaticamente pelo .zshrc
+    # Oh-My-Zsh and plugins are installed automatically by .zshrc
 )

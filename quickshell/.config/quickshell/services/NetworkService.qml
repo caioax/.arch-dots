@@ -23,7 +23,7 @@ Singleton {
         return "󰤫";
     }
 
-    // --- FUNÇÕES ---
+    // --- FUNCTIONS ---
 
     function getWifiIcon(signal) {
         if (signal > 80)
@@ -37,19 +37,19 @@ Singleton {
         return "󰤫";
     }
 
-    // Texto de status
+    // Status text
     readonly property string statusText: {
         if (!wifiEnabled)
-            return "Desligado";
+            return "Off";
 
         const activeNetwork = accessPoints.find(ap => ap.active === true);
 
-        // Se tem rede ativa, retorna o SSID
+        // If there is an active network, return the SSID
         if (activeNetwork)
-            return activeNetwork.ssid || "Rede Oculta";
+            return activeNetwork.ssid || "Hidden Network";
 
-        // Se está ligado mas sem conexão
-        return "Ligado";
+        // If enabled but not connected
+        return "On";
     }
 
     function toggleWifi() {
@@ -65,41 +65,41 @@ Singleton {
 
     function disconnect() {
         if (wifiInterface !== "") {
-            console.log("Desconectando interface: " + wifiInterface);
+            console.log("Disconnecting interface: " + wifiInterface);
             disconnectProc.command = ["nmcli", "dev", "disconnect", wifiInterface];
             disconnectProc.running = true;
         }
     }
 
     function connect(ssid, password) {
-        console.log("Tentando conectar a:", ssid);
-        root.connectingSsid = ssid; // Marca qual estamos tentando
+        console.log("Attempting to connect to:", ssid);
+        root.connectingSsid = ssid; // Mark which one we are trying
 
         if (password && password.length > 0) {
             connectProc.command = ["nmcli", "dev", "wifi", "connect", ssid, "password", password];
         } else {
-            // Tenta conectar usando perfil salvo
+            // Try connecting using saved profile
             connectProc.command = ["nmcli", "dev", "wifi", "connect", ssid];
         }
         connectProc.running = true;
     }
 
     function forget(ssid) {
-        console.log("Esquecendo rede: " + ssid);
+        console.log("Forgetting network: " + ssid);
         forgetProc.command = ["nmcli", "connection", "delete", "id", ssid];
         forgetProc.running = true;
     }
 
-    // Função interna para limpar conexões que falharam
+    // Internal function to clean up failed connections
     function cleanUpBadConnection(ssid) {
-        console.warn("Conexão falhou. Removendo perfil inválido de: " + ssid);
-        // Usa o forgetProc para deletar, pois é a mesma lógica
+        console.warn("Connection failed. Removing invalid profile for: " + ssid);
+        // Uses forgetProc to delete, since it is the same logic
         forget(ssid);
     }
 
-    // --- PROCESSOS ---
+    // --- PROCESSES ---
 
-    // Processo de Conexão
+    // Connection Process
     Process {
         id: connectProc
 
@@ -107,30 +107,30 @@ Singleton {
             onRead: data => console.log("[Wifi] " + data)
         }
         stderr: SplitParser {
-            onRead: data => console.error("[Wifi Erro] " + data)
+            onRead: data => console.error("[Wifi Error] " + data)
         }
 
         onExited: code => {
-            // Se o código for 0, sucesso. Se não, houve erro (senha errada, timeout, etc).
+            // If exit code is 0, success. Otherwise, there was an error (wrong password, timeout, etc).
             if (code !== 0) {
-                console.error("Falha ao conectar. Código de saída: " + code);
+                console.error("Failed to connect. Exit code: " + code);
 
-                // SE FALHOU: Deletamos o perfil criado para não ficar marcado como "Salvo" incorretamente
+                // IF FAILED: Delete the created profile so it doesn't remain incorrectly marked as "Saved"
                 if (root.connectingSsid !== "") {
                     root.cleanUpBadConnection(root.connectingSsid);
                 }
             } else {
-                console.log("Conectado com sucesso!");
+                console.log("Connected successfully!");
             }
 
-            // Reseta estado e atualiza listas
+            // Reset state and update lists
             root.connectingSsid = "";
             getSavedProc.running = true;
             getNetworksProc.running = true;
         }
     }
 
-    // Detectar Interface Wifi
+    // Detect Wifi Interface
     Process {
         id: findInterfaceProc
         command: ["nmcli", "-g", "DEVICE,TYPE", "device"]
@@ -148,7 +148,7 @@ Singleton {
         }
     }
 
-    // Monitor de Status (Enabled/Disabled)
+    // Status Monitor (Enabled/Disabled)
     Process {
         id: statusProc
         command: ["nmcli", "radio", "wifi"]
@@ -182,17 +182,17 @@ Singleton {
         onExited: getNetworksProc.running = true
     }
 
-    // Esquecer Rede
+    // Forget Network
     Process {
         id: forgetProc
-        // O comando é definido dinamicamente antes de rodar
+        // The command is defined dynamically before running
         onExited: {
             getSavedProc.running = true;
             getNetworksProc.running = true;
         }
     }
 
-    // Timer de Atualização Automática
+    // Automatic Update Timer
     Timer {
         interval: 10000
         running: root.wifiEnabled
@@ -203,7 +203,7 @@ Singleton {
         }
     }
 
-    // Listar Redes Salvas (Saved)
+    // List Saved Networks
     Process {
         id: getSavedProc
         command: ["nmcli", "-g", "NAME,TYPE", "connection", "show"]
@@ -222,7 +222,7 @@ Singleton {
         }
     }
 
-    // Listar Redes Disponíveis (Scan)
+    // List Available Networks (Scan)
     Process {
         id: getNetworksProc
         command: ["nmcli", "-g", "IN-USE,SIGNAL,SSID,SECURITY,BSSID,CHAN,RATE", "dev", "wifi", "list"]
@@ -250,7 +250,7 @@ Singleton {
                     if (!ssid)
                         return;
                     if (seen.has(ssid))
-                        return; // Evita duplicatas visuais
+                        return; // Avoid visual duplicates
                     seen.add(ssid);
 
                     const isSaved = root.savedSsids.includes(ssid);
@@ -260,7 +260,7 @@ Singleton {
                         signal: signal,
                         active: inUse,
                         secure: security.length > 0,
-                        securityType: security || "Aberta",
+                        securityType: security || "Open",
                         saved: isSaved,
                         bssid: bssid,
                         channel: channel,
@@ -268,7 +268,7 @@ Singleton {
                     });
                 });
 
-                // Ordenação: Conectado > Salvo > Sinal
+                // Sort: Connected > Saved > Signal
                 tempParams.sort((a, b) => {
                     if (a.active)
                         return -1;

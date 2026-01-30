@@ -10,15 +10,15 @@ import qs.config
 PanelWindow {
     id: root
 
-    // Propriedades recebidas ao abrir
+    // Properties received when opening
     property var rootMenuHandle: null
     property int anchorX: 0
     property int anchorY: 0
 
-    // --- CONFIGURAÇÃO DA JANELA ---
+    // --- WINDOW CONFIGURATION ---
     color: "transparent"
 
-    // Tamanho
+    // Size
     implicitWidth: Math.max(220, mainColumn.implicitWidth)
     implicitHeight: mainColumn.implicitHeight
 
@@ -26,7 +26,7 @@ PanelWindow {
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
     WlrLayershell.exclusiveZone: -1
 
-    // Posiciona onde o mouse clicou (ou ícone)
+    // Positions where the mouse clicked (or icon)
     anchors {
         left: true
         top: true
@@ -36,15 +36,15 @@ PanelWindow {
         top: Math.min(root.screen.height - implicitHeight - 10, root.anchorY)
     }
 
-    // --- SISTEMA DE NAVEGAÇÃO ---
-    // Mantém o histórico de onde estamos. Se vazio, estamos na raiz.
+    // --- NAVIGATION SYSTEM ---
+    // Keeps the history of where we are. If empty, we are at the root.
     ListModel {
         id: menuStack
     }
 
     function pushSubMenu(menuItem) {
         if (menuItem && menuItem.menu) {
-            // Adiciona o submenu ao histórico
+            // Adds the submenu to the history
             menuStack.append({
                 "handle": menuItem.menu
             });
@@ -57,7 +57,7 @@ PanelWindow {
         }
     }
 
-    // Define qual menu mostrar: o último da pilha ou o raiz
+    // Defines which menu to show: the last from the stack or the root
     property var currentMenuHandle: {
         if (menuStack.count > 0) {
             return menuStack.get(menuStack.count - 1).handle;
@@ -65,7 +65,7 @@ PanelWindow {
         return root.rootMenuHandle;
     }
 
-    // --- FOCO E FECHAMENTO ---
+    // --- FOCUS AND CLOSING ---
     HyprlandFocusGrab {
         id: focusGrab
         windows: [root]
@@ -80,7 +80,7 @@ PanelWindow {
 
     function close() {
         root.visible = false;
-        menuStack.clear(); // Reseta navegação ao fechar
+        menuStack.clear(); // Resets navigation on close
         focusGrab.active = false;
     }
 
@@ -93,13 +93,13 @@ PanelWindow {
         }
     }
 
-    // O objeto que lê os itens do menu atual
+    // The object that reads the items of the current menu
     QsMenuOpener {
         id: menuOpener
         menu: root.currentMenuHandle
     }
 
-    // --- VISUAL ---
+    // --- VISUALS ---
     Rectangle {
         id: background
         anchors.fill: parent
@@ -122,8 +122,8 @@ PanelWindow {
             width: parent.width
             spacing: 0
 
-            // --- CABEÇALHO / VOLTAR ---
-            // Só aparece se estivermos dentro de um submenu
+            // --- HEADER / BACK ---
+            // Only appears if we are inside a submenu
             Rectangle {
                 visible: menuStack.count > 0
                 Layout.fillWidth: true
@@ -150,7 +150,7 @@ PanelWindow {
                 }
             }
 
-            // Divisor se tiver botão voltar
+            // Divider if there is a back button
             Rectangle {
                 visible: menuStack.count > 0
                 Layout.fillWidth: true
@@ -158,7 +158,7 @@ PanelWindow {
                 color: Config.surface2Color
             }
 
-            // --- LISTA DE ITENS ---
+            // --- ITEMS LIST ---
             Repeater {
                 model: menuOpener.children
 
@@ -179,7 +179,7 @@ PanelWindow {
                     color: itemMouse.containsMouse && !isSeparator ? Config.surface1Color : "transparent"
                     opacity: isEnabled ? 1.0 : 0.5
 
-                    // Separador
+                    // Separator
                     Rectangle {
                         anchors.centerIn: parent
                         width: parent.width - 10
@@ -188,7 +188,7 @@ PanelWindow {
                         visible: parent.isSeparator
                     }
 
-                    // Item Conteúdo
+                    // Item Content
                     RowLayout {
                         anchors.fill: parent
                         anchors.leftMargin: 8
@@ -196,7 +196,7 @@ PanelWindow {
                         spacing: 10
                         visible: !parent.isSeparator
 
-                        // Ícone
+                        // Icon
                         Image {
                             Layout.preferredWidth: 16
                             Layout.preferredHeight: 16
@@ -222,7 +222,7 @@ PanelWindow {
                             }
                         }
 
-                        // Texto
+                        // Text
                         Text {
                             text: {
                                 var txt = modelData.text || modelData.title || "";
@@ -235,7 +235,7 @@ PanelWindow {
                             elide: Text.ElideRight
                         }
 
-                        // Seta de Submenu
+                        // Submenu Arrow
                         Text {
                             visible: parent.parent.hasSubMenu
                             text: "›"
@@ -253,10 +253,10 @@ PanelWindow {
 
                         onClicked: {
                             if (parent.hasSubMenu) {
-                                // Empilha o submenu e a interface atualiza sozinha
+                                // Pushes the submenu and the interface updates automatically
                                 root.pushSubMenu(modelData);
                             } else {
-                                // Ação Normal
+                                // Normal Action
                                 if (typeof modelData.activate === 'function')
                                     modelData.activate();
                                 else if (typeof modelData.triggered === 'function')

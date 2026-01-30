@@ -27,7 +27,7 @@ PanelWindow {
 
     color: "transparent"
 
-    // Clique no fundo fecha ou limpa seleção
+    // Click on background closes or clears selection
     MouseArea {
         anchors.fill: parent
         onClicked: {
@@ -39,7 +39,7 @@ PanelWindow {
         }
     }
 
-    // Conteúdo principal
+    // Main content
     Rectangle {
         id: content
         anchors.centerIn: parent
@@ -50,7 +50,7 @@ PanelWindow {
         border.color: Qt.alpha(Config.accentColor, 0.2)
         border.width: 1
 
-        // Animação de entrada
+        // Entry animation
         scale: WallpaperService.pickerVisible ? 1 : 0.9
         opacity: WallpaperService.pickerVisible ? 1 : 0
 
@@ -93,7 +93,7 @@ PanelWindow {
 
                 Item { Layout.fillWidth: true }
 
-                // Contador
+                // Counter
                 Rectangle {
                     Layout.preferredWidth: countText.implicitWidth + 16
                     Layout.preferredHeight: 26
@@ -103,14 +103,14 @@ PanelWindow {
                     Text {
                         id: countText
                         anchors.centerIn: parent
-                        text: WallpaperService.wallpapers.length + " imagens"
+                        text: WallpaperService.wallpapers.length + " images"
                         font.family: Config.font
                         font.pixelSize: Config.fontSizeSmall
                         color: Config.subtextColor
                     }
                 }
 
-                // Botão adicionar
+                // Add button
                 Rectangle {
                     Layout.preferredWidth: 36
                     Layout.preferredHeight: 36
@@ -139,12 +139,12 @@ PanelWindow {
 
                     ToolTip {
                         visible: addMouse.containsMouse
-                        text: "Adicionar wallpapers"
+                        text: "Add wallpapers"
                         delay: 500
                     }
                 }
 
-                // Botão random
+                // Random button
                 Rectangle {
                     Layout.preferredWidth: 36
                     Layout.preferredHeight: 36
@@ -173,12 +173,12 @@ PanelWindow {
 
                     ToolTip {
                         visible: randomMouse.containsMouse
-                        text: "Wallpaper aleatório"
+                        text: "Random wallpaper"
                         delay: 500
                     }
                 }
 
-                // Botão fechar
+                // Close button
                 Rectangle {
                     Layout.preferredWidth: 36
                     Layout.preferredHeight: 36
@@ -207,14 +207,14 @@ PanelWindow {
                 }
             }
 
-            // Separador
+            // Separator
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 1
                 color: Config.surface1Color
             }
 
-            // Grid de wallpapers
+            // Wallpaper grid
             GridView {
                 id: wallpaperGrid
                 Layout.fillWidth: true
@@ -254,7 +254,7 @@ PanelWindow {
                             ColorAnimation { duration: Config.animDurationShort }
                         }
 
-                        // Thumbnail com clip arredondado
+                        // Rounded clip thumbnail
                         Item {
                             anchors.fill: parent
                             anchors.margins: 4
@@ -276,7 +276,7 @@ PanelWindow {
                             }
                         }
 
-                        // Overlay de loading
+                        // Loading overlay
                         Rectangle {
                             anchors.fill: parent
                             anchors.margins: 4
@@ -300,7 +300,7 @@ PanelWindow {
                             }
                         }
 
-                        // Overlay de seleção
+                        // Selection overlay
                         Rectangle {
                             anchors.fill: parent
                             anchors.margins: 4
@@ -309,7 +309,7 @@ PanelWindow {
                             visible: wallpaperItem.isSelected
                         }
 
-                        // Badge de wallpaper atual
+                        // Current wallpaper badge
                         Rectangle {
                             visible: wallpaperItem.isCurrent
                             anchors.top: parent.top
@@ -329,7 +329,7 @@ PanelWindow {
                             }
                         }
 
-                        // Badge de selecionado
+                        // Selected badge
                         Rectangle {
                             visible: wallpaperItem.isSelected
                             anchors.top: parent.top
@@ -349,7 +349,7 @@ PanelWindow {
                             }
                         }
 
-                        // Efeito de escala no hover
+                        // Scale effect on hover
                         scale: wallpaperItem.isHovered ? 1.02 : 1
 
                         Behavior on scale {
@@ -368,23 +368,23 @@ PanelWindow {
 
                             onClicked: mouse => {
                                 if (mouse.modifiers & Qt.ControlModifier) {
-                                    // Ctrl+Click: adiciona/remove da seleção
+                                    // Ctrl+Click: add/remove from selection
                                     WallpaperService.toggleSelection(wallpaperItem.modelData);
                                 } else {
-                                    // Click normal: seleciona apenas este
+                                    // Normal click: select only this one
                                     WallpaperService.selectOnly(wallpaperItem.modelData);
                                 }
                             }
 
                             onDoubleClicked: {
-                                // Duplo clique: aplica wallpaper
+                                // Double click: apply wallpaper
                                 WallpaperService.setWallpaper(wallpaperItem.modelData);
                             }
                         }
                     }
                 }
 
-                // Estado vazio
+                // Empty state
                 Column {
                     anchors.centerIn: parent
                     spacing: Config.spacing
@@ -400,7 +400,7 @@ PanelWindow {
 
                     Text {
                         anchors.horizontalCenter: parent.horizontalCenter
-                        text: "Nenhum wallpaper encontrado"
+                        text: "No wallpapers found"
                         font.family: Config.font
                         font.pixelSize: Config.fontSizeNormal
                         color: Config.subtextColor
@@ -408,7 +408,7 @@ PanelWindow {
 
                     Text {
                         anchors.horizontalCenter: parent.horizontalCenter
-                        text: "Adicione imagens em ~/.local/wallpapers"
+                        text: "Add images to ~/.local/wallpapers"
                         font.family: Config.font
                         font.pixelSize: Config.fontSizeSmall
                         color: Config.mutedColor
@@ -431,7 +431,7 @@ PanelWindow {
                 }
             }
 
-            // Barra de ações (aparece quando há seleção)
+            // Action bar (appears when there's a selection)
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: WallpaperService.selectedCount > 0 ? 50 : 0
@@ -453,9 +453,9 @@ PanelWindow {
                     anchors.rightMargin: Config.spacing + 4
                     spacing: Config.spacing
 
-                    // Info de seleção
+                    // Selection info
                     Text {
-                        text: WallpaperService.selectedCount + " selecionado" + (WallpaperService.selectedCount > 1 ? "s" : "")
+                        text: WallpaperService.selectedCount + " selected"
                         font.family: Config.font
                         font.pixelSize: Config.fontSizeNormal
                         color: Config.subtextColor
@@ -463,14 +463,14 @@ PanelWindow {
 
                     Item { Layout.fillWidth: true }
 
-                    // Confirmação de delete (aparece quando necessário)
+                    // Delete confirmation (appears when needed)
                     Row {
                         visible: WallpaperService.confirmDelete
                         spacing: Config.spacing
 
                         Text {
                             anchors.verticalCenter: parent.verticalCenter
-                            text: "Deletar " + WallpaperService.selectedCount + " wallpapers?"
+                            text: "Delete " + WallpaperService.selectedCount + " wallpapers?"
                             font.family: Config.font
                             font.pixelSize: Config.fontSizeNormal
                             color: Config.warningColor
@@ -484,7 +484,7 @@ PanelWindow {
 
                             Text {
                                 anchors.centerIn: parent
-                                text: "Sim"
+                                text: "Yes"
                                 font.family: Config.font
                                 font.pixelSize: Config.fontSizeNormal
                                 color: confirmYesMouse.containsMouse ? Config.textColor : Config.errorColor
@@ -507,7 +507,7 @@ PanelWindow {
 
                             Text {
                                 anchors.centerIn: parent
-                                text: "Não"
+                                text: "No"
                                 font.family: Config.font
                                 font.pixelSize: Config.fontSizeNormal
                                 color: Config.subtextColor
@@ -523,12 +523,12 @@ PanelWindow {
                         }
                     }
 
-                    // Botões de ação (escondem durante confirmação)
+                    // Action buttons (hidden during confirmation)
                     Row {
                         visible: !WallpaperService.confirmDelete
                         spacing: Config.spacing
 
-                        // Botão aplicar (só quando 1 selecionado)
+                        // Apply button (only when 1 selected)
                         Rectangle {
                             visible: WallpaperService.selectedCount === 1
                             width: 100
@@ -552,7 +552,7 @@ PanelWindow {
                                 }
 
                                 Text {
-                                    text: "Aplicar"
+                                    text: "Apply"
                                     font.family: Config.font
                                     font.pixelSize: Config.fontSizeNormal
                                     color: applyMouse.containsMouse ? Config.textReverseColor : Config.textColor
@@ -568,7 +568,7 @@ PanelWindow {
                             }
                         }
 
-                        // Botão deletar
+                        // Delete button
                         Rectangle {
                             width: 100
                             height: 32
@@ -591,7 +591,7 @@ PanelWindow {
                                 }
 
                                 Text {
-                                    text: "Deletar"
+                                    text: "Delete"
                                     font.family: Config.font
                                     font.pixelSize: Config.fontSizeNormal
                                     color: deleteMouse.containsMouse ? Config.textColor : Config.textColor
@@ -607,7 +607,7 @@ PanelWindow {
                             }
                         }
 
-                        // Botão limpar seleção
+                        // Clear selection button
                         Rectangle {
                             width: 32
                             height: 32
@@ -632,7 +632,7 @@ PanelWindow {
 
                             ToolTip {
                                 visible: clearMouse.containsMouse
-                                text: "Limpar seleção"
+                                text: "Clear selection"
                                 delay: 500
                             }
                         }
@@ -641,7 +641,7 @@ PanelWindow {
             }
         }
 
-        // Atalhos de teclado
+        // Keyboard shortcuts
         Keys.onEscapePressed: {
             if (WallpaperService.confirmDelete) {
                 WallpaperService.cancelDelete();
@@ -658,7 +658,7 @@ PanelWindow {
                 WallpaperService.setRandomWallpaper();
                 event.accepted = true;
             } else if (event.key === Qt.Key_A && (event.modifiers & Qt.ControlModifier)) {
-                // Ctrl+A: seleciona todos
+                // Ctrl+A: select all
                 WallpaperService.selectedWallpapers = [...WallpaperService.wallpapers];
                 event.accepted = true;
             }

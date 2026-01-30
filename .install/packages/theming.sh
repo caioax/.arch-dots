@@ -2,7 +2,7 @@
 # =============================================================================
 # Theming Packages - Qt/GTK Theming
 # =============================================================================
-# Pacotes para configuração de temas Qt e GTK
+# Packages for Qt and GTK theme configuration
 # =============================================================================
 
 THEMING_PACKAGES=(
@@ -15,7 +15,7 @@ THEMING_PACKAGES=(
     "breeze-gtk" # Breeze GTK theme
 )
 
-# Pacotes AUR
+# AUR packages
 THEMING_AUR_PACKAGES=(
     # Qt Theming
     "qt5ct-kde" # Qt5 theme configuration
@@ -23,15 +23,15 @@ THEMING_AUR_PACKAGES=(
 )
 
 # =============================================================================
-# Setup - Aplicar configurações de tema
+# Setup - Apply theme settings
 # =============================================================================
 setup_theming() {
-    echo "[>>] Aplicando configurações de tema GTK..."
+    echo "[>>] Applying GTK theme settings..."
     gsettings set org.gnome.desktop.interface gtk-theme "Breeze-Dark"
     gsettings set org.gnome.desktop.interface icon-theme "Tela-blue-dark"
     gsettings set org.gnome.desktop.interface font-name "CaskaydiaCove Nerd Font 10"
     gsettings set org.gnome.desktop.interface cursor-theme "Bibata-Modern-Classic"
     gsettings set org.gnome.desktop.interface cursor-size 24
     gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
-    echo "[OK] Tema GTK aplicado!"
+    echo "[OK] GTK theme applied!"
 }

@@ -6,18 +6,18 @@ import qs.config
 Item {
     id: root
 
-    // --- Propriedades ---
+    // --- Properties ---
     property real value: 0
     property real from: 0
     property real to: 1
     property string icon: ""
     property bool showPercentage: true
 
-    // SINAIS
+    // SIGNALS
     signal moved(real newValue)
     signal iconClicked
 
-    // Tamanho do componente
+    // Component size
     implicitHeight: 40
     Layout.fillWidth: true
 
@@ -25,17 +25,17 @@ Item {
         anchors.fill: parent
         spacing: 10
 
-        // --- O BOTÃO DO ÍCONE ---
+        // --- THE ICON BUTTON ---
         Rectangle {
             id: iconBtn
 
-            // Define o tamanho: altura total do componente e largura igual à altura (quadrado)
+            // Set the size: full component height and width equal to height (square)
             Layout.fillHeight: true
             Layout.preferredWidth: height
 
             radius: Config.radiusLarge
 
-            // Cor muda se passar o mouse (feedback de botão)
+            // Color changes on hover (button feedback)
             color: iconMouse.containsMouse ? Config.surface2Color : Config.surface1Color
 
             Behavior on color {
@@ -44,7 +44,7 @@ Item {
                 }
             }
 
-            // Ícone
+            // Icon
             Text {
                 anchors.centerIn: parent
                 text: root.icon
@@ -70,15 +70,15 @@ Item {
             }
         }
 
-        // A BARRA DE SLIDER
+        // THE SLIDER BAR
         Item {
             id: sliderContainer
 
-            // Mágica do Layout: Ocupa toda a largura restante
+            // Layout magic: Takes up all remaining width
             Layout.fillWidth: true
             Layout.preferredHeight: parent.height - 5
 
-            // Container interno para a animação de escala
+            // Inner container for the scale animation
             Item {
                 anchors.fill: parent
                 scale: sliderMouse.pressed ? 0.98 : 1.0
@@ -89,7 +89,7 @@ Item {
                     }
                 }
 
-                // Fundo da Trilha
+                // Track Background
                 Rectangle {
                     id: track
                     anchors.fill: parent
@@ -97,13 +97,13 @@ Item {
                     color: Config.surface1Color
                     clip: true
 
-                    // Barra de Preenchimento
+                    // Fill Bar
                     Rectangle {
                         id: fill
                         height: parent.height
                         radius: Config.radiusLarge
 
-                        // Largura baseada na porcentagem
+                        // Width based on percentage
                         width: {
                             var percent = (root.value - root.from) / (root.to - root.from);
                             percent = Math.max(0, Math.min(1, percent));
@@ -120,7 +120,7 @@ Item {
                         }
                     }
 
-                    // Texto de Porcentagem
+                    // Percentage Text
                     Text {
                         visible: root.showPercentage
                         anchors.centerIn: parent
@@ -131,7 +131,7 @@ Item {
                         font.bold: true
                         font.pixelSize: Config.fontSizeNormal
 
-                        // Cor inteligente
+                        // Smart color
                         property bool isCovered: fill.width > (parent.width / 2)
                         color: isCovered ? Config.textReverseColor : Config.textColor
 

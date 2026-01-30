@@ -9,27 +9,27 @@ Item {
     id: root
 
     // ========================================================================
-    // PROPRIEDADES
+    // PROPERTIES
     // ========================================================================
 
-    // O wrapper da notificação (do NotificationService)
+    // The notification wrapper (from NotificationService)
     required property var wrapper
 
-    // Modo popup (true) ou histórico (false)
+    // Popup mode (true) or history mode (false)
     property bool popupMode: false
 
-    // Estado interno para animação de saída
+    // Internal state for exit animation
     property bool isExiting: false
     property bool isCollapsed: false
 
     // ========================================================================
-    // PROPRIEDADES DERIVADAS DO WRAPPER
+    // PROPERTIES DERIVED FROM WRAPPER
     // ========================================================================
 
     readonly property int notifId: wrapper ? wrapper.notifId : -1
     readonly property string summary: wrapper ? wrapper.summary : ""
     readonly property string body: wrapper ? wrapper.body : ""
-    readonly property string appName: wrapper ? wrapper.appName : "Sistema"
+    readonly property string appName: wrapper ? wrapper.appName : "System"
     readonly property string appIcon: wrapper ? wrapper.appIcon : ""
     readonly property string image: wrapper ? wrapper.image : ""
     readonly property int urgency: wrapper ? wrapper.urgency : 0
@@ -39,13 +39,13 @@ Item {
     readonly property bool showPopup: wrapper ? wrapper.popup : false
     readonly property string timeStr: wrapper ? wrapper.timeStr : ""
 
-    // Progresso do timer (0.0 a 1.0) - vem direto do wrapper
+    // Timer progress (0.0 to 1.0) - comes directly from the wrapper
     readonly property real progress: wrapper ? wrapper.progress : 0.0
 
-    // Verifica se está pausado (hover)
+    // Check if paused (hover)
     readonly property bool isPaused: wrapper && wrapper.isPaused
 
-    // Filtra ações que não devem ser mostradas como botões
+    // Filter actions that should not be shown as buttons
     readonly property var visibleActions: {
         if (!actions || actions.length === 0)
             return [];
@@ -85,13 +85,13 @@ Item {
 
         const id = action.identifier || "";
         if (id === "")
-            return "Abrir";
+            return "Open";
 
         return id.charAt(0).toUpperCase() + id.slice(1);
     }
 
     // ========================================================================
-    // DIMENSÕES
+    // DIMENSIONS
     // ========================================================================
 
     readonly property int visualHeight: contentColumn.implicitHeight + 24
@@ -113,14 +113,14 @@ Item {
     // VISUAL
     // ========================================================================
 
-    // Container com clipping
+    // Container with clipping
     Item {
         id: clippedContainer
         width: parent.width
         height: root.visualHeight
         visible: root.wrapper !== null
 
-        // Máscara para borda arredondada
+        // Mask for rounded border
         Rectangle {
             id: maskRect
             anchors.fill: parent
@@ -134,13 +134,13 @@ Item {
             maskSource: maskRect
         }
 
-        // Fundo
+        // Background
         Rectangle {
             anchors.fill: parent
             color: Config.surface0Color
         }
 
-        // Barra de progresso (só no modo popup)
+        // Progress bar (only in popup mode)
         Rectangle {
             visible: root.popupMode
             anchors.bottom: parent.bottom
@@ -150,19 +150,19 @@ Item {
             color: root.isUrgent ? Config.errorColor : Config.accentColor
         }
 
-        // Conteúdo
+        // Content
         ColumnLayout {
             id: contentColumn
             anchors.fill: parent
             anchors.margins: 12
             spacing: 8
 
-            // Linha principal: Ícone + Texto
+            // Main row: Icon + Text
             RowLayout {
                 Layout.fillWidth: true
                 spacing: 12
 
-                // Ícone / Imagem
+                // Icon / Image
                 Rectangle {
                     Layout.preferredWidth: 42
                     Layout.preferredHeight: 42
@@ -189,7 +189,7 @@ Item {
                             }
                         }
 
-                        // Máscara circular para a imagem
+                        // Circular mask for the image
                         layer.enabled: root.image !== ""
                         layer.effect: OpacityMask {
                             maskSource: Rectangle {
@@ -201,7 +201,7 @@ Item {
                         }
                     }
 
-                    // Ícone de fallback se não tiver imagem
+                    // Fallback icon if there is no image
                     Text {
                         visible: notifImage.status === Image.Error || (notifImage.source + "") === ""
                         anchors.centerIn: parent
@@ -212,12 +212,12 @@ Item {
                     }
                 }
 
-                // Textos
+                // Texts
                 ColumnLayout {
                     Layout.fillWidth: true
                     spacing: 2
 
-                    // Header: Título + Nome do App + Tempo
+                    // Header: Title + App Name + Time
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: 5
@@ -243,7 +243,7 @@ Item {
                         }
                     }
 
-                    // Tempo (só no histórico)
+                    // Time (only in history)
                     Text {
                         visible: !root.popupMode && root.timeStr !== ""
                         text: root.timeStr
@@ -253,7 +253,7 @@ Item {
                         opacity: 0.7
                     }
 
-                    // Corpo da notificação
+                    // Notification body
                     Text {
                         text: root.body
                         color: Config.subtextColor
@@ -272,7 +272,7 @@ Item {
         }
     }
 
-    // Borda externa (hover state)
+    // Outer border (hover state)
     Rectangle {
         width: parent.width
         height: root.visualHeight
@@ -288,7 +288,7 @@ Item {
         }
     }
 
-    // MouseArea principal
+    // Main MouseArea
     MouseArea {
         id: mouseArea
         width: parent.width
@@ -311,7 +311,7 @@ Item {
     }
 
     // ========================================================================
-    // ANIMAÇÃO DE SAÍDA
+    // EXIT ANIMATION
     // ========================================================================
 
     function startExitAnimation(removeCompletely) {

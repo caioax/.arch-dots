@@ -9,14 +9,14 @@ Singleton {
     id: root
 
     // ========================================================================
-    // PROPRIEDADES
+    // PROPERTIES
     // ========================================================================
 
     property bool overlayVisible: false
     property string pendingAction: ""
 
     // ========================================================================
-    // FUNÇÕES PÚBLICAS
+    // PUBLIC FUNCTIONS
     // ========================================================================
 
     function showOverlay() {
@@ -56,7 +56,7 @@ Singleton {
         hideOverlay();
     }
 
-    // Atalhos rápidos
+    // Quick shortcuts
     function shutdown() { executeAction("shutdown"); }
     function reboot() { executeAction("reboot"); }
     function suspend() { executeAction("suspend"); }
@@ -65,7 +65,7 @@ Singleton {
     function logout() { executeAction("logout"); }
 
     // ========================================================================
-    // PROCESSOS
+    // PROCESSES
     // ========================================================================
 
     Process {

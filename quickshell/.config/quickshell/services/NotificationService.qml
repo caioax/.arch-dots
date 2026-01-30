@@ -18,7 +18,7 @@ Singleton {
         dndEnabled = !dndEnabled;
         
         if (dndEnabled) {
-            // Quando DND é ativado, remove todos os popups ativos
+            // When DND is enabled, remove all active popups
             for (let i = 0; i < notifications.length; i++) {
                 if (notifications[i] && notifications[i].popup) {
                     notifications[i].popup = false;
@@ -32,7 +32,7 @@ Singleton {
         if (dndEnabled !== enabled) {
             dndEnabled = enabled;
             if (enabled) {
-                // Remove popups ativos
+                // Remove active popups
                 for (let i = 0; i < notifications.length; i++) {
                     if (notifications[i] && notifications[i].popup) {
                         notifications[i].popup = false;
@@ -44,7 +44,7 @@ Singleton {
     }
 
     // ========================================================================
-    // LISTAS DE NOTIFICAÇÕES
+    // NOTIFICATION LISTS
     // ========================================================================
 
     readonly property list<NotifWrapper> notifications: []
@@ -56,7 +56,7 @@ Singleton {
     property int hoveredNotificationId: -1
 
     // ========================================================================
-    // SERVIDOR DE NOTIFICAÇÕES
+    // NOTIFICATION SERVER
     // ========================================================================
 
     NotificationServer {
@@ -72,11 +72,11 @@ Singleton {
         persistenceSupported: true
 
         onNotification: notif => {
-            console.log("[Notif] Recebida:", notif.appName, "-", notif.summary);
+            console.log("[Notif] Received:", notif.appName, "-", notif.summary);
 
             notif.tracked = true;
 
-            // Se DND está ativo, não mostra popup mas ainda guarda no histórico
+            // If DND is active, don't show popup but still keep in history
             const showPopup = !root.dndEnabled;
 
             const wrapper = notifComponent.createObject(root, {
@@ -87,18 +87,18 @@ Singleton {
             if (wrapper) {
                 root.notifications.push(wrapper);
                 
-                // Só inicia o lifecycle (timer) se não estiver em DND
+                // Only start the lifecycle (timer) if not in DND
                 if (showPopup) {
                     wrapper.startLifecycle();
                 }
                 
-                console.log("[Notif] Wrapper criado. Total:", root.notifications.length, "Popups:", root.popups.length, "DND:", root.dndEnabled);
+                console.log("[Notif] Wrapper created. Total:", root.notifications.length, "Popups:", root.popups.length, "DND:", root.dndEnabled);
             }
         }
     }
 
     // ========================================================================
-    // COMPONENTE WRAPPER
+    // WRAPPER COMPONENT
     // ========================================================================
 
     component NotifWrapper: QtObject {
@@ -106,14 +106,14 @@ Singleton {
 
         property bool popup: false
 
-        // ====== SISTEMA DE TIMER COM TICK (para pausa real) ======
+        // ====== TICK TIMER SYSTEM (for real pause) ======
         property int totalTime: Config.notifTimeout
         property int remainingTime: Config.notifTimeout
 
-        // Progresso de 0.0 a 1.0 (para a barra de progresso no Card)
+        // Progress from 0.0 to 1.0 (for the progress bar in the Card)
         property real progress: 0.0
 
-        // Timer que decrementa a cada 50ms
+        // Timer that decrements every 50ms
         readonly property Timer tickTimer: Timer {
             interval: 50
             repeat: true
@@ -129,7 +129,7 @@ Singleton {
                         wrapper.progress = 1.0;
                         stop();
                         wrapper.popup = false;
-                        console.log("[Notif] Timer expirou para:", wrapper.notifId);
+                        console.log("[Notif] Timer expired for:", wrapper.notifId);
                     }
                 }
             }
@@ -141,19 +141,19 @@ Singleton {
             tickTimer.start();
         }
 
-        // Pausa o timer quando hover
+        // Pause the timer on hover
         property bool isPaused: root.hoveredNotificationId === (notification ? notification.id : -1)
 
         onIsPausedChanged: {
             if (isPaused) {
                 if (tickTimer.running) {
                     tickTimer.stop();
-                    console.log("[Notif] Pausado:", notifId, "- Restam:", remainingTime, "ms - Progress:", progress.toFixed(2));
+                    console.log("[Notif] Paused:", notifId, "- Remaining:", remainingTime, "ms - Progress:", progress.toFixed(2));
                 }
             } else {
                 if (popup && remainingTime > 0 && !tickTimer.running) {
                     tickTimer.start();
-                    console.log("[Notif] Retomado:", notifId, "- Restam:", remainingTime, "ms");
+                    console.log("[Notif] Resumed:", notifId, "- Remaining:", remainingTime, "ms");
                 } else if (popup && remainingTime <= 0) {
                     popup = false;
                 }
@@ -168,15 +168,15 @@ Singleton {
             const minutes = Math.floor(diff / 60000);
 
             if (minutes < 1)
-                return "agora";
+                return "now";
             if (minutes < 60)
-                return minutes + "m atrás";
+                return minutes + "m ago";
 
             const hours = Math.floor(minutes / 60);
             if (hours < 24)
-                return hours + "h atrás";
+                return hours + "h ago";
 
-            return Math.floor(hours / 24) + "d atrás";
+            return Math.floor(hours / 24) + "d ago";
         }
 
         required property Notification notification
@@ -185,7 +185,7 @@ Singleton {
         readonly property string summary: notification ? (notification.summary || "") : ""
         readonly property string body: notification ? (notification.body || "") : ""
         readonly property string appIcon: notification ? (notification.appIcon || "") : ""
-        readonly property string appName: notification ? (notification.appName || "Sistema") : "Sistema"
+        readonly property string appName: notification ? (notification.appName || "System") : "System"
         readonly property string image: notification ? (notification.image || "") : ""
         readonly property int urgency: notification ? notification.urgency : 0
         readonly property bool isUrgent: urgency === 2
@@ -214,7 +214,7 @@ Singleton {
     }
 
     // ========================================================================
-    // FUNÇÕES PÚBLICAS
+    // PUBLIC FUNCTIONS
     // ========================================================================
 
     function setHovered(notifId) {
@@ -262,7 +262,7 @@ Singleton {
     }
 
     // ========================================================================
-    // HELPER PARA ÍCONES
+    // ICON HELPER
     // ========================================================================
 
     function getIconSource(appIcon, image) {

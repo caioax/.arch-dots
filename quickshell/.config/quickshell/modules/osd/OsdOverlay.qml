@@ -10,7 +10,7 @@ import qs.config
 Scope {
     id: root
 
-    // Ícones para cada tipo (Nerd Font)
+    // Icons for each type (Nerd Font)
     readonly property var icons: ({
         "volume_off": "󰖁",
         "volume_low": "󰕿",
@@ -38,7 +38,7 @@ Scope {
         return icons.volume_high;
     }
 
-    // Cria OSD em todos os monitores
+    // Create OSD on all monitors
     Variants {
         model: Quickshell.screens
 
@@ -49,7 +49,7 @@ Scope {
 
             screen: modelData
 
-            // Posição: centro-inferior da tela
+            // Position: bottom-center of the screen
             anchors.bottom: true
             margins.bottom: 80
             exclusionMode: ExclusionMode.Ignore
@@ -61,10 +61,10 @@ Scope {
             implicitHeight: content.height
             color: "transparent"
 
-            // Não bloqueia mouse
+            // Does not block mouse
             mask: Region {}
 
-            // Visibilidade controlada pelo serviço
+            // Visibility controlled by the service
             visible: OsdService.visible
 
             Rectangle {
@@ -76,7 +76,7 @@ Scope {
                 border.color: Qt.alpha(Config.accentColor, 0.2)
                 border.width: 1
 
-                // Animação de entrada
+                // Entry animation
                 scale: OsdService.visible ? 1 : 0.8
                 opacity: OsdService.visible ? 1 : 0
 
@@ -100,7 +100,7 @@ Scope {
                     anchors.rightMargin: 16
                     spacing: 14
 
-                    // Ícone
+                    // Icon
                     Text {
                         text: root.getIcon()
                         font.family: Config.font
@@ -114,7 +114,7 @@ Scope {
                         }
                     }
 
-                    // Barra de progresso
+                    // Progress bar
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 6
@@ -145,7 +145,7 @@ Scope {
                         }
                     }
 
-                    // Porcentagem
+                    // Percentage
                     Text {
                         text: Math.round(OsdService.value * 100) + "%"
                         font.family: Config.font

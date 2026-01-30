@@ -8,10 +8,10 @@ RowLayout {
     id: root
     spacing: 5
 
-    // Estado da gaveta
+    // Drawer state
     property bool isOpen: false
 
-    // Criamos o objeto TrayMenu aqui, mas ele começa invisível.
+    // We create the TrayMenu object here, but it starts invisible.
     TrayMenu {
         id: sharedMenu
         visible: false
@@ -42,7 +42,7 @@ RowLayout {
             NumberAnimation { duration: Config.animDuration }
         }
 
-        // Conteúdo da gaveta
+        // Drawer content
         Row {
             id: iconsRow
             spacing: 3
@@ -97,15 +97,15 @@ RowLayout {
                                 sharedMenu.close();
                             } else if (mouse.button === Qt.RightButton) {
                                 if (trayDelegate.modelData.hasMenu) {
-                                    // 1. Pega a posição absoluta do ícone na tela
+                                    // 1. Gets the absolute position of the icon on screen
                                     var globalPos = trayDelegate.mapToGlobal(0, trayDelegate.height);
 
-                                    // 2. Configura o menu compartilhado
+                                    // 2. Configures the shared menu
                                     sharedMenu.rootMenuHandle = trayDelegate.modelData.menu;
                                     sharedMenu.anchorX = globalPos.x;
                                     sharedMenu.anchorY = globalPos.y + 5;
 
-                                    // 3. Abre o menu
+                                    // 3. Opens the menu
                                     sharedMenu.open();
                                 }
                             }
@@ -116,7 +116,7 @@ RowLayout {
         }
     }
 
-    // Botão de toggle
+    // Toggle button
     Rectangle {
         id: toggleBtn
 
@@ -127,7 +127,7 @@ RowLayout {
 
         color: toggleMouse.containsMouse ? Config.surface2Color : "transparent"
 
-        // Ícone de Seta
+        // Arrow Icon
         Text {
             anchors.centerIn: parent
             text: root.isOpen ? "" : ""

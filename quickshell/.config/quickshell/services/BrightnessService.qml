@@ -9,7 +9,7 @@ Singleton {
     id: root
 
     // ========================================================================
-    // PROPRIEDADES PÚBLICAS - BRILHO
+    // PUBLIC PROPERTIES - BRIGHTNESS
     // ========================================================================
 
     property real brightness: 1.0
@@ -30,24 +30,24 @@ Singleton {
     }
 
     // ========================================================================
-    // PROPRIEDADES PÚBLICAS - LUZ NOTURNA (HYPRSUNSET)
+    // PUBLIC PROPERTIES - NIGHT LIGHT (HYPRSUNSET)
     // ========================================================================
 
     property bool nightLightEnabled: false
 
-    // Temperatura em Kelvin (1000 = muito quente/laranja, 6500 = luz do dia)
-    // Slider vai de 0.0 a 1.0, mapeado para 2500K - 5500K
+    // Temperature in Kelvin (1000 = very warm/orange, 6500 = daylight)
+    // Slider goes from 0.0 to 1.0, mapped to 2500K - 5500K
     property int nightLightTemperature: 4000
 
-    // Intensidade como valor 0.0 - 1.0 para o slider
-    // 0.0 = mais quente (2500K), 1.0 = mais frio (5500K)
+    // Intensity as a 0.0 - 1.0 value for the slider
+    // 0.0 = warmer (2500K), 1.0 = cooler (5500K)
     property real nightLightIntensity: 0.5
 
-    // Ícone da luz noturna
+    // Night light icon
     readonly property string nightLightIcon: nightLightEnabled ? "󰌵" : "󰌶"
 
     // ========================================================================
-    // INICIALIZAÇÃO
+    // INITIALIZATION
     // ========================================================================
 
     Component.onCompleted: {
@@ -55,21 +55,21 @@ Singleton {
         ensureHyprsunsetRunning.running = true;
     }
 
-    // Conexão com StateService para carregar estado persistido
+    // Connection with StateService to load persisted state
     Connections {
         target: StateService
 
         function onStateLoaded() {
-            // Carrega estado da luz noturna
+            // Load night light state
             root.nightLightEnabled = StateService.get("nightLight.enabled", false);
             root.nightLightIntensity = StateService.get("nightLight.intensity", 0.5);
             root.updateTemperatureFromIntensity();
 
             console.log("[Brightness] Loaded state - enabled:", root.nightLightEnabled, "intensity:", root.nightLightIntensity);
 
-            // Aplica o estado carregado
+            // Apply the loaded state
             if (root.nightLightEnabled) {
-                // Pequeno delay para garantir que hyprsunset está pronto
+                // Small delay to ensure hyprsunset is ready
                 applyStateTimer.restart();
             }
         }
@@ -86,22 +86,22 @@ Singleton {
     }
 
     // ========================================================================
-    // FUNÇÕES INTERNAS
+    // INTERNAL FUNCTIONS
     // ========================================================================
 
-    // Converte intensidade (0-1) para temperatura Kelvin
+    // Converts intensity (0-1) to Kelvin temperature
     function updateTemperatureFromIntensity() {
-        // 0.0 = 2500K (muito quente), 1.0 = 5500K (menos quente)
+        // 0.0 = 2500K (very warm), 1.0 = 5500K (less warm)
         nightLightTemperature = Math.round(2500 + (nightLightIntensity * 3000));
     }
 
-    // Converte temperatura Kelvin para intensidade (0-1)
+    // Converts Kelvin temperature to intensity (0-1)
     function updateIntensityFromTemperature() {
         nightLightIntensity = (nightLightTemperature - 2500) / 3000;
     }
 
     // ========================================================================
-    // DETECÇÃO DE BACKLIGHT
+    // BACKLIGHT DETECTION
     // ========================================================================
 
     Process {
@@ -154,7 +154,7 @@ Singleton {
     }
 
     // ========================================================================
-    // FUNÇÕES PÚBLICAS - BRILHO
+    // PUBLIC FUNCTIONS - BRIGHTNESS
     // ========================================================================
 
     function setBrightness(value: real) {
@@ -188,7 +188,7 @@ Singleton {
     }
 
     // ========================================================================
-    // FUNÇÕES PÚBLICAS - LUZ NOTURNA
+    // PUBLIC FUNCTIONS - NIGHT LIGHT
     // ========================================================================
 
     function toggleNightLight() {
@@ -211,7 +211,7 @@ Singleton {
         disableNightLightProc.running = true;
     }
 
-    // Define a intensidade e aplica se estiver ativo
+    // Set the intensity and apply if active
     function setNightLightIntensity(intensity: real) {
         nightLightIntensity = Math.max(0.0, Math.min(1.0, intensity));
         updateTemperatureFromIntensity();
@@ -232,14 +232,14 @@ Singleton {
         }
     }
 
-    // Aplica a temperatura atual
+    // Apply the current temperature
     function applyNightLight() {
         enableNightLightProc.command = ["hyprctl", "hyprsunset", "temperature", nightLightTemperature.toString()];
         enableNightLightProc.running = true;
     }
 
     // ========================================================================
-    // PROCESSOS - BRILHO
+    // PROCESSES - BRIGHTNESS
     // ========================================================================
 
     Process {
@@ -247,7 +247,7 @@ Singleton {
     }
 
     // ========================================================================
-    // PROCESSOS - LUZ NOTURNA (HYPRSUNSET)
+    // PROCESSES - NIGHT LIGHT (HYPRSUNSET)
     // ========================================================================
 
     Process {

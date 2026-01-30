@@ -7,12 +7,12 @@ import qs.config
 Button {
     id: root
 
-    // --- Propriedades---
-    property bool loading: false         // Controla se mostra o Spinner ou o Ícone
-    property int size: 30                // Tamanho do botão
-    property string tooltipText: "Atualizar"
+    // --- Properties ---
+    property bool loading: false         // Controls whether to show the Spinner or the Icon
+    property int size: 30                // Button size
+    property string tooltipText: "Refresh"
 
-    // --- Ajuste Fino (Offsets) ---
+    // --- Fine Tuning (Offsets) ---
     property real iconOffsetX: 0.5
     property real iconOffsetY: 0.5
 
@@ -22,7 +22,7 @@ Button {
     Layout.preferredWidth: size
     Layout.preferredHeight: size
 
-    // --- Fundo ---
+    // --- Background ---
     background: Rectangle {
         radius: root.height / 2
 
@@ -41,15 +41,15 @@ Button {
         }
     }
 
-    // --- Conteúdo ---
+    // --- Content ---
     contentItem: Item {
         anchors.centerIn: root
 
-        // Ícone de Refresh (Visível quando NÃO está carregando)
+        // Refresh Icon (Visible when NOT loading)
         Text {
             anchors.centerIn: parent
 
-            // Offsets manuais
+            // Manual offsets
             anchors.horizontalCenterOffset: root.iconOffsetX
             anchors.verticalCenterOffset: root.iconOffsetY
 
@@ -61,7 +61,7 @@ Button {
             visible: !root.loading
         }
 
-        // Spinner (Visível quando ESTÁ carregando)
+        // Spinner (Visible when loading)
         Spinner {
             anchors.centerIn: parent
             running: root.loading

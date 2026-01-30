@@ -2,29 +2,29 @@
 # =============================================================================
 # Editor Packages - Text Editors & Development Tools
 # =============================================================================
-# Pacotes para edição de texto e desenvolvimento
+# Packages for text editing and development
 # =============================================================================
 
 EDITOR_PACKAGES=(
     # Editor
     "neovim" # Modern Vim-based text editor
 
-    # Build tools (para plugins do Neovim)
+    # Build tools (for Neovim plugins)
     "base-devel" # Build essentials
     "gcc"        # GNU Compiler Collection
     "make"       # Build automation tool
     "unzip"      # Unzip utility
     "unrar"      # Unrar utility
-    "ripgrep"    # Fast grep (para Telescope)
-    "fd"         # Fast find (para Telescope)
+    "ripgrep"    # Fast grep (for Telescope)
+    "fd"         # Fast find (for Telescope)
     "ffmpeg"     # Multimedia framework
 
-    # Node.js (para LSPs)
+    # Node.js (for LSPs)
     "nodejs" # JavaScript runtime
     "npm"    # Node package manager
 )
 
-# Pacotes AUR
+# AUR packages
 EDITOR_AUR_PACKAGES=(
-    # Nenhum pacote AUR obrigatório
+    # No mandatory AUR packages
 )

@@ -87,7 +87,7 @@ Item {
         };
     }
 
-    // Atualiza o cache apenas quando houver um workspace válido
+    // Updates the cache only when there is a valid workspace
     onCurrentSpecialConfigChanged: {
         if (currentSpecialConfig) {
             cachedIcon = currentSpecialConfig.icon;
@@ -166,7 +166,7 @@ Item {
         visible: opacity > 0
         anchors.centerIn: parent
 
-        // A opacidade depende apenas se o estado é especial
+        // Opacity depends only on whether the state is special
         opacity: root.isSpecialWorkspace ? (h.hovered ? 0.8 : 1.0) : 0
 
         scale: root.isSpecialWorkspace ? 1.0 : 0.9
@@ -210,7 +210,7 @@ Item {
             spacing: Config.padding * 0.8
 
             Text {
-                // Usa o ícone cacheado
+                // Uses the cached icon
                 text: root.cachedIcon
                 font {
                     family: Config.font
@@ -221,7 +221,7 @@ Item {
             }
 
             Text {
-                // Usa o nome cacheado
+                // Uses the cached name
                 text: root.cachedName
                 font {
                     family: Config.font

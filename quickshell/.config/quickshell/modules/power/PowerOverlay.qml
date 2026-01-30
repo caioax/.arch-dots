@@ -26,11 +26,11 @@ PanelWindow {
 
     property int selectedIndex: 0
     readonly property var actions: [
-        { id: "shutdown", icon: "󰐥", color: Config.errorColor, label: "Desligar" },
-        { id: "reboot", icon: "󰜉", color: Config.warningColor, label: "Reiniciar" },
-        { id: "suspend", icon: "󰒲", color: Config.accentColor, label: "Suspender" },
-        { id: "logout", icon: "󰍃", color: Config.subtextColor, label: "Sair" },
-        { id: "lock", icon: "󰌾", color: Config.subtextColor, label: "Bloquear" }
+        { id: "shutdown", icon: "󰐥", color: Config.errorColor, label: "Shutdown" },
+        { id: "reboot", icon: "󰜉", color: Config.warningColor, label: "Reboot" },
+        { id: "suspend", icon: "󰒲", color: Config.accentColor, label: "Suspend" },
+        { id: "logout", icon: "󰍃", color: Config.subtextColor, label: "Log Out" },
+        { id: "lock", icon: "󰌾", color: Config.subtextColor, label: "Lock" }
     ]
 
     function navigate(delta: int) {
@@ -41,7 +41,7 @@ PanelWindow {
         PowerService.executeAction(actions[selectedIndex].id);
     }
 
-    // Fundo
+    // Background
     Rectangle {
         anchors.fill: parent
         color: Qt.rgba(0, 0, 0, 0.3)
@@ -52,7 +52,7 @@ PanelWindow {
         }
     }
 
-    // Widget central
+    // Central widget
     Rectangle {
         id: powerWidget
 
@@ -87,7 +87,7 @@ PanelWindow {
 
             Text {
                 Layout.alignment: Qt.AlignHCenter
-                text: "O que deseja fazer?"
+                text: "What would you like to do?"
                 font.family: Config.font
                 font.pixelSize: Config.fontSizeLarge
                 font.weight: Font.DemiBold
@@ -206,9 +206,9 @@ PanelWindow {
 
                 Repeater {
                     model: [
-                        { key: "←→", label: "Navegar" },
-                        { key: "Enter", label: "Confirmar" },
-                        { key: "Esc", label: "Cancelar" }
+                        { key: "←→", label: "Navigate" },
+                        { key: "Enter", label: "Confirm" },
+                        { key: "Esc", label: "Cancel" }
                     ]
 
                     Row {

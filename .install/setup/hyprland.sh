@@ -2,7 +2,7 @@
 # =============================================================================
 # Hyprland Setup - Local Configuration
 # =============================================================================
-# Configura arquivos locais do Hyprland que não são rastreados pelo git
+# Configures local Hyprland files that are not tracked by git
 # =============================================================================
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
@@ -10,13 +10,13 @@ TEMPLATES_DIR="$DOTFILES_DIR/.data/hyprland/templates"
 UWSM_TEMPLATES_DIR="$DOTFILES_DIR/.data/hyprland/uwsm"
 QUICKSHELL_DATA_DIR="$DOTFILES_DIR/.data/quickshell"
 
-# Diretórios de destino
+# Destination directories
 HYPR_CONFIG_DIR="$HOME/.config/hypr"
 HYPR_LOCAL_DIR="$HYPR_CONFIG_DIR/local"
 UWSM_ENV_DIR="$HOME/.config/uwsm/env.d"
 QUICKSHELL_CONFIG_DIR="$HOME/.config/quickshell"
 
-# Cores
+# Colors
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
@@ -31,10 +31,10 @@ log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 log_step() { echo -e "${CYAN}[>>]${NC} $1"; }
 
 # =============================================================================
-# Criar diretórios
+# Create directories
 # =============================================================================
 create_directories() {
-    log_info "Criando diretórios de configuração local..."
+    log_info "Creating local configuration directories..."
     mkdir -p "$HYPR_LOCAL_DIR"
     mkdir -p "$UWSM_ENV_DIR"
     mkdir -p "$QUICKSHELL_CONFIG_DIR"
@@ -42,7 +42,7 @@ create_directories() {
 }
 
 # =============================================================================
-# Copiar template se arquivo não existir
+# Copy template if file doesn't exist
 # =============================================================================
 copy_template() {
     local TEMPLATE="$1"
@@ -52,98 +52,98 @@ copy_template() {
     if [[ ! -f "$DEST" ]]; then
         if [[ -f "$TEMPLATE" ]]; then
             cp "$TEMPLATE" "$DEST"
-            log_info "  Criado: $DESC"
+            log_info "  Created: $DESC"
             return 0
         else
-            log_warn "  Template não encontrado: $TEMPLATE"
+            log_warn "  Template not found: $TEMPLATE"
             return 1
         fi
     else
-        log_warn "  Pulando (já existe): $DESC"
+        log_warn "  Skipping (already exists): $DESC"
         return 0
     fi
 }
 
 # =============================================================================
-# Configurar arquivo de monitores
+# Configure monitors file
 # =============================================================================
 setup_monitors() {
     echo ""
-    log_info "Configurando monitors.conf..."
+    log_info "Configuring monitors.conf..."
 
     local MONITORS_FILE="$HYPR_CONFIG_DIR/monitors.conf"
 
     if [[ ! -f "$MONITORS_FILE" ]]; then
-        # Criar arquivo com configuração genérica do Hyprland
+        # Create file with generic Hyprland configuration
         cat > "$MONITORS_FILE" << 'EOF'
 # =============================================================================
 # Monitor Configuration
 # =============================================================================
-# Este arquivo é criado na primeira instalação.
-# Use 'nwg-displays' para configurar seus monitores graficamente.
-# Este arquivo não é rastreado pelo git.
+# This file is created on first installation.
+# Use 'nwg-displays' to configure your monitors graphically.
+# This file is not tracked by git.
 # See https://wiki.hypr.land/Configuring/Monitors/
 # =============================================================================
 
-# Configuração genérica - detecta automaticamente resolução e taxa
+# Generic configuration - auto-detects resolution and refresh rate
 monitor=,preferred,auto,auto
 EOF
-        log_info "  Criado: monitors.conf (configuração genérica)"
+        log_info "  Created: monitors.conf (generic configuration)"
     else
-        log_warn "  Pulando (já existe): monitors.conf"
+        log_warn "  Skipping (already exists): monitors.conf"
     fi
 }
 
 # =============================================================================
-# Configurar arquivo de workspaces
+# Configure workspaces file
 # =============================================================================
 setup_workspaces() {
-    log_info "Configurando workspaces.conf..."
+    log_info "Configuring workspaces.conf..."
 
     local WORKSPACES_FILE="$HYPR_CONFIG_DIR/workspaces.conf"
 
     if [[ ! -f "$WORKSPACES_FILE" ]]; then
-        # Criar arquivo vazio (será preenchido pelo workspace-manager.sh)
+        # Create empty file (will be populated by workspace-manager.sh)
         cat > "$WORKSPACES_FILE" << 'EOF'
 # =============================================================================
 # Workspaces Configuration
 # =============================================================================
-# Este arquivo é gerado automaticamente pelo workspace-manager.sh no boot.
-# Não edite manualmente - suas alterações serão sobrescritas.
+# This file is automatically generated by workspace-manager.sh on boot.
+# Do not edit manually - your changes will be overwritten.
 # =============================================================================
 EOF
-        log_info "  Criado: workspaces.conf (será preenchido automaticamente)"
+        log_info "  Created: workspaces.conf (will be populated automatically)"
     else
-        log_warn "  Pulando (já existe): workspaces.conf"
+        log_warn "  Skipping (already exists): workspaces.conf"
     fi
 }
 
 # =============================================================================
-# Configurar arquivos locais do Hyprland
+# Configure local Hyprland files
 # =============================================================================
 setup_local_configs() {
     echo ""
-    log_info "Configurando arquivos locais do Hyprland..."
+    log_info "Configuring local Hyprland files..."
 
     # autostart.conf
     copy_template \
         "$TEMPLATES_DIR/autostart.conf" \
         "$HYPR_LOCAL_DIR/autostart.conf" \
-        "local/autostart.conf (autostart local)"
+        "local/autostart.conf (local autostart)"
 
     # extra_keybinds.conf
     copy_template \
         "$TEMPLATES_DIR/extra_keybinds.conf" \
         "$HYPR_LOCAL_DIR/extra_keybinds.conf" \
-        "local/extra_keybinds.conf (keybinds locais)"
+        "local/extra_keybinds.conf (local keybinds)"
 }
 
 # =============================================================================
-# Configurar QuickShell state.json
+# Configure QuickShell state.json
 # =============================================================================
 setup_quickshell() {
     echo ""
-    log_info "Configurando QuickShell..."
+    log_info "Configuring QuickShell..."
 
     local STATE_FILE="$QUICKSHELL_CONFIG_DIR/state.json"
     local DEFAULTS_FILE="$QUICKSHELL_DATA_DIR/defaults.json"
@@ -151,9 +151,9 @@ setup_quickshell() {
     if [[ ! -f "$STATE_FILE" ]]; then
         if [[ -f "$DEFAULTS_FILE" ]]; then
             cp "$DEFAULTS_FILE" "$STATE_FILE"
-            log_info "  Criado: state.json (baseado em defaults.json)"
+            log_info "  Created: state.json (based on defaults.json)"
         else
-            # Criar state.json mínimo se defaults.json não existir
+            # Create minimal state.json if defaults.json doesn't exist
             cat > "$STATE_FILE" << 'EOF'
 {
   "nightLight": {
@@ -166,19 +166,19 @@ setup_quickshell() {
   }
 }
 EOF
-            log_info "  Criado: state.json (configuração mínima)"
+            log_info "  Created: state.json (minimal configuration)"
         fi
     else
-        log_warn "  Pulando (já existe): state.json"
+        log_warn "  Skipping (already exists): state.json"
     fi
 }
 
 # =============================================================================
-# Perguntar sobre NVIDIA
+# Ask about NVIDIA
 # =============================================================================
 ask_nvidia() {
     echo ""
-    echo -ne "${BLUE}[?]${NC} Você tem uma GPU NVIDIA (híbrida ou dedicada)? [y/N]: "
+    echo -ne "${BLUE}[?]${NC} Do you have an NVIDIA GPU (hybrid or dedicated)? [y/N]: "
     read -r is_nvidia
 
     if [[ $is_nvidia =~ ^[Yy]$ ]]; then
@@ -189,76 +189,76 @@ ask_nvidia() {
 }
 
 # =============================================================================
-# Configurar ambiente NVIDIA
+# Configure NVIDIA environment
 # =============================================================================
 setup_nvidia() {
     echo ""
-    log_info "Configurando ambiente para NVIDIA..."
+    log_info "Configuring environment for NVIDIA..."
 
     # Hyprland extra_environment.conf
     copy_template \
         "$TEMPLATES_DIR/extra_environment_nvidia.conf" \
         "$HYPR_LOCAL_DIR/extra_environment.conf" \
-        "local/extra_environment.conf (variáveis NVIDIA)"
+        "local/extra_environment.conf (NVIDIA variables)"
 
     # UWSM global_hardware.sh
     copy_template \
         "$UWSM_TEMPLATES_DIR/global_hardware.sh" \
         "$UWSM_ENV_DIR/global_hardware.sh" \
-        "uwsm/global_hardware.sh (variáveis globais NVIDIA)"
+        "uwsm/global_hardware.sh (global NVIDIA variables)"
 
     # UWSM hyprland_hardware.sh
     copy_template \
         "$UWSM_TEMPLATES_DIR/hyprland_hardware.sh" \
         "$UWSM_ENV_DIR/hyprland_hardware.sh" \
-        "uwsm/hyprland_hardware.sh (hardware Hyprland)"
+        "uwsm/hyprland_hardware.sh (Hyprland hardware)"
 
     echo ""
-    log_warn "NOTA: Se você tem GPU híbrida (Intel + NVIDIA), pode precisar"
-    log_warn "      editar os arquivos em ~/.config/hypr/local/ e"
-    log_warn "      ~/.config/uwsm/env.d/ para descomentar AQ_DRM_DEVICES."
+    log_warn "NOTE: If you have a hybrid GPU (Intel + NVIDIA), you may need to"
+    log_warn "      edit the files in ~/.config/hypr/local/ and"
+    log_warn "      ~/.config/uwsm/env.d/ to uncomment AQ_DRM_DEVICES."
 }
 
 # =============================================================================
-# Configurar ambiente sem NVIDIA
+# Configure environment without NVIDIA
 # =============================================================================
 setup_no_nvidia() {
     echo ""
-    log_info "Configurando ambiente padrão (sem NVIDIA)..."
+    log_info "Configuring default environment (no NVIDIA)..."
 
-    # Hyprland extra_environment.conf (vazio)
+    # Hyprland extra_environment.conf (empty)
     if [[ ! -f "$HYPR_LOCAL_DIR/extra_environment.conf" ]]; then
         cat > "$HYPR_LOCAL_DIR/extra_environment.conf" << 'EOF'
 # =============================================================================
 # Extra Environment Variables - Local
 # =============================================================================
-# Variáveis de ambiente locais específicas da máquina.
-# Este arquivo é sourced pelo hyprland.conf
+# Machine-specific local environment variables.
+# This file is sourced by hyprland.conf
 # =============================================================================
 
-# Adicione variáveis de ambiente específicas aqui
+# Add machine-specific environment variables here
 EOF
-        log_info "  Criado: local/extra_environment.conf (vazio)"
+        log_info "  Created: local/extra_environment.conf (empty)"
     fi
 
-    # UWSM - criar arquivos vazios
+    # UWSM - create empty files
     if [[ ! -f "$UWSM_ENV_DIR/global_hardware.sh" ]]; then
         echo "#!/bin/bash" > "$UWSM_ENV_DIR/global_hardware.sh"
-        log_info "  Criado: uwsm/global_hardware.sh (vazio)"
+        log_info "  Created: uwsm/global_hardware.sh (empty)"
     fi
 
     if [[ ! -f "$UWSM_ENV_DIR/hyprland_hardware.sh" ]]; then
         echo "#!/bin/bash" > "$UWSM_ENV_DIR/hyprland_hardware.sh"
-        log_info "  Criado: uwsm/hyprland_hardware.sh (vazio)"
+        log_info "  Created: uwsm/hyprland_hardware.sh (empty)"
     fi
 }
 
 # =============================================================================
-# Configurar wallpapers
+# Configure wallpapers
 # =============================================================================
 setup_wallpapers() {
     echo ""
-    log_info "Configurando wallpapers..."
+    log_info "Configuring wallpapers..."
 
     local WALLPAPERS_DIR="$HOME/.local/wallpapers"
     local WALLPAPERS_DATA="$DOTFILES_DIR/.data/wallpapers"
@@ -266,37 +266,37 @@ setup_wallpapers() {
 
     mkdir -p "$WALLPAPERS_DIR"
 
-    # Copiar wallpapers iniciais se a pasta estiver vazia (ignora .gitkeep e .current)
+    # Copy initial wallpapers if directory is empty (ignores .gitkeep and .current)
     local file_count
     file_count=$(find "$WALLPAPERS_DIR" -maxdepth 1 -type f \( -name '*.png' -o -name '*.jpg' -o -name '*.jpeg' -o -name '*.webp' -o -name '*.gif' \) 2>/dev/null | wc -l)
 
     if [[ "$file_count" -eq 0 ]]; then
         if [[ -d "$WALLPAPERS_DATA" ]]; then
             find "$WALLPAPERS_DATA" -maxdepth 1 -type f \( -name '*.png' -o -name '*.jpg' -o -name '*.jpeg' -o -name '*.webp' -o -name '*.gif' \) -exec cp -n {} "$WALLPAPERS_DIR/" \;
-            log_info "  Wallpapers iniciais copiados de .data/wallpapers/"
+            log_info "  Initial wallpapers copied from .data/wallpapers/"
         else
-            log_warn "  Diretório de wallpapers iniciais não encontrado: $WALLPAPERS_DATA"
+            log_warn "  Initial wallpapers directory not found: $WALLPAPERS_DATA"
         fi
     else
-        log_warn "  Pulando (wallpapers já existem): $WALLPAPERS_DIR"
+        log_warn "  Skipping (wallpapers already exist): $WALLPAPERS_DIR"
     fi
 
-    # Criar arquivo .current com wallpaper padrão
+    # Create .current file with default wallpaper
     if [[ ! -f "$CURRENT_FILE" ]]; then
         if [[ -f "$WALLPAPERS_DATA/.current" ]]; then
-            # Substituir /home/caio pelo $HOME real do usuário
+            # Replace /home/caio with the actual $HOME
             sed "s|/home/caio|$HOME|g" "$WALLPAPERS_DATA/.current" > "$CURRENT_FILE"
         else
             echo "$WALLPAPERS_DIR/Background2.png" > "$CURRENT_FILE"
         fi
-        log_info "  Criado: .current (wallpaper padrão)"
+        log_info "  Created: .current (default wallpaper)"
     else
-        log_warn "  Pulando (já existe): .current"
+        log_warn "  Skipping (already exists): .current"
     fi
 }
 
 # =============================================================================
-# Main (para execução direta)
+# Main (for direct execution)
 # =============================================================================
 run_hyprland_main() {
     echo ""
@@ -320,10 +320,10 @@ run_hyprland_main() {
 
     echo ""
     echo "=================================================="
-    log_info "Configuração do Hyprland concluída!"
+    log_info "Hyprland configuration complete!"
     echo "=================================================="
     echo ""
-    log_info "Arquivos criados/verificados:"
+    log_info "Files created/verified:"
     echo "  - ~/.config/hypr/monitors.conf"
     echo "  - ~/.config/hypr/workspaces.conf"
     echo "  - ~/.config/hypr/local/extra_environment.conf"
@@ -334,12 +334,12 @@ run_hyprland_main() {
     echo "  - ~/.config/quickshell/state.json"
     echo "  - ~/.local/wallpapers/ (wallpapers + .current)"
     echo ""
-    log_info "Use 'nwg-displays' para configurar seus monitores."
-    log_info "O workspace-manager.sh regenerará workspaces.conf automaticamente."
+    log_info "Use 'nwg-displays' to configure your monitors."
+    log_info "workspace-manager.sh will regenerate workspaces.conf automatically."
     echo ""
 }
 
-# Executar se chamado diretamente
+# Run if called directly
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     run_hyprland_main "$@"
 fi

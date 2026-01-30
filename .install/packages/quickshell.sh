@@ -2,7 +2,7 @@
 # =============================================================================
 # QuickShell Packages - QuickShell Bar/Shell
 # =============================================================================
-# Pacotes necessários para o QuickShell funcionar
+# Packages required for QuickShell to work
 # =============================================================================
 
 QUICKSHELL_PACKAGES=(
@@ -17,7 +17,7 @@ QUICKSHELL_PACKAGES=(
     "qt6-imageformats" # Additional image formats
 )
 
-# Pacotes AUR
+# AUR packages
 QUICKSHELL_AUR_PACKAGES=(
     # QuickShell
     "quickshell-git" # QuickShell shell framework

@@ -1,137 +1,137 @@
 # ⚡ Neovim Cheat Sheet
 
-| Core Config        | Valor                     |
+| Core Config        | Value                     |
 | :----------------- | :------------------------ |
-| **Leader Key**     | `Space` (Espaço)          |
+| **Leader Key**     | `Space`                   |
 | **Plugin Manager** | `lazy.nvim`               |
 | **LSP/Format**     | `Mason` + `Conform`       |
 | **Engine**         | `Smart Splits` + `Snacks` |
 
 ---
 
-## 🧭 Navegação & Janelas (Smart Splits)
+## 🧭 Navigation & Windows (Smart Splits)
 
-Integração fluida com o Tmux. Não requer Leader.
+Seamless integration with Tmux. Does not require Leader.
 
-| Atalho                 | Ação              | Descrição                                          |
-| :--------------------- | :---------------- | :------------------------------------------------- |
-| **`Ctrl` + `h j k l`** | **Navegar**       | Move o foco entre splits do Vim e Painéis do Tmux. |
-| **`Alt` + `h j k l`**  | **Redimensionar** | Aumenta/Diminui o tamanho do split atual.          |
-
----
-
-## 📋 Clipboard & Copiar/Colar
-
-Fluxo de trabalho onde do Yank e Clipboard do sistema
-
-| Atalho              | Ação                 | Descrição                                                               |
-| :------------------ | :------------------- | :---------------------------------------------------------------------- |
-| **`y`** / **`p`**   | **Interno (Seguro)** | `p` cola sempre o último **Yank** (`0`), ignorando deletes recentes.    |
-| **`Space` + `y`**   | Copiar p/ Sistema    | Copia a seleção para o clipboard do **Sistema** (Ctrl+V funciona fora). |
-| **`Space` + `p`**   | Colar do Sistema     | Cola o conteúdo vindo do clipboard do **Sistema**.                      |
-| **`Space` + `d`**   | Colar Deletado       | Cola o que foi realmente apagado/cortado (`dd` / `x` etc).              |
-| **`Space` + `"`**   | **Ver Gavetas**      | Abre menu visual (`Telescope`) com histórico de cópias.                 |
-| **`Space` + `y c`** | Exportar             | Envia um registro específico (`0`, `a`...) para o Sistema.              |
+| Shortcut               | Action         | Description                                          |
+| :--------------------- | :------------- | :--------------------------------------------------- |
+| **`Ctrl` + `h j k l`** | **Navigate**   | Moves focus between Vim splits and Tmux panes.       |
+| **`Alt` + `h j k l`**  | **Resize**     | Increases/Decreases the size of the current split.   |
 
 ---
 
-## ⌨️ Comandos do Leader (`Space` + Tecla)
+## 📋 Clipboard & Copy/Paste
 
-### 📂 Arquivos e Busca (Telescope)
+Workflow for Yank and system Clipboard
 
-|  Atalho   | Ação       | Descrição                                    |
-| :-------: | :--------- | :------------------------------------------- |
-| **`f f`** | Find Files | Busca arquivos pelo nome (ignora gitignore). |
-| **`f g`** | Live Grep  | Busca por texto dentro de todos os arquivos. |
-| **`f b`** | Buffers    | Lista arquivos abertos na memória.           |
-|  **`e`**  | Explorer   | Abre/Fecha a árvore lateral (`NeoTree`).     |
-
-### 🛠️ Ferramentas (Snacks.nvim)
-
-|      Atalho      | Ação           | Descrição                                 |
-| :--------------: | :------------- | :---------------------------------------- |
-|    **`l g`**     | **LazyGit**    | Abre interface gráfica do Git flutuante.  |
-|    **`g l`**     | Git Log        | Histórico de commits do arquivo atual.    |
-|    **`s f`**     | Scratch        | Bloco de notas temporário flutuante.      |
-|     **`S`**      | Select Scratch | Seleciona entre notas temporárias salvas. |
-|    **`u n`**     | Dismiss        | Limpa todas as notificações da tela.      |
-| **`Ctrl` + `/`** | Terminal       | Abre/Fecha terminal flutuante rápido.     |
-
-### 💾 Sessões (Persistence)
-
-O Neovim grava sessões automaticamente.
-
-|  Atalho   | Ação         | Descrição                              |
-| :-------: | :----------- | :------------------------------------- |
-| **`q s`** | Restore Dir  | Restaura a sessão da pasta atual.      |
-| **`q l`** | Restore Last | Restaura a última sessão global usada. |
-| **`q d`** | Stop         | Para de gravar a sessão atual.         |
+| Shortcut            | Action               | Description                                                                |
+| :------------------ | :------------------- | :------------------------------------------------------------------------- |
+| **`y`** / **`p`**   | **Internal (Safe)**  | `p` always pastes the last **Yank** (`0`), ignoring recent deletes.        |
+| **`Space` + `y`**   | Copy to System       | Copies the selection to the **System** clipboard (Ctrl+V works outside).   |
+| **`Space` + `p`**   | Paste from System    | Pastes content from the **System** clipboard.                              |
+| **`Space` + `d`**   | Paste Deleted        | Pastes what was actually deleted/cut (`dd` / `x` etc).                     |
+| **`Space` + `"`**   | **View Registers**   | Opens a visual menu (`Telescope`) with copy history.                       |
+| **`Space` + `y c`** | Export               | Sends a specific register (`0`, `a`...) to the System.                     |
 
 ---
 
-## 🧠 Código e Inteligência (LSP)
+## ⌨️ Leader Commands (`Space` + Key)
 
-Atalhos disponíveis quando um arquivo de código está aberto.
+### 📂 Files and Search (Telescope)
 
-### ⚡ Ações Rápidas
+| Shortcut  | Action     | Description                                    |
+| :-------: | :--------- | :--------------------------------------------- |
+| **`f f`** | Find Files | Searches files by name (ignores gitignore).    |
+| **`f g`** | Live Grep  | Searches for text inside all files.            |
+| **`f b`** | Buffers    | Lists open files in memory.                    |
+|  **`e`**  | Explorer   | Opens/Closes the side tree (`NeoTree`).        |
 
-|  Atalho   | Comando     | Descrição                                       |
-| :-------: | :---------- | :---------------------------------------------- |
-|  **`K`**  | Hover       | Abre documentação da função sob o cursor.       |
-| **`g d`** | Definition  | Pula para a definição da variável/função.       |
-| **`r n`** | Rename      | Renomeia variável no projeto todo.              |
-| **`c a`** | Code Action | Menu de correções rápidas (Fix/Import).         |
-| **`m p`** | **Format**  | Formata o arquivo (`Conform`: Prettier/Stylua). |
+### 🛠️ Tools (Snacks.nvim)
+
+|      Shortcut     | Action         | Description                                |
+| :--------------: | :------------- | :----------------------------------------- |
+|    **`l g`**     | **LazyGit**    | Opens floating Git graphical interface.    |
+|    **`g l`**     | Git Log        | Commit history of the current file.        |
+|    **`s f`**     | Scratch        | Floating temporary notepad.                |
+|     **`S`**      | Select Scratch | Selects among saved temporary notes.       |
+|    **`u n`**     | Dismiss        | Clears all notifications from the screen.  |
+| **`Ctrl` + `/`** | Terminal       | Opens/Closes quick floating terminal.      |
+
+### 💾 Sessions (Persistence)
+
+Neovim saves sessions automatically.
+
+| Shortcut  | Action       | Description                                  |
+| :-------: | :----------- | :------------------------------------------- |
+| **`q s`** | Restore Dir  | Restores the session of the current folder.  |
+| **`q l`** | Restore Last | Restores the last global session used.       |
+| **`q d`** | Stop         | Stops recording the current session.         |
+
+---
+
+## 🧠 Code and Intelligence (LSP)
+
+Shortcuts available when a code file is open.
+
+### ⚡ Quick Actions
+
+| Shortcut  | Command     | Description                                          |
+| :-------: | :---------- | :--------------------------------------------------- |
+|  **`K`**  | Hover       | Opens documentation of the function under the cursor.|
+| **`g d`** | Definition  | Jumps to the variable/function definition.           |
+| **`r n`** | Rename      | Renames variable across the entire project.          |
+| **`c a`** | Code Action | Quick fix menu (Fix/Import).                         |
+| **`m p`** | **Format**  | Formats the file (`Conform`: Prettier/Stylua).       |
 
 ### 🤖 Autocomplete (CMP)
 
-|        Tecla         | Ação                                                   |
-| :------------------: | :----------------------------------------------------- |
-| **`Ctrl` + `Space`** | Força aparecer o menu de sugestões.                    |
-|      **`Tab`**       | Próxima sugestão / Pula para próximo campo do snippet. |
-|     **`Enter`**      | Confirma a sugestão selecionada.                       |
+|        Key           | Action                                                    |
+| :------------------: | :-------------------------------------------------------- |
+| **`Ctrl` + `Space`** | Forces the suggestions menu to appear.                    |
+|      **`Tab`**       | Next suggestion / Jumps to next snippet field.            |
+|     **`Enter`**      | Confirms the selected suggestion.                         |
 
 ### 📝 Git (Gitsigns)
 
-|  Atalho   | Ação                                                    |
-| :-------: | :------------------------------------------------------ |
-| **`] c`** | Pula para a próxima alteração (Hunk).                   |
-| **`[ c`** | Pula para a alteração anterior.                         |
-| **`g p`** | **Preview**: Mostra o que mudou na linha atual (popup). |
-| **`g b`** | **Blame**: Mostra quem editou a linha atual.            |
+| Shortcut  | Action                                                       |
+| :-------: | :----------------------------------------------------------- |
+| **`] c`** | Jumps to the next change (Hunk).                             |
+| **`[ c`** | Jumps to the previous change.                                |
+| **`g p`** | **Preview**: Shows what changed on the current line (popup). |
+| **`g b`** | **Blame**: Shows who edited the current line.                |
 
 ---
 
-## ⚙️ Manutenção e Instalação
+## ⚙️ Maintenance and Installation
 
-### Estrutura de Pastas
+### Folder Structure
 
 ```text
 ~/.config/nvim/
 ├── init.lua            # Boot
-├── lazy-lock.json      # Versões travadas (Não mexa)
+├── lazy-lock.json      # Locked versions (Don't touch)
 ├── lua/
 │   ├── config/         # Options, Keymaps, Commands
-│   ├── mytheme/        # Seu tema local (Palette/Highlights)
-│   └── plugins/        # Módulos (LSP, Snacks, CMP, etc)
+│   ├── mytheme/        # Your local theme (Palette/Highlights)
+│   └── plugins/        # Modules (LSP, Snacks, CMP, etc)
 ```
 
-### Como instalar...
+### How to install...
 
-**1. Novos Plugins:**
-Crie um arquivo em `lua/plugins/nome.lua` e cole o código `return { ... }`. O `lazy` instala sozinho no restart.
+**1. New Plugins:**
+Create a file at `lua/plugins/name.lua` and paste the `return { ... }` code. `lazy` installs automatically on restart.
 
-**2. Novas Linguagens (LSP/Formatters):**
+**2. New Languages (LSP/Formatters):**
 
-1. Digite `:Mason`.
-2. Busque com `/` (ex: `python`, `gopls`).
-3. Aperte `i` para instalar.
-4. **Obrigatório:** Adicione na lista `ensure_installed` em:
-   - `lua/plugins/lsp.lua` (para Servidores)
-   - `lua/plugins/formatting.lua` (para Formatadores)
+1. Type `:Mason`.
+2. Search with `/` (e.g.: `python`, `gopls`).
+3. Press `i` to install.
+4. **Required:** Add to the `ensure_installed` list in:
+   - `lua/plugins/lsp.lua` (for Servers)
+   - `lua/plugins/formatting.lua` (for Formatters)
 
-**3. Atualizações:**
+**3. Updates:**
 
-- Atualizar Plugins: `:Lazy sync`
-- Atualizar Ferramentas: `:MasonUpdate`
-- Recarregar Tema: `<Space>rt` (Reload Theme)
+- Update Plugins: `:Lazy sync`
+- Update Tools: `:MasonUpdate`
+- Reload Theme: `<Space>rt` (Reload Theme)

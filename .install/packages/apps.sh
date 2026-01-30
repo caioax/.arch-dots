@@ -2,33 +2,33 @@
 # =============================================================================
 # Application Packages - Desktop Applications
 # =============================================================================
-# Aplicativos de uso diário
+# Daily-use applications
 # =============================================================================
 
 APPS_PACKAGES=(
     # File Manager
     "dolphin"                  # KDE file manager
     "dolphin-plugins"          # Dolphin plugins
-    "ark"                      # Archive manager (integração com Dolphin)
-    "ffmpegthumbs"             # Video thumbnails para Dolphin
+    "ark"                      # Archive manager (Dolphin integration)
+    "ffmpegthumbs"             # Video thumbnails for Dolphin
     "kdegraphics-thumbnailers" # Image/PDF thumbnails
 
     # Launcher
     "rofi-wayland" # Application launcher (Wayland fork)
 
-    # Multi mídia
+    # Multimedia
     "mpv"
 
     # Flatpak Store
     "discover"
 
     # KDE Integration
-    "breeze"             # KDE theme (para ícones do Dolphin)
-    "kio-admin"          # KIO para acesso root no Dolphin
-    "archlinux-xdg-menu" # Xdg para reconhecer apps padrão
+    "breeze"             # KDE theme (for Dolphin icons)
+    "kio-admin"          # KIO for root access in Dolphin
+    "archlinux-xdg-menu" # XDG for recognizing default apps
 )
 
-# Pacotes AUR
+# AUR packages
 APPS_AUR_PACKAGES=(
     "zen-browser-bin" # Zen Browser (Firefox fork)
     "spotify"         # Spotify music player
