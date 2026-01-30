@@ -44,6 +44,9 @@ UTILS_PACKAGES=(
     "grim"  # Screenshot utility (used by hyprshot)
     "slurp" # Region selection (used by hyprshot)
 
+    # Image Processing
+    "imagemagick" # Image manipulation (used by ThemeService for logo colorization)
+
     # Misc
     "polkit-kde-agent" # KDE Polkit agent
     "qt5-wayland"      # Qt5 Wayland support

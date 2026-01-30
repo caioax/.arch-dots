@@ -1,4 +1,4 @@
-# === VISUAL FETCH (MUST BE FIRST) ===
+# === VISUAL FETCH ===
 # Running before P10k instant prompt to prevent warnings
 if [[ $(pgrep -cx kitty) -le 1 ]] && command -v fastfetch >/dev/null 2>&1; then
   fastfetch
