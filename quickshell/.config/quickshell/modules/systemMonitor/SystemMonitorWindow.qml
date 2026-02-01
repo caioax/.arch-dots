@@ -1,86 +1,20 @@
 pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
-import Quickshell.Wayland
-import Quickshell.Hyprland
 import qs.config
 import qs.services
+import "../../components/"
 
-PanelWindow {
+QsPopupWindow {
     id: root
 
+    popupWidth: 380
+    popupMaxHeight: 700
+    anchorSide: "left"
+    moduleName: "SystemMonitor"
+    contentImplicitHeight: content.implicitHeight
+
     readonly property bool hasGpu: SystemMonitorService.gpuType !== "unknown"
-    readonly property int contentWidth: 380
-    readonly property int maxHeight: 700
-    readonly property int screenMargin: 15
-
-    WlrLayershell.namespace: "qs_modules"
-    WlrLayershell.layer: WlrLayer.Overlay
-    WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
-    WlrLayershell.exclusiveZone: -1
-
-    anchors {
-        top: true
-        left: true
-    }
-
-    margins {
-        top: Config.barHeight + 10
-        left: 10
-    }
-
-    implicitWidth: contentWidth + (screenMargin * 2)
-    implicitHeight: maxHeight
-    color: "transparent"
-
-    property bool isClosing: false
-    property bool isOpening: false
-
-    function closeWindow() {
-        if (!visible)
-            return;
-        isClosing = true;
-        closeTimer.restart();
-    }
-
-    Timer {
-        id: closeTimer
-        interval: Config.animDuration
-        onTriggered: {
-            root.visible = false;
-            isClosing = false;
-        }
-    }
-
-    HyprlandFocusGrab {
-        id: focusGrab
-        windows: [root]
-        active: false
-        onCleared: root.closeWindow()
-    }
-
-    Timer {
-        id: grabTimer
-        interval: 10
-        onTriggered: {
-            focusGrab.active = true;
-            background.forceActiveFocus();
-        }
-    }
-
-    onVisibleChanged: {
-        if (visible) {
-            isClosing = false;
-            isOpening = true;
-            WindowManagerService.registerOpen("SystemMonitor");
-            grabTimer.restart();
-        } else {
-            focusGrab.active = false;
-            isOpening = false;
-            WindowManagerService.registerClose("SystemMonitor");
-        }
-    }
 
     // Color helpers
     function usageColor(usage: int): color {
@@ -99,264 +33,222 @@ PanelWindow {
         return Config.successColor;
     }
 
-    Item {
+    ColumnLayout {
+        id: content
         anchors.fill: parent
+        spacing: 12
 
-        Rectangle {
-            id: background
-            width: root.contentWidth
-            height: content.implicitHeight + 32
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.leftMargin: (root.screenMargin - 10) / 2
-            color: Config.backgroundTransparentColor
-            radius: Config.radiusLarge
-            clip: true
+        // ==================== HEADER ====================
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: 10
 
-            transformOrigin: Item.TopLeft
-            property bool showState: visible && !root.isClosing && root.isOpening
-            scale: showState ? 1.0 : 0.9
-            opacity: showState ? 1.0 : 0.0
+            Rectangle {
+                Layout.preferredWidth: 36
+                Layout.preferredHeight: 36
+                radius: Config.radius
+                color: Qt.alpha(Config.accentColor, 0.15)
 
-            Behavior on scale {
-                NumberAnimation {
-                    duration: Config.animDurationLong
-                    easing.type: Easing.OutExpo
-                }
-            }
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: Config.animDurationShort
-                }
-            }
-            Behavior on height {
-                NumberAnimation {
-                    duration: 200
-                    easing.type: Easing.OutQuad
+                Text {
+                    anchors.centerIn: parent
+                    text: "󰍛"
+                    font.family: Config.font
+                    font.pixelSize: 18
+                    color: Config.accentColor
                 }
             }
 
-            Keys.onEscapePressed: root.closeWindow()
+            Text {
+                text: "System Monitor"
+                font.family: Config.font
+                font.bold: true
+                font.pixelSize: Config.fontSizeLarge
+                color: Config.textColor
+                Layout.fillWidth: true
+            }
 
-            ColumnLayout {
-                id: content
-                anchors.fill: parent
-                anchors.margins: 16
-                spacing: 14
+            // Uptime badge
+            Rectangle {
+                Layout.preferredHeight: 26
+                Layout.preferredWidth: uptimeContent.implicitWidth + 14
+                radius: Config.radius
+                color: Config.surface1Color
 
-                // ==================== HEADER ====================
                 RowLayout {
-                    Layout.fillWidth: true
-                    spacing: 10
+                    id: uptimeContent
+                    anchors.centerIn: parent
+                    spacing: 4
 
-                    Rectangle {
-                        Layout.preferredWidth: 36
-                        Layout.preferredHeight: 36
-                        radius: Config.radius
-                        color: Qt.alpha(Config.accentColor, 0.15)
-
-                        Text {
-                            anchors.centerIn: parent
-                            text: "󰍛"
-                            font.family: Config.font
-                            font.pixelSize: 18
-                            color: Config.accentColor
-                        }
+                    Text {
+                        text: "󰅐"
+                        font.family: Config.font
+                        font.pixelSize: 12
+                        color: Config.subtextColor
                     }
 
                     Text {
-                        text: "System Monitor"
+                        text: SystemMonitorService.uptime
                         font.family: Config.font
+                        font.pixelSize: Config.fontSizeSmall
                         font.bold: true
-                        font.pixelSize: Config.fontSizeLarge
-                        color: Config.textColor
-                        Layout.fillWidth: true
-                    }
-
-                    // Uptime badge
-                    Rectangle {
-                        Layout.preferredHeight: 26
-                        Layout.preferredWidth: uptimeContent.implicitWidth + 14
-                        radius: Config.radius
-                        color: Config.surface1Color
-
-                        RowLayout {
-                            id: uptimeContent
-                            anchors.centerIn: parent
-                            spacing: 4
-
-                            Text {
-                                text: "󰅐"
-                                font.family: Config.font
-                                font.pixelSize: 12
-                                color: Config.subtextColor
-                            }
-
-                            Text {
-                                text: SystemMonitorService.uptime
-                                font.family: Config.font
-                                font.pixelSize: Config.fontSizeSmall
-                                font.bold: true
-                                color: Config.subtextColor
-                            }
-                        }
+                        color: Config.subtextColor
                     }
                 }
+            }
+        }
 
-                // ==================== SEPARATOR ====================
+        // ==================== SEPARATOR ====================
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 1
+            color: Config.surface1Color
+        }
+
+        // ==================== GAUGES (CPU + GPU) ====================
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter
+            spacing: 20
+
+            ArcGauge {
+                label: "CPU"
+                usage: SystemMonitorService.cpuUsage
+                temp: SystemMonitorService.cpuTemp
+                arcColor: root.usageColor(SystemMonitorService.cpuUsage)
+                badgeColor: root.tempColor(SystemMonitorService.cpuTemp)
+            }
+
+            ArcGauge {
+                visible: root.hasGpu
+                label: "GPU"
+                subtitle: SystemMonitorService.gpuType.toUpperCase()
+                usage: SystemMonitorService.gpuUsage
+                temp: SystemMonitorService.gpuTemp
+                arcColor: root.usageColor(SystemMonitorService.gpuUsage)
+                badgeColor: root.tempColor(SystemMonitorService.gpuTemp)
+            }
+        }
+
+        // ==================== SEPARATOR ====================
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 1
+            color: Config.surface1Color
+        }
+
+        // ==================== RAM ====================
+        MetricBar {
+            icon: "󰘚"
+            label: "RAM"
+            usage: SystemMonitorService.ramUsage
+            detail: SystemMonitorService.ramUsed + " / " + SystemMonitorService.ramTotal + " GiB"
+            barColor: root.usageColor(SystemMonitorService.ramUsage)
+        }
+
+        // ==================== DISK ====================
+        MetricBar {
+            icon: "󰋊"
+            label: "Disk (/)"
+            usage: SystemMonitorService.diskUsage
+            detail: SystemMonitorService.diskUsed + " / " + SystemMonitorService.diskTotal + " GiB"
+            barColor: root.usageColor(SystemMonitorService.diskUsage)
+        }
+
+        // ==================== SEPARATOR ====================
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 1
+            color: Config.surface1Color
+        }
+
+        // ==================== NETWORK ====================
+        ColumnLayout {
+            Layout.fillWidth: true
+            spacing: 8
+
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 8
+
+                Text {
+                    text: "󰛳"
+                    font.family: Config.font
+                    font.pixelSize: Config.fontSizeLarge
+                    color: Config.accentColor
+                }
+
+                Text {
+                    text: "Network"
+                    font.family: Config.font
+                    font.pixelSize: Config.fontSizeNormal
+                    font.bold: true
+                    color: Config.textColor
+                    Layout.fillWidth: true
+                }
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 12
+
+                // Download
                 Rectangle {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 1
-                    color: Config.surface1Color
-                }
-
-                // ==================== GAUGES (CPU + GPU) ====================
-                RowLayout {
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignHCenter
-                    spacing: 20
-
-                    ArcGauge {
-                        label: "CPU"
-                        usage: SystemMonitorService.cpuUsage
-                        temp: SystemMonitorService.cpuTemp
-                        arcColor: root.usageColor(SystemMonitorService.cpuUsage)
-                        badgeColor: root.tempColor(SystemMonitorService.cpuTemp)
-                    }
-
-                    ArcGauge {
-                        visible: root.hasGpu
-                        label: "GPU"
-                        subtitle: SystemMonitorService.gpuType.toUpperCase()
-                        usage: SystemMonitorService.gpuUsage
-                        temp: SystemMonitorService.gpuTemp
-                        arcColor: root.usageColor(SystemMonitorService.gpuUsage)
-                        badgeColor: root.tempColor(SystemMonitorService.gpuTemp)
-                    }
-                }
-
-                // ==================== SEPARATOR ====================
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 1
-                    color: Config.surface1Color
-                }
-
-                // ==================== RAM ====================
-                MetricBar {
-                    icon: "󰘚"
-                    label: "RAM"
-                    usage: SystemMonitorService.ramUsage
-                    detail: SystemMonitorService.ramUsed + " / " + SystemMonitorService.ramTotal + " GiB"
-                    barColor: root.usageColor(SystemMonitorService.ramUsage)
-                }
-
-                // ==================== DISK ====================
-                MetricBar {
-                    icon: "󰋊"
-                    label: "Disk (/)"
-                    usage: SystemMonitorService.diskUsage
-                    detail: SystemMonitorService.diskUsed + " / " + SystemMonitorService.diskTotal + " GiB"
-                    barColor: root.usageColor(SystemMonitorService.diskUsage)
-                }
-
-                // ==================== SEPARATOR ====================
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 1
-                    color: Config.surface1Color
-                }
-
-                // ==================== NETWORK ====================
-                ColumnLayout {
-                    Layout.fillWidth: true
-                    spacing: 8
+                    implicitHeight: 34
+                    radius: Config.radius
+                    color: Config.surface0Color
 
                     RowLayout {
-                        Layout.fillWidth: true
-                        spacing: 8
+                        anchors.fill: parent
+                        anchors.leftMargin: 10
+                        anchors.rightMargin: 10
+                        spacing: 6
 
                         Text {
-                            text: "󰛳"
+                            text: "󰁅"
                             font.family: Config.font
-                            font.pixelSize: Config.fontSizeLarge
-                            color: Config.accentColor
+                            font.pixelSize: Config.fontSizeNormal
+                            color: Config.successColor
                         }
 
                         Text {
-                            text: "Network"
+                            text: SystemMonitorService.networkDown
                             font.family: Config.font
-                            font.pixelSize: Config.fontSizeNormal
+                            font.pixelSize: Config.fontSizeSmall
                             font.bold: true
                             color: Config.textColor
                             Layout.fillWidth: true
                         }
                     }
+                }
+
+                // Upload
+                Rectangle {
+                    Layout.fillWidth: true
+                    implicitHeight: 34
+                    radius: Config.radius
+                    color: Config.surface0Color
 
                     RowLayout {
-                        Layout.fillWidth: true
-                        spacing: 12
+                        anchors.fill: parent
+                        anchors.leftMargin: 10
+                        anchors.rightMargin: 10
+                        spacing: 6
 
-                        // Download
-                        Rectangle {
-                            Layout.fillWidth: true
-                            implicitHeight: 34
-                            radius: Config.radius
-                            color: Config.surface0Color
-
-                            RowLayout {
-                                anchors.fill: parent
-                                anchors.leftMargin: 10
-                                anchors.rightMargin: 10
-                                spacing: 6
-
-                                Text {
-                                    text: "󰁅"
-                                    font.family: Config.font
-                                    font.pixelSize: Config.fontSizeNormal
-                                    color: Config.successColor
-                                }
-
-                                Text {
-                                    text: SystemMonitorService.networkDown
-                                    font.family: Config.font
-                                    font.pixelSize: Config.fontSizeSmall
-                                    font.bold: true
-                                    color: Config.textColor
-                                    Layout.fillWidth: true
-                                }
-                            }
+                        Text {
+                            text: "󰁝"
+                            font.family: Config.font
+                            font.pixelSize: Config.fontSizeNormal
+                            color: Config.warningColor
                         }
 
-                        // Upload
-                        Rectangle {
+                        Text {
+                            text: SystemMonitorService.networkUp
+                            font.family: Config.font
+                            font.pixelSize: Config.fontSizeSmall
+                            font.bold: true
+                            color: Config.textColor
                             Layout.fillWidth: true
-                            implicitHeight: 34
-                            radius: Config.radius
-                            color: Config.surface0Color
-
-                            RowLayout {
-                                anchors.fill: parent
-                                anchors.leftMargin: 10
-                                anchors.rightMargin: 10
-                                spacing: 6
-
-                                Text {
-                                    text: "󰁝"
-                                    font.family: Config.font
-                                    font.pixelSize: Config.fontSizeNormal
-                                    color: Config.warningColor
-                                }
-
-                                Text {
-                                    text: SystemMonitorService.networkUp
-                                    font.family: Config.font
-                                    font.pixelSize: Config.fontSizeSmall
-                                    font.bold: true
-                                    color: Config.textColor
-                                    Layout.fillWidth: true
-                                }
-                            }
                         }
                     }
                 }
@@ -411,7 +303,6 @@ PanelWindow {
                     var sweepAngle = (270 * Math.PI) / 180;
                     var endAngle = startAngle + sweepAngle;
 
-                    // Background arc
                     ctx.beginPath();
                     ctx.arc(cx, cy, radius, startAngle, endAngle);
                     ctx.strokeStyle = Config.surface2Color.toString();
@@ -419,7 +310,6 @@ PanelWindow {
                     ctx.lineCap = "round";
                     ctx.stroke();
 
-                    // Value arc
                     if (gauge.animatedUsage > 0) {
                         var valueEnd = startAngle + (gauge.animatedUsage / 100) * sweepAngle;
                         ctx.beginPath();
@@ -546,7 +436,6 @@ PanelWindow {
         }
         onUsageChanged: animatedUsage = usage
 
-        // Header row: icon + label + detail
         RowLayout {
             Layout.fillWidth: true
             spacing: 8
@@ -558,7 +447,9 @@ PanelWindow {
                 color: metric.barColor
 
                 Behavior on color {
-                    ColorAnimation { duration: Config.animDuration }
+                    ColorAnimation {
+                        duration: Config.animDuration
+                    }
                 }
             }
 
@@ -570,7 +461,9 @@ PanelWindow {
                 color: Config.textColor
             }
 
-            Item { Layout.fillWidth: true }
+            Item {
+                Layout.fillWidth: true
+            }
 
             Text {
                 text: metric.detail
@@ -580,7 +473,6 @@ PanelWindow {
             }
         }
 
-        // Progress bar
         Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: 8
@@ -594,12 +486,13 @@ PanelWindow {
                 color: metric.barColor
 
                 Behavior on color {
-                    ColorAnimation { duration: Config.animDuration }
+                    ColorAnimation {
+                        duration: Config.animDuration
+                    }
                 }
             }
         }
 
-        // Percentage label
         Text {
             text: metric.usage + "% used"
             font.family: Config.font

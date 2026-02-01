@@ -30,7 +30,10 @@ PanelWindow {
     // Click on background closes
     MouseArea {
         anchors.fill: parent
-        onClicked: ClipboardService.hide()
+        onClicked: {
+            contentLoader.item.forceActiveFocus();
+            ClipboardService.hide();
+        }
     }
 
     // Loader that creates/destroys the content
@@ -126,7 +129,9 @@ PanelWindow {
                         color: clearAllMouse.containsMouse ? Qt.alpha(Config.errorColor, 0.15) : Config.surface1Color
 
                         Behavior on color {
-                            ColorAnimation { duration: Config.animDurationShort }
+                            ColorAnimation {
+                                duration: Config.animDurationShort
+                            }
                         }
 
                         RowLayout {
@@ -171,7 +176,9 @@ PanelWindow {
                     border.color: Config.accentColor
 
                     Behavior on border.width {
-                        NumberAnimation { duration: Config.animDurationShort }
+                        NumberAnimation {
+                            duration: Config.animDurationShort
+                        }
                     }
 
                     RowLayout {
@@ -187,7 +194,9 @@ PanelWindow {
                             color: searchInput.activeFocus ? Config.accentColor : Config.subtextColor
 
                             Behavior on color {
-                                ColorAnimation { duration: Config.animDurationShort }
+                                ColorAnimation {
+                                    duration: Config.animDurationShort
+                                }
                             }
                         }
 
@@ -208,7 +217,10 @@ PanelWindow {
 
                             onTextChanged: ClipboardService.query = text
 
-                            Keys.onEscapePressed: ClipboardService.hide()
+                            Keys.onEscapePressed: {
+                                focus = false;
+                                ClipboardService.hide();
+                            }
                             Keys.onReturnPressed: ClipboardService.selectCurrent()
                             Keys.onUpPressed: ClipboardService.navigateUp()
                             Keys.onDownPressed: ClipboardService.navigateDown()
@@ -429,7 +441,9 @@ PanelWindow {
                             opacity: parent.active ? 1 : 0
 
                             Behavior on opacity {
-                                NumberAnimation { duration: Config.animDurationShort }
+                                NumberAnimation {
+                                    duration: Config.animDurationShort
+                                }
                             }
                         }
                     }

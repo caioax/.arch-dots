@@ -11,32 +11,21 @@ Item {
     signal backRequested
 
     Layout.fillWidth: true
-    implicitHeight: 350
+    implicitHeight: main.implicitHeight
 
     ColumnLayout {
         id: main
-        anchors.fill: parent
-        spacing: 15
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        spacing: 12
 
         // Header
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.margins: 10
-            spacing: 10
-
-            // Back button
-            BackButton {
-                onClicked: root.backRequested()
-            }
-
-            // Title
-            Text {
-                text: "Night Light"
-                color: Config.textColor
-                font.bold: true
-                font.pixelSize: Config.fontSizeIcon
-                Layout.fillWidth: true
-            }
+        PageHeader {
+            icon: BrightnessService.nightLightEnabled ? "󰌵" : "󰌶"
+            iconColor: BrightnessService.nightLightEnabled ? Config.warningColor : Config.subtextColor
+            title: "Night Light"
+            onBackClicked: root.backRequested()
 
             // On/Off Switch
             QsSwitch {
@@ -45,19 +34,25 @@ Item {
             }
         }
 
+        // Separator
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 1
+            color: Config.surface1Color
+        }
+
         // Content
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.margins: 15
-            spacing: 20
+            Layout.margins: 10
+            spacing: 16
 
             // Large icon
             Rectangle {
                 Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: 80
-                Layout.preferredHeight: 80
-                radius: 40
+                Layout.preferredWidth: 64
+                Layout.preferredHeight: 64
+                radius: 32
                 color: BrightnessService.nightLightEnabled ? Qt.alpha(Config.warningColor, 0.2) : Config.surface1Color
 
                 Behavior on color {
@@ -70,7 +65,7 @@ Item {
                     anchors.centerIn: parent
                     text: BrightnessService.nightLightEnabled ? "󰌵" : "󰌶"
                     font.family: Config.font
-                    font.pixelSize: 36
+                    font.pixelSize: 28
                     color: BrightnessService.nightLightEnabled ? Config.warningColor : Config.subtextColor
                 }
             }
@@ -91,7 +86,7 @@ Item {
 
                 Text {
                     Layout.alignment: Qt.AlignHCenter
-                    text: BrightnessService.nightLightEnabled 
+                    text: BrightnessService.nightLightEnabled
                         ? "Temperature: " + BrightnessService.nightLightTemperature + "K"
                         : "Reduces blue light from the screen"
                     font.family: Config.font
@@ -100,17 +95,11 @@ Item {
                 }
             }
 
-            // Spacer
-            Item {
-                Layout.fillHeight: true
-            }
-
             // Intensity Slider
             ColumnLayout {
                 Layout.fillWidth: true
                 spacing: 10
 
-                // Label
                 RowLayout {
                     Layout.fillWidth: true
 
@@ -139,7 +128,6 @@ Item {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 40
 
-                    // Edge labels
                     RowLayout {
                         anchors.top: parent.top
                         anchors.left: parent.left
@@ -164,7 +152,6 @@ Item {
                         }
                     }
 
-                    // Slider track
                     Rectangle {
                         id: sliderTrack
                         anchors.bottom: parent.bottom
@@ -173,7 +160,6 @@ Item {
                         height: 8
                         radius: 4
 
-                        // Warm to cool color gradient
                         gradient: Gradient {
                             orientation: Gradient.Horizontal
                             GradientStop {
@@ -190,15 +176,12 @@ Item {
                             }
                         }
 
-                        // Thumb (handle)
                         Rectangle {
                             id: sliderThumb
                             width: 20
                             height: 20
                             radius: 10
                             y: (parent.height - height) / 2
-
-                            // Position based on intensity (inverted: 0 = warm = left)
                             x: (1 - BrightnessService.nightLightIntensity) * (parent.width - width)
 
                             color: Config.textColor
@@ -211,7 +194,6 @@ Item {
                                 }
                             }
 
-                            // Shadow
                             Rectangle {
                                 anchors.fill: parent
                                 anchors.margins: -2
@@ -237,7 +219,6 @@ Item {
                             function updateFromMouse(mouseX) {
                                 let percent = (mouseX - 10) / (sliderTrack.width - 20);
                                 percent = Math.max(0, Math.min(1, percent));
-                                // Inverted: left = warm (0), right = cool (1)
                                 BrightnessService.setNightLightIntensity(1 - percent);
                             }
                         }
@@ -249,7 +230,7 @@ Item {
             ColumnLayout {
                 Layout.fillWidth: true
                 spacing: 10
-                Layout.topMargin: 10
+                Layout.topMargin: 6
 
                 Text {
                     text: "Presets"
@@ -265,10 +246,10 @@ Item {
 
                     Repeater {
                         model: [
-                            { label: "Candle", temp: 2500, color: "#ff6b00" },
-                            { label: "Warm", temp: 3500, color: "#ff9500" },
+                            { label: "Cool", temp: 5500, color: "#fff5e6" },
                             { label: "Neutral", temp: 4500, color: "#ffcc00" },
-                            { label: "Cool", temp: 5500, color: "#fff5e6" }
+                            { label: "Warm", temp: 3500, color: "#ff9500" },
+                            { label: "Candle", temp: 2500, color: "#ff6b00" }
                         ]
 
                         delegate: Rectangle {
@@ -320,11 +301,6 @@ Item {
                         }
                     }
                 }
-            }
-
-            // Spacer final
-            Item {
-                Layout.fillHeight: true
             }
         }
     }

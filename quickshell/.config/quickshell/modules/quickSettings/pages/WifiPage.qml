@@ -17,33 +17,18 @@ Item {
     ColumnLayout {
         id: main
         anchors.fill: parent
-        spacing: 15
+        spacing: 12
 
         // Header
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.margins: 10
-            spacing: 10
-
-            // Back button
-            BackButton {
-                onClicked: root.backRequested()
-            }
-
-            // Title
-            Text {
-                text: "Wi-Fi"
-                color: Config.textColor
-                font.bold: true
-                font.pixelSize: Config.fontSizeIcon
-                Layout.fillWidth: true
-            }
+        PageHeader {
+            icon: NetworkService.systemIcon
+            title: "Wi-Fi"
+            onBackClicked: root.backRequested()
 
             // Scan Button
             RefreshButton {
                 visible: NetworkService.wifiEnabled
                 loading: NetworkService.scanning
-
                 onClicked: NetworkService.scan()
             }
 
@@ -52,6 +37,13 @@ Item {
                 checked: NetworkService.wifiEnabled
                 onToggled: NetworkService.toggleWifi()
             }
+        }
+
+        // Separator
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 1
+            color: Config.surface1Color
         }
 
         // Network List
@@ -68,20 +60,16 @@ Item {
             delegate: DeviceCard {
                 required property var modelData
 
-                // Helper to know if this card is connecting
                 property bool isConnectingThis: NetworkService.connectingSsid === modelData.ssid
 
-                // Data
                 title: modelData.ssid || "Hidden Network"
                 subtitle: modelData.signal + "%"
                 icon: NetworkService.getWifiIcon(modelData.signal)
 
-                // States
                 active: modelData.active
                 connecting: isConnectingThis
                 secured: modelData.secure && !active && !connecting
 
-                // Status text
                 statusText: {
                     if (connecting)
                         return "Connecting...";
@@ -94,7 +82,6 @@ Item {
                     return "Open";
                 }
 
-                // Menu
                 showMenu: !connecting
 
                 menuModel: {
@@ -103,7 +90,7 @@ Item {
                         list.push({
                             text: "Disconnect",
                             action: "disconnect",
-                            icon: "",
+                            icon: "",
                             textColor: Config.warningColor,
                             iconColor: Config.warningColor
                         });
@@ -111,7 +98,7 @@ Item {
                         list.push({
                             text: "Connect",
                             action: "connect",
-                            icon: "",
+                            icon: "",
                             textColor: Config.successColor,
                             iconColor: Config.successColor
                         });
@@ -120,7 +107,7 @@ Item {
                         list.push({
                             text: "Forget",
                             action: "forget",
-                            icon: "",
+                            icon: "",
                             textColor: Config.errorColor,
                             iconColor: Config.errorColor
                         });
@@ -138,7 +125,6 @@ Item {
                     }
                 }
 
-                // Main click
                 onClicked: wifiToggleConnect()
 
                 function wifiToggleConnect() {
@@ -157,19 +143,64 @@ Item {
                 }
             }
 
-            // Empty list message
-            Text {
+            // Empty state
+            Column {
                 anchors.centerIn: parent
-                anchors.verticalCenterOffset: -40
-                visible: !NetworkService.wifiEnabled || (parent.count === 0 && !NetworkService.scanning)
-                text: {
-                    if (!NetworkService.wifiEnabled)
-                        return "Wi-Fi Off";
-                    return "No networks found";
+                spacing: 12
+                visible: !NetworkService.wifiEnabled || (wifiList.count === 0)
+
+                Rectangle {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    width: 64
+                    height: 64
+                    radius: 32
+                    color: Config.surface1Color
+
+                    Text {
+                        anchors.centerIn: parent
+                        text: {
+                            if (!NetworkService.wifiEnabled)
+                                return "󰤮";
+                            if (NetworkService.scanning)
+                                return "󰤩";
+                            return "󰤫";
+                        }
+                        font.family: Config.font
+                        font.pixelSize: 28
+                        color: Config.subtextColor
+                        opacity: 0.5
+                    }
                 }
-                color: Config.surface2Color
-                font.pixelSize: Config.fontSizeNormal
-                font.italic: true
+
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: {
+                        if (!NetworkService.wifiEnabled)
+                            return "Wi-Fi Off";
+                        if (NetworkService.scanning)
+                            return "Scanning...";
+                        return "No networks found";
+                    }
+                    font.family: Config.font
+                    font.pixelSize: Config.fontSizeNormal
+                    color: Config.subtextColor
+                    opacity: 0.7
+                }
+
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: {
+                        if (!NetworkService.wifiEnabled)
+                            return "Turn on to see networks";
+                        if (NetworkService.scanning)
+                            return "Looking for networks";
+                        return "Try scanning again";
+                    }
+                    font.family: Config.font
+                    font.pixelSize: Config.fontSizeSmall
+                    color: Config.subtextColor
+                    opacity: 0.5
+                }
             }
         }
     }

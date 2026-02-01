@@ -167,7 +167,7 @@ Item {
         anchors.centerIn: parent
 
         // Opacity depends only on whether the state is special
-        opacity: root.isSpecialWorkspace ? (h.hovered ? 0.8 : 1.0) : 0
+        opacity: root.isSpecialWorkspace ? (specialHover.hovered ? 0.8 : 1.0) : 0
 
         scale: root.isSpecialWorkspace ? 1.0 : 0.9
         property int yOffset: root.isSpecialWorkspace ? 0 : 5
@@ -240,7 +240,8 @@ Item {
             }
         }
         HoverHandler {
-            id: h
+            id: specialHover
+            cursorShape: Qt.PointingHandCursor
         }
     }
 
@@ -283,6 +284,7 @@ Item {
                     height: isActive ? root.activeHeight : root.itemHeight
                     radius: Config.radius
                     color: isActive ? Config.accentColor : (!isEmpty ? Config.surface3Color : Qt.alpha(Config.surface2Color, 0.65))
+                    opacity: !isActive ? (workspaceHover.hovered ? 0.8 : 1.0) : 1
 
                     Behavior on x {
                         NumberAnimation {
@@ -304,9 +306,25 @@ Item {
                             duration: Config.animDuration
                         }
                     }
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: Config.animDurationShort
+                        }
+                    }
 
                     TapHandler {
-                        onTapped: Hyprland.dispatch("workspace " + workspaceItem.workspaceId)
+                        onTapped: {
+                            if (!workspaceItem.isActive)
+                                Hyprland.dispatch("workspace " + workspaceItem.workspaceId);
+                        }
+                    }
+
+                    HoverHandler {
+                        id: workspaceHover
+                        cursorShape: {
+                            if (!workspaceItem.isActive)
+                                return Qt.PointingHandCursor;
+                        }
                     }
                 }
             }

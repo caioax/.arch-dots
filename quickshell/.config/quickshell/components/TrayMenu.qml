@@ -22,6 +22,7 @@ PanelWindow {
     implicitWidth: Math.max(220, mainColumn.implicitWidth)
     implicitHeight: mainColumn.implicitHeight
 
+    WlrLayershell.namespace: "qs_trayMenu"
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
     WlrLayershell.exclusiveZone: -1
@@ -103,7 +104,7 @@ PanelWindow {
     Rectangle {
         id: background
         anchors.fill: parent
-        color: Config.surface0Color
+        color: Config.backgroundTransparentColor
         border.color: Config.surface2Color
         border.width: 1
         radius: Config.radius
@@ -173,10 +174,12 @@ PanelWindow {
                     property bool isEnabled: modelData.enabled !== false
                     property bool hasSubMenu: (modelData.children && modelData.children.length > 0) || modelData.type === "menu"
 
-                    Layout.fillWidth: true
+                    Layout.preferredWidth: mainColumn.width - 3
                     Layout.preferredHeight: isSeparator ? 6 : 32
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
                     color: itemMouse.containsMouse && !isSeparator ? Config.surface1Color : "transparent"
+                    radius: Config.radius
                     opacity: isEnabled ? 1.0 : 0.5
 
                     // Separator

@@ -21,7 +21,7 @@ Item {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        spacing: 16
+        spacing: 12
 
         // HEADER (Profile and Info)
         RowLayout {
@@ -149,7 +149,7 @@ Item {
             Rectangle {
                 Layout.preferredWidth: 36
                 Layout.preferredHeight: 36
-                radius: Config.radius
+                radius: Config.radiusLarge
                 color: powerBtnHover.containsMouse ? Qt.rgba(Config.errorColor.r, Config.errorColor.g, Config.errorColor.b, 0.2) : "transparent"
                 border.width: 1
                 border.color: powerBtnHover.containsMouse ? Config.errorColor : Config.surface2Color

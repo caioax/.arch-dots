@@ -39,7 +39,9 @@ RowLayout {
 
         opacity: root.isOpen ? 1 : 0
         Behavior on opacity {
-            NumberAnimation { duration: Config.animDuration }
+            NumberAnimation {
+                duration: Config.animDuration
+            }
         }
 
         // Drawer content
@@ -68,7 +70,7 @@ RowLayout {
                     implicitWidth: 24
                     implicitHeight: 24
                     radius: width / 2
-                    color: mouseArea.containsMouse ? Config.surface2Color : "transparent"
+                    color: mouseArea.containsMouse ? Config.surface1Color : "transparent"
 
                     Image {
                         anchors.centerIn: parent
@@ -125,16 +127,30 @@ RowLayout {
         Layout.preferredHeight: 24
         radius: width / 2
 
-        color: toggleMouse.containsMouse ? Config.surface2Color : "transparent"
+        color: (toggleMouse.containsMouse) ? Config.surface1Color : "transparent"
+
+        Behavior on color {
+            ColorAnimation {
+                duration: Config.animDuration
+            }
+        }
 
         // Arrow Icon
         Text {
             anchors.centerIn: parent
-            text: root.isOpen ? "" : ""
+            text: "󰅁"
             font.family: Config.font
-            font.pixelSize: Config.fontSizeSmall
-            font.bold: true
-            color: root.isOpen ? Config.accentColor : Config.textColor
+            font.pixelSize: Config.fontSizeIconSmall
+            color: Config.textColor
+
+            scale: root.isOpen ? -1 : 1
+
+            Behavior on scale {
+                NumberAnimation {
+                    duration: Config.animDuration
+                    easing.type: Easing.OutBack
+                }
+            }
         }
 
         MouseArea {

@@ -30,11 +30,11 @@ Button {
         // Color changes on hover
         color: root.hovered ? Config.surface2Color : "transparent"
 
-        // Behavior on color {
-        //     ColorAnimation {
-        //         duration: Config.animDuration
-        //     }
-        // }
+        Behavior on color {
+            ColorAnimation {
+                duration: Config.animDuration
+            }
+        }
     }
 
     // --- Content (Icon) ---

@@ -16,33 +16,18 @@ Item {
     ColumnLayout {
         id: main
         anchors.fill: parent
-        spacing: 15
+        spacing: 12
 
         // Header
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.margins: 10
-            spacing: 10
-
-            // Back Button
-            BackButton {
-                onClicked: root.backRequested()
-            }
-
-            // Title
-            Text {
-                text: "Bluetooth"
-                color: Config.textColor
-                font.bold: true
-                font.pixelSize: Config.fontSizeIcon
-                Layout.fillWidth: true
-            }
+        PageHeader {
+            icon: BluetoothService.systemIcon
+            title: "Bluetooth"
+            onBackClicked: root.backRequested()
 
             // Scan Button
             RefreshButton {
                 visible: BluetoothService.isPowered
                 loading: BluetoothService.isDiscovering
-
                 onClicked: BluetoothService.toggleScan()
             }
 
@@ -52,11 +37,9 @@ Item {
                 active: BluetoothService.isDiscoverable
                 iconOffsetX: 0.5
                 iconOffsetY: 0.5
-                iconOn: ""
-                iconOff: ""
-
+                iconOn: ""
+                iconOff: ""
                 tooltipText: active ? "Visible to all" : "Invisible"
-
                 onClicked: BluetoothService.toggleDiscoverable()
             }
 
@@ -79,6 +62,13 @@ Item {
             }
         }
 
+        // Separator
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 1
+            color: Config.surface1Color
+        }
+
         // Device List
         ListView {
             id: deviceList
@@ -94,16 +84,13 @@ Item {
             delegate: DeviceCard {
                 required property var modelData
 
-                // Data
                 title: modelData.alias || modelData.name || "Unknown"
                 subtitle: modelData.address || ""
                 icon: BluetoothService.getDeviceIcon(modelData)
 
-                // States
                 active: modelData.connected
                 connecting: BluetoothService.getIsConnecting(modelData)
 
-                // Status text
                 statusText: {
                     if (connecting)
                         return "Connecting...";
@@ -114,7 +101,6 @@ Item {
                     return "";
                 }
 
-                // Menu settings
                 showMenu: modelData.paired || modelData.trusted || modelData.connected
 
                 menuModel: {
@@ -123,7 +109,7 @@ Item {
                         list.push({
                             text: "Disconnect",
                             action: "disconnect",
-                            icon: "",
+                            icon: "",
                             textColor: Config.warningColor,
                             iconColor: Config.warningColor
                         });
@@ -131,7 +117,7 @@ Item {
                         list.push({
                             text: "Connect",
                             action: "connect",
-                            icon: "",
+                            icon: "",
                             textColor: Config.successColor,
                             iconColor: Config.successColor
                         });
@@ -139,7 +125,7 @@ Item {
                     list.push({
                         text: "Forget",
                         action: "forget",
-                        icon: "",
+                        icon: "",
                         textColor: Config.errorColor,
                         iconColor: Config.errorColor
                     });
@@ -156,27 +142,67 @@ Item {
                     }
                 }
 
-                // Main click
                 onClicked: BluetoothService.toggleConnection(modelData)
             }
 
-            // Empty list message
-            Text {
+            // Empty state
+            Column {
                 anchors.centerIn: parent
-                anchors.verticalCenterOffset: -40
-                visible: !BluetoothService.isPowered || (parent.count === 0)
-                text: {
-                    if (!BluetoothService.isPowered)
-                        return "Activate to connect";
+                spacing: 12
+                visible: !BluetoothService.isPowered || (deviceList.count === 0)
 
-                    if (BluetoothService.isDiscovering)
-                        return "Searching...";
+                Rectangle {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    width: 64
+                    height: 64
+                    radius: 32
+                    color: Config.surface1Color
 
-                    return "No devices found";
+                    Text {
+                        anchors.centerIn: parent
+                        text: {
+                            if (!BluetoothService.isPowered)
+                                return "󰂲";
+                            if (BluetoothService.isDiscovering)
+                                return "󰂱";
+                            return "󰂳";
+                        }
+                        font.family: Config.font
+                        font.pixelSize: 28
+                        color: Config.subtextColor
+                        opacity: 0.5
+                    }
                 }
-                color: Config.surface2Color
-                font.pixelSize: Config.fontSizeNormal
-                font.italic: true
+
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: {
+                        if (!BluetoothService.isPowered)
+                            return "Bluetooth Off";
+                        if (BluetoothService.isDiscovering)
+                            return "Searching...";
+                        return "No devices found";
+                    }
+                    font.family: Config.font
+                    font.pixelSize: Config.fontSizeNormal
+                    color: Config.subtextColor
+                    opacity: 0.7
+                }
+
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: {
+                        if (!BluetoothService.isPowered)
+                            return "Turn on to connect";
+                        if (BluetoothService.isDiscovering)
+                            return "Looking for devices";
+                        return "Make sure devices are discoverable";
+                    }
+                    font.family: Config.font
+                    font.pixelSize: Config.fontSizeSmall
+                    color: Config.subtextColor
+                    opacity: 0.5
+                }
             }
         }
     }

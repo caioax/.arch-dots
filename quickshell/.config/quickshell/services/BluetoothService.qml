@@ -9,7 +9,7 @@ Singleton {
     id: root
 
     // Gets the system's default adapter. Can be null if there is no bluetooth.
-    property var adapter: Bluetooth.defaultAdapter
+    property var adapter: Bluetooth?.defaultAdapter
 
     // Reactive properties (return false if there is no adapter)
     readonly property bool isPowered: (adapter && adapter.enabled) === true

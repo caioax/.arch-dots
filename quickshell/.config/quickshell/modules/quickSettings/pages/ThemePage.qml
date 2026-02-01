@@ -18,25 +18,13 @@ Item {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        spacing: 15
+        spacing: 12
 
         // Header
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.margins: 10
-            spacing: 10
-
-            BackButton {
-                onClicked: root.backRequested()
-            }
-
-            Text {
-                text: "Theme"
-                color: Config.textColor
-                font.bold: true
-                font.pixelSize: Config.fontSizeIcon
-                Layout.fillWidth: true
-            }
+        PageHeader {
+            icon: "󰏘"
+            title: "Theme"
+            onBackClicked: root.backRequested()
 
             // Current theme badge
             Rectangle {
@@ -57,6 +45,13 @@ Item {
                     color: Config.accentColor
                 }
             }
+        }
+
+        // Separator
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 1
+            color: Config.surface1Color
         }
 
         // Theme grid
@@ -82,7 +77,7 @@ Item {
                     readonly property string displayName: preview.name || modelData
 
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 90
+                    Layout.preferredHeight: 76
                     radius: Config.radius
                     color: cardMouse.containsMouse ? Config.surface1Color : Config.surface0Color
                     border.width: isCurrent ? 2 : 1
@@ -100,7 +95,6 @@ Item {
                         anchors.margins: 10
                         spacing: 8
 
-                        // Theme name
                         Text {
                             text: card.displayName
                             font.family: Config.font
@@ -111,10 +105,9 @@ Item {
                             Layout.fillWidth: true
                         }
 
-                        // Color preview dots
                         RowLayout {
                             Layout.fillWidth: true
-                            spacing: 6
+                            spacing: 5
 
                             Repeater {
                                 model: [
@@ -127,9 +120,9 @@ Item {
 
                                 delegate: Rectangle {
                                     required property string modelData
-                                    width: 18
-                                    height: 18
-                                    radius: 9
+                                    width: 14
+                                    height: 14
+                                    radius: 7
                                     color: modelData
                                     border.width: 1
                                     border.color: Qt.alpha(Config.textColor, 0.15)
@@ -137,15 +130,6 @@ Item {
                             }
 
                             Item { Layout.fillWidth: true }
-                        }
-
-                        // Active indicator
-                        Text {
-                            text: card.isCurrent ? "Active" : ""
-                            font.family: Config.font
-                            font.pixelSize: 10
-                            color: Config.accentColor
-                            visible: card.isCurrent
                         }
                     }
 

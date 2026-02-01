@@ -43,7 +43,7 @@ ShellRoot {
     // Bar - always active (main component)
     Bar {}
 
-    // Notifications - loads on demand when there are notifications
+    // Notifications
     Loader {
         id: notificationLoader
         active: NotificationService.activePopupCount > 0 || NotificationService.popups.length > 0
@@ -55,7 +55,7 @@ ShellRoot {
         }
     }
 
-    // Power Overlay - loads on demand when requested
+    // Power Overlay
     Loader {
         id: powerLoader
         active: PowerService.overlayVisible
@@ -67,7 +67,7 @@ ShellRoot {
         }
     }
 
-    // Screenshot Manager - loads on demand
+    // Screenshot Manager
     Loader {
         id: screenshotLoader
         active: root.screenshotActive
@@ -95,23 +95,23 @@ ShellRoot {
 
     // Launcher
     Loader {
-        active: true
+        active: LauncherService.visible
         source: "./modules/launcher/Launcher.qml"
     }
 
-    // OSD - loads on demand
+    // OSD
     Loader {
         active: OsdService.visible
         source: "./modules/osd/OsdOverlay.qml"
     }
 
-    // Wallpaper Picker - loads on demand
+    // Wallpaper Picker
     Loader {
         active: WallpaperService.pickerVisible
         source: "./modules/wallpaper/WallpaperPicker.qml"
     }
 
-    // Clipboard History - loads on demand
+    // Clipboard History
     Loader {
         active: ClipboardService.visible
         source: "./modules/clipboard/ClipboardHistory.qml"
