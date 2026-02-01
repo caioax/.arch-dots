@@ -32,7 +32,7 @@ Item {
             Rectangle {
                 Layout.preferredWidth: 48
                 Layout.preferredHeight: 48
-                radius: 16
+                radius: Config.radiusLarge
                 gradient: Gradient {
                     GradientStop {
                         position: 0.0
@@ -83,7 +83,7 @@ Item {
                 visible: BatteryService.hasBattery
                 Layout.preferredHeight: 36
                 Layout.preferredWidth: batteryContent.implicitWidth + 16
-                radius: Config.radiusLarge
+                radius: Config.radius
                 color: Config.surface1Color
 
                 RowLayout {
@@ -117,72 +117,23 @@ Item {
             }
 
             // Theme color
-            Rectangle {
-                implicitHeight: 36
-                implicitWidth: 36
-                radius: Config.radiusLarge
-                color: themeBarMouse.containsMouse ? Config.surface2Color : Config.surface1Color
-
-                Behavior on color {
-                    ColorAnimation {
-                        duration: Config.animDurationShort
-                    }
-                }
-                Text {
-                    text: "󰏘"
-                    anchors.centerIn: parent
-                    font.family: Config.font
-                    font.pixelSize: Config.fontSizeIcon
-                    color: Config.accentColor
-                }
-
-                MouseArea {
-                    id: themeBarMouse
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: pageStack.currentIndex = 5
-                }
+            ActionButton {
+                icon: "󰏘"
+                textColor: Config.accentColor
+                hoverTextColor: Config.accentColor
+                onClicked: pageStack.currentIndex = 5
             }
 
-            // Power Button
-            Rectangle {
+            // Power Menu
+            ClearButton {
+                icon: "⏻"
+
                 Layout.preferredWidth: 36
                 Layout.preferredHeight: 36
-                radius: Config.radiusLarge
-                color: powerBtnHover.containsMouse ? Qt.rgba(Config.errorColor.r, Config.errorColor.g, Config.errorColor.b, 0.2) : "transparent"
-                border.width: 1
-                border.color: powerBtnHover.containsMouse ? Config.errorColor : Config.surface2Color
 
-                Behavior on color {
-                    ColorAnimation {
-                        duration: Config.animDurationShort
-                    }
-                }
-
-                Behavior on border.color {
-                    ColorAnimation {
-                        duration: Config.animDurationShort
-                    }
-                }
-
-                Text {
-                    anchors.centerIn: parent
-                    text: "⏻"
-                    font.family: Config.font
-                    font.pixelSize: Config.fontSizeLarge
-                    color: Config.errorColor
-                }
-
-                MouseArea {
-                    id: powerBtnHover
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: {
-                        root.closeWindow();
-                        PowerService.showOverlay();
-                    }
+                onClicked: {
+                    root.closeWindow();
+                    PowerService.showOverlay();
                 }
             }
         }

@@ -49,7 +49,7 @@ Rectangle {
     }
     Behavior on color {
         ColorAnimation {
-            duration: 150
+            duration: Config.animDurationShort
         }
     }
 
@@ -58,6 +58,7 @@ Rectangle {
         id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
+        cursorShape: Qt.PointingHandCursor
         onClicked: root.clicked()
     }
 
@@ -110,6 +111,7 @@ Rectangle {
             Text {
                 text: root.title
                 color: Config.textColor
+                font.family: Config.font
                 font.bold: true
                 font.pixelSize: Config.fontSizeNormal
                 elide: Text.ElideRight
@@ -124,6 +126,7 @@ Rectangle {
                     visible: root.subtitle !== ""
                     text: root.subtitle
                     color: Config.textColor
+                    font.family: Config.font
                     font.pixelSize: Config.fontSizeSmall
                     elide: Text.ElideRight
                 }
@@ -133,12 +136,14 @@ Rectangle {
                     visible: root.subtitle !== "" && root.statusText !== ""
                     text: "•"
                     color: Config.textColor
+                    font.family: Config.font
                     font.pixelSize: Config.fontSizeSmall
                 }
 
                 // Status (Connected, Paired...)
                 Text {
                     text: root.statusText
+                    font.family: Config.font
                     color: {
                         if (root.active)
                             return Config.accentColor;
@@ -237,6 +242,7 @@ Rectangle {
                                 Text {
                                     text: modelData.text
                                     color: modelData.textColor ?? Config.textColor
+                                    font.family: Config.font
                                     font.pixelSize: Config.fontSizeSmall
                                     Layout.fillWidth: true
                                 }
@@ -246,6 +252,7 @@ Rectangle {
                                 id: itemMouse
                                 anchors.fill: parent
                                 hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
                                 onClicked: {
                                     menuPopup.close();
                                     root.menuAction(modelData.action);

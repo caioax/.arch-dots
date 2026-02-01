@@ -16,9 +16,6 @@ Switch {
 
         color: root.checked ? Config.accentColor : Config.surface2Color
 
-        border.width: 1
-        border.color: "transparent"
-
         Behavior on color {
             ColorAnimation {
                 duration: Config.animDuration
@@ -33,7 +30,13 @@ Switch {
             height: parent.height - 8
             radius: width / 2
 
-            color: Config.textColor
+            color: root.checked ? Config.textReverseColor : Config.textColor
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: Config.animDuration
+                }
+            }
 
             Behavior on x {
                 NumberAnimation {

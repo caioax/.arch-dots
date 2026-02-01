@@ -27,7 +27,9 @@ BarButton {
         color: root.active ? Config.accentColor : Config.textColor
 
         Behavior on color {
-            ColorAnimation { duration: Config.animDuration }
+            ColorAnimation {
+                duration: Config.animDuration
+            }
         }
     }
 

@@ -8,6 +8,7 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 import qs.services
 import qs.config
+import "../../components/"
 
 PanelWindow {
     id: root
@@ -121,47 +122,12 @@ PanelWindow {
                     }
 
                     // Clear All button
-                    Rectangle {
+                    ClearButton {
                         visible: ClipboardService.entries.length > 0
-                        Layout.preferredHeight: 28
-                        Layout.preferredWidth: clearAllContent.implicitWidth + 16
-                        radius: Config.radius
-                        color: clearAllMouse.containsMouse ? Qt.alpha(Config.errorColor, 0.15) : Config.surface1Color
+                        icon: "󰆴"
+                        text: "Clear"
 
-                        Behavior on color {
-                            ColorAnimation {
-                                duration: Config.animDurationShort
-                            }
-                        }
-
-                        RowLayout {
-                            id: clearAllContent
-                            anchors.centerIn: parent
-                            spacing: 4
-
-                            Text {
-                                text: "󰆴"
-                                font.family: Config.font
-                                font.pixelSize: 12
-                                color: clearAllMouse.containsMouse ? Config.errorColor : Config.subtextColor
-                            }
-
-                            Text {
-                                text: "Clear"
-                                font.family: Config.font
-                                font.pixelSize: Config.fontSizeSmall
-                                font.bold: true
-                                color: clearAllMouse.containsMouse ? Config.errorColor : Config.subtextColor
-                            }
-                        }
-
-                        MouseArea {
-                            id: clearAllMouse
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: ClipboardService.clearAll()
-                        }
+                        onClicked: ClipboardService.clearAll()
                     }
                 }
 

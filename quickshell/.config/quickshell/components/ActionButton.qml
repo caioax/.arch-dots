@@ -18,7 +18,7 @@ Rectangle {
     readonly property bool hovered: mouseArea.containsMouse
     readonly property bool pressed: mouseArea.pressed
 
-    signal clicked()
+    signal clicked
 
     implicitHeight: size
     implicitWidth: root.text !== "" ? contentRow.implicitWidth + 16 : size

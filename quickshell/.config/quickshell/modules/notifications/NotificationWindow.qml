@@ -78,96 +78,25 @@ QsPopupWindow {
             }
 
             // DND Toggle Button
-            Rectangle {
-                Layout.preferredHeight: 32
-                Layout.preferredWidth: dndContent.implicitWidth + 16
-                radius: Config.radius
-                color: {
-                    if (NotificationService.dndEnabled)
-                        return Config.warningColor;
-                    if (dndMouse.containsMouse)
-                        return Config.surface2Color;
-                    return Config.surface1Color;
-                }
-
-                Behavior on color {
-                    ColorAnimation {
-                        duration: Config.animDuration
-                    }
-                }
-
-                RowLayout {
-                    id: dndContent
-                    anchors.centerIn: parent
-                    spacing: 6
-
-                    Text {
-                        text: NotificationService.dndEnabled ? "󰂛" : "󰂚"
-                        font.family: Config.font
-                        font.pixelSize: 14
-                        color: NotificationService.dndEnabled ? Config.textReverseColor : Config.subtextColor
-                    }
-
-                    Text {
-                        text: "DND"
-                        font.family: Config.font
-                        font.pixelSize: Config.fontSizeSmall
-                        font.bold: true
-                        color: NotificationService.dndEnabled ? Config.textReverseColor : Config.subtextColor
-                    }
-                }
-
-                MouseArea {
-                    id: dndMouse
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: NotificationService.toggleDnd()
-                }
+            ActionButton {
+                size: 32
+                icon: NotificationService.dndEnabled ? "󰂛" : "󰂚"
+                iconSize: 14
+                text: "DND"
+                baseColor: NotificationService.dndEnabled ? Config.warningColor : Config.surface1Color
+                hoverColor: NotificationService.dndEnabled ? Config.warningColor : Config.surface2Color
+                textColor: NotificationService.dndEnabled ? Config.textReverseColor : Config.subtextColor
+                hoverTextColor: NotificationService.dndEnabled ? Config.textReverseColor : Config.subtextColor
+                onClicked: NotificationService.toggleDnd()
             }
 
             // Clear All Button
-            Rectangle {
+            ClearButton {
                 visible: NotificationService.count > 0
-                Layout.preferredHeight: 32
-                Layout.preferredWidth: clearAllContent.implicitWidth + 20
-                radius: Config.radius
-                color: clearAllMouse.containsMouse ? Qt.alpha(Config.errorColor, 0.15) : Config.surface1Color
+                icon: "󰆴"
+                text: "Clear"
 
-                Behavior on color {
-                    ColorAnimation {
-                        duration: Config.animDuration
-                    }
-                }
-
-                RowLayout {
-                    id: clearAllContent
-                    anchors.centerIn: parent
-                    spacing: 6
-
-                    Text {
-                        text: "󰆴"
-                        font.family: Config.font
-                        font.pixelSize: 14
-                        color: clearAllMouse.containsMouse ? Config.errorColor : Config.subtextColor
-                    }
-
-                    Text {
-                        text: "Clear"
-                        font.family: Config.font
-                        font.pixelSize: Config.fontSizeSmall
-                        font.bold: true
-                        color: clearAllMouse.containsMouse ? Config.errorColor : Config.subtextColor
-                    }
-                }
-
-                MouseArea {
-                    id: clearAllMouse
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: NotificationService.clearAll()
-                }
+                onClicked: NotificationService.clearAll()
             }
         }
 
