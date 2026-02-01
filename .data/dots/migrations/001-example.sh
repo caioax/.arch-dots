@@ -1,4 +1,4 @@
-# 001-example.sh - Example migration (safe to delete)
+# 001-example.sh - Example migration
 #
 # This is a template showing how migrations work.
 # Each migration runs once during "dots update" and never again.
