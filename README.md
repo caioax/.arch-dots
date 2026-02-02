@@ -1,8 +1,10 @@
-# Lyne Shell
+# 🐚 Lyne Shell
 
-Arch Linux dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/), featuring a Hyprland (Wayland) desktop environment with a custom QuickShell bar and a unified theme system that applies across the entire setup.
+> Arch Linux dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/), featuring a Hyprland (Wayland) desktop environment with a custom QuickShell bar and a unified theme system that applies across the entire setup.
 
-## Screenshots
+---
+
+## 📸 Screenshots
 
 ### Tokyo Night
 
@@ -28,19 +30,19 @@ Arch Linux dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/),
 
 ![Rose Pine](./.data/assets/rosepine.png)
 
-## Features
+## ✨ Features
 
-- **Hyprland** - Tiling Wayland compositor with modular configuration
-- **QuickShell** - Custom QML-based status bar, launcher, notifications, quick settings, and power menu
-- **Dynamic Theming** - 6 themes (Tokyo Night, Catppuccin Mocha, Dracula, Gruvbox, Nord, Rose Pine) applied live across the entire system: shell, terminal, editor, wallpaper, and fastfetch logo
-- **Wallpaper Picker** - Built-in wallpaper manager with search, favorites, and per-theme wallpaper folders
-- **Neovim** - Lua-based configuration with LSP, Telescope, Smart Splits, and lazy.nvim
-- **Tmux** - Terminal multiplexer with seamless Neovim navigation (Smart Splits)
-- **Kitty** - GPU-accelerated terminal with dynamic theme switching
-- **Zsh** - Oh-My-Zsh with autosuggestions, syntax highlighting, vi-mode, and Powerlevel10k
-- **Lyne CLI** - Built-in command-line tool for managing the dotfiles
+- 🪟 **Hyprland** - Tiling Wayland compositor with modular configuration
+- 🖥️ **QuickShell** - Custom QML-based status bar, launcher, notifications, quick settings, and power menu
+- 🎨 **Dynamic Theming** - 6 themes (Tokyo Night, Catppuccin Mocha, Dracula, Gruvbox, Nord, Rose Pine) applied live across the entire system: shell, terminal, editor, wallpaper, and fastfetch logo
+- 🖼️ **Wallpaper Picker** - Built-in wallpaper manager with search, favorites, and per-theme wallpaper folders
+- ✏️ **Neovim** - Lua-based configuration with LSP, Telescope, Smart Splits, and lazy.nvim
+- 📟 **Tmux** - Terminal multiplexer with seamless Neovim navigation (Smart Splits)
+- 🐱 **Kitty** - GPU-accelerated terminal with dynamic theme switching
+- ⚡ **Zsh** - Oh-My-Zsh with autosuggestions, syntax highlighting, vi-mode, and Powerlevel10k
+- 🔧 **Lyne CLI** - Built-in command-line tool for managing the dotfiles
 
-### Theme System
+### 🎨 Theme System
 
 Switching themes from the Quick Settings panel applies colors instantly to:
 
@@ -55,7 +57,9 @@ Switching themes from the Quick Settings panel applies colors instantly to:
 
 No restarts required.
 
-## Installation
+---
+
+## 📦 Installation
 
 ### Requirements
 
@@ -95,7 +99,9 @@ The installer is interactive and lets you pick which package categories to insta
 
 See [.install/README.md](.install/README.md) for more details.
 
-## Lyne CLI
+---
+
+## 🔧 Lyne CLI
 
 Lyne Shell includes a built-in CLI tool called `lyne` for managing the dotfiles. It is loaded automatically via `.zshrc`.
 
@@ -132,7 +138,9 @@ lyne state
 lyne reload
 ```
 
-## Keybindings
+---
+
+## ⌨️ Keybindings
 
 ### Apps
 
@@ -189,7 +197,9 @@ lyne reload
 | `Brightness Keys` | Brightness up / down           |
 | `Media Keys`      | Play / Pause / Next / Previous |
 
-## Structure
+---
+
+## 📁 Structure
 
 Each top-level directory is a [GNU Stow](https://www.gnu.org/software/stow/) package that gets symlinked into `$HOME`.
 
@@ -214,7 +224,9 @@ Each top-level directory is a [GNU Stow](https://www.gnu.org/software/stow/) pac
 | `.data/`          | Templates, default themes, and default wallpapers |
 | `.data/lyne-cli/` | CLI commands, libraries, and migrations           |
 
-## Tech Stack
+---
+
+## 🛠️ Tech Stack
 
 | Component       | Tool            |
 | --------------- | --------------- |
@@ -231,7 +243,9 @@ Each top-level directory is a [GNU Stow](https://www.gnu.org/software/stow/) pac
 | AUR Helper      | yay             |
 | Dotfile Manager | GNU Stow        |
 
-## Customization
+---
+
+## ⚙️ Customization
 
 Machine-specific configs are kept in `~/.config/hypr/local/` and are not tracked by git. The install script generates these from templates in `.data/hyprland/templates/` on first run:
 
