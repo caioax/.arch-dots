@@ -43,6 +43,11 @@ Scope {
             screen: "󰍹"
         })
 
+    onActiveChanged: {
+        if (!active)
+            resetSelection();
+    }
+
     // =========================================================================
     // ANIMATIONS
     // =========================================================================
@@ -81,6 +86,7 @@ Scope {
         enabled: root.activeScreen === null
 
         function onFocusedMonitorChanged() {
+            root.resetSelection();
             const monitor = Hyprland.focusedMonitor;
             if (!monitor)
                 return;
@@ -102,13 +108,7 @@ Scope {
     function startCapture() {
         // Reset state
         root.mode = "region";
-        root.hasSelection = false;
-        root.selectionX = 0;
-        root.selectionY = 0;
-        root.selectionWidth = 0;
-        root.selectionHeight = 0;
-        root.selectedWindowTitle = "";
-        root.selectedWindowClass = "";
+        root.resetSelection();
         root.activeScreen = null;
 
         // Find current screen
@@ -206,7 +206,7 @@ Scope {
 
     Timer {
         id: showTimer
-        interval: 100
+        interval: 50
         repeat: false
         onTriggered: root.active = true
     }
@@ -243,6 +243,58 @@ Scope {
             property bool isActiveMonitor: modelData === root.activeScreen
             property var workspace: hyprMonitor?.activeWorkspace
             property var windowList: workspace?.toplevels ?? []
+
+            function findWindowAt(mouseX, mouseY) {
+                // Check if the monitor and window list are available
+                if (!hyprMonitor || !windowList)
+                    return null;
+
+                const monitorIpc = hyprMonitor.lastIpcObject;
+                // Check if monitor IPC data exists
+                if (!monitorIpc || (typeof monitorIpc.x !== "number"))
+                    return null;
+
+                const monitorX = monitorIpc.x;
+                const monitorY = monitorIpc.y;
+
+                // Iterate backwards to respect Z-order (top-most windows first)
+                for (let i = windowList.length - 1; i >= 0; i--) {
+                    let windowItem = windowList[i];
+                    if (!windowItem)
+                        continue;
+
+                    let ipc = windowItem.lastIpcObject;
+
+                    // DEFENSIVE CHECK:
+                    // Verify that IPC data and required arrays exist before accessing index [0]
+                    if (!ipc || !ipc.at || !ipc.size || ipc.at.length < 2 || ipc.size.length < 2) {
+                        continue;
+                    }
+
+                    // Filter out invalid or special windows
+                    if (ipc.title === "" && ipc.class === "")
+                        continue;
+
+                    // Calculate window boundaries relative to the current monitor
+                    let winX = ipc.at[0] - monitorX;
+                    let winY = ipc.at[1] - monitorY;
+                    let winW = ipc.size[0];
+                    let winH = ipc.size[1];
+
+                    // Check if the mouse coordinates are within the window area
+                    if (mouseX >= winX && mouseX <= winX + winW && mouseY >= winY && mouseY <= winY + winH) {
+                        return {
+                            x: winX,
+                            y: winY,
+                            width: winW,
+                            height: winH,
+                            title: ipc.title || ipc.class || "Window",
+                            className: ipc.class || ""
+                        };
+                    }
+                }
+                return null;
+            }
 
             // Signal for window hover detection (like original)
             signal checkWindowHover(real mouseX, real mouseY)
@@ -455,6 +507,19 @@ Scope {
                 }
 
                 onPositionChanged: mouse => {
+                    if (root.mode === "window" && !root.hasSelection) {
+                        let found = window.findWindowAt(mouse.x, mouse.y);
+                        if (found) {
+                            root.selectionX = found.x;
+                            root.selectionY = found.y;
+                            root.selectionWidth = found.width;
+                            root.selectionHeight = found.height;
+                            root.selectedWindowTitle = found.title;
+                            root.selectedWindowClass = found.className;
+                        } else {
+                            root.resetSelection();
+                        }
+                    }
                     // Update active monitor if changed
                     if (root.activeScreen !== window.modelData) {
                         root.activeScreen = window.modelData;
