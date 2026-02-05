@@ -47,7 +47,6 @@ Scope {
         if (!active)
             resetSelection();
     }
-
     // =========================================================================
     // ANIMATIONS
     // =========================================================================
@@ -77,6 +76,10 @@ Scope {
         }
     }
 
+    Component.onCompleted: {
+        initializeMonitor();
+    }
+
     // =========================================================================
     // MONITOR TRACKING
     // =========================================================================
@@ -86,24 +89,28 @@ Scope {
         enabled: root.activeScreen === null
 
         function onFocusedMonitorChanged() {
-            root.resetSelection();
-            const monitor = Hyprland.focusedMonitor;
-            if (!monitor)
-                return;
-
-            for (const screen of Quickshell.screens) {
-                if (screen.name === monitor.name) {
-                    root.activeScreen = screen;
-                    root.hyprlandMonitor = monitor;
-                    break;
-                }
-            }
+            root.initializeMonitor();
         }
     }
 
     // =========================================================================
     // FUNCTIONS
     // =========================================================================
+
+    function initializeMonitor() {
+        const monitor = Hyprland.focusedMonitor;
+        if (!monitor)
+            return;
+
+        for (const screen of Quickshell.screens) {
+            if (screen.name === monitor.name) {
+                root.activeScreen = screen;
+                root.hyprlandMonitor = monitor;
+                root.active = true;
+                return;
+            }
+        }
+    }
 
     function startCapture() {
         // Reset state
@@ -296,7 +303,7 @@ Scope {
                 return null;
             }
 
-            // Signal for window hover detection (like original)
+            // Signal for window hover detection
             signal checkWindowHover(real mouseX, real mouseY)
 
             // =================================================================

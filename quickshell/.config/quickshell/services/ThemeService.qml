@@ -26,8 +26,6 @@ Singleton {
     readonly property string themesDir: Quickshell.env("HOME") + "/.local/themes"
     readonly property string kittyThemePath: Quickshell.env("HOME") + "/.config/kitty/current-theme.conf"
     readonly property string nvimThemePath: Quickshell.env("HOME") + "/.config/nvim/current-theme.txt"
-    readonly property string fastfetchBaseLogo: Quickshell.env("HOME") + "/.config/fastfetch/arch-base.png"
-    readonly property string fastfetchLogo: Quickshell.env("HOME") + "/.config/fastfetch/arch.png"
     readonly property string wallpaperDir: Quickshell.env("HOME") + "/.local/wallpapers"
 
     property string currentThemeName: getState("theme.name", "tokyonight")
@@ -129,10 +127,7 @@ Singleton {
         // 6. Apply to Neovim
         _applyNeovim(data.neovim);
 
-        // 7. Apply to Fastfetch logo
-        _applyFastfetch(data.palette);
-
-        // 8. Apply theme wallpaper
+        // 7. Apply theme wallpaper
         _applyWallpaper(data.wallpaper);
 
         console.log("[ThemeService] Theme applied:", data.name || themeName);
@@ -188,14 +183,6 @@ Singleton {
 
         wallpaperProc.command = ["bash", "-c", "[ -f '" + path + "' ] && swww img '" + path + "'" + " --transition-type grow --transition-duration 1 --transition-fps 60 --transition-step 90" + " || echo '[ThemeService] Wallpaper not found: " + wallpaperFile + "' >&2"];
         wallpaperProc.running = true;
-    }
-
-    function _applyFastfetch(palette) {
-        if (!palette || !palette.accent)
-            return;
-
-        fastfetchProc.command = ["magick", fastfetchBaseLogo, "-fill", palette.accent, "-colorize", "100", fastfetchLogo];
-        fastfetchProc.running = true;
     }
 
     function shellEscape(str) {
@@ -335,17 +322,6 @@ Singleton {
                 console.log("[ThemeService] Theme wallpaper applied");
                 WallpaperService.getCurrentWallpaper();
             }
-        }
-    }
-
-    Process {
-        id: fastfetchProc
-        stderr: SplitParser {
-            onRead: data => console.error("[ThemeService:Fastfetch] " + data)
-        }
-        onExited: exitCode => {
-            if (exitCode === 0)
-                console.log("[ThemeService] Fastfetch logo updated");
         }
     }
 }

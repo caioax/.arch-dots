@@ -34,7 +34,7 @@
 
 - 🪟 **Hyprland** - Tiling Wayland compositor with modular configuration
 - 🖥️ **QuickShell** - Custom QML-based status bar, launcher, notifications, quick settings, and power menu
-- 🎨 **Dynamic Theming** - 6 themes (Tokyo Night, Catppuccin Mocha, Dracula, Gruvbox, Nord, Rose Pine) applied live across the entire system: shell, terminal, editor, wallpaper, and fastfetch logo
+- 🎨 **Dynamic Theming** - 6 themes (Tokyo Night, Catppuccin Mocha, Dracula, Gruvbox, Nord, Rose Pine) applied live across the entire system: shell, terminal, editor, and wallpaper
 - 🖼️ **Wallpaper Picker** - Built-in wallpaper manager with search, favorites, and per-theme wallpaper folders
 - ✏️ **Neovim** - Lua-based configuration with LSP, Telescope, Smart Splits, and lazy.nvim
 - 📟 **Tmux** - Terminal multiplexer with seamless Neovim navigation (Smart Splits)
@@ -52,7 +52,6 @@ Switching themes from the Quick Settings panel applies colors instantly to:
 | Kitty                                     | Terminal colors, cursor, tabs, borders      |
 | Neovim                                    | Colorscheme (sent to all running instances) |
 | Hyprland                                  | Active/inactive border colors, shadow       |
-| Fastfetch                                 | Logo recolored to match accent              |
 | Wallpaper                                 | Theme-linked wallpaper applied via swww     |
 
 No restarts required.
@@ -212,7 +211,7 @@ Each top-level directory is a [GNU Stow](https://www.gnu.org/software/stow/) pac
 | `kitty/`      | Kitty terminal config with dynamic themes                                            |
 | `zsh/`        | Zsh config with Oh-My-Zsh and Powerlevel10k                                          |
 | `local/`      | Custom scripts, wallpapers (`~/.local/wallpapers/`), and themes (`~/.local/themes/`) |
-| `fastfetch/`  | System info display config and dynamic logo                                          |
+| `fastfetch/`  | System info display config                                                           |
 | `theming/`    | GTK3/4 and Qt5/6 theme settings                                                      |
 | `kde/`        | KDE Plasma global settings (colors, icons, fonts)                                    |
 
