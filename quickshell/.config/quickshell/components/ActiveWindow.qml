@@ -29,7 +29,8 @@ Item {
             if (event.name === "workspace") {
                 // Small delay to let Hyprland update its internal state
                 Qt.callLater(() => {
-                    if (root) root.windowExists = Hyprland.activeToplevel !== null;
+                    if (root)
+                        root.windowExists = Hyprland.activeToplevel !== null;
                 });
             }
         }
@@ -60,7 +61,7 @@ Item {
 
         Text {
             id: titleText
-            text: root.windowTitle !== "" ? "   " + root.windowTitle : ""
+            text: root.windowTitle !== "" ? "  " + root.windowTitle : ""
             color: Config.surface3Color
             font.family: Config.font
             font.pixelSize: Config.fontSizeNormal

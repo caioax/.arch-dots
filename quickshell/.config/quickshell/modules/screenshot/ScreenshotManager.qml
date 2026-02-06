@@ -157,6 +157,7 @@ Scope {
     }
 
     function confirmSelection() {
+        root.editMode = false;
         saveScreenshot(root.selectionX, root.selectionY, root.selectionWidth, root.selectionHeight);
     }
 

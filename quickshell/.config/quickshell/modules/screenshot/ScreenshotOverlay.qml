@@ -171,12 +171,27 @@ PanelWindow {
     }
 
     // =================================================================
-    // ESCAPE KEY
+    // SHORTCUT
     // =================================================================
 
     Shortcut {
         sequence: "Escape"
         onActivated: root.screenshot.cancelCapture()
+    }
+
+    Shortcut {
+        sequence: "r"
+        onActivated: root.screenshot.setMode("region")
+    }
+
+    Shortcut {
+        sequence: "w"
+        onActivated: root.screenshot.setMode("window")
+    }
+
+    Shortcut {
+        sequence: "s"
+        onActivated: root.screenshot.setMode("screen")
     }
 
     // =================================================================
