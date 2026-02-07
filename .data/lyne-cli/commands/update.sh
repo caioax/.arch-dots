@@ -28,7 +28,7 @@ source "$DOTS_DIR/.data/lyne-cli/lib/run-migrations.sh"
 echo -e "\e[1;34m:: Reloading Quickshell...\e[0m"
 source "$DOTS_DIR/.data/lyne-cli/commands/reload.sh"
 
-# Ensure stow symlinks are up to date (lyne CLI, environment.d, etc)
+# Ensure stow symlinks are up to date (lyne CLI, etc)
 cd "$DOTS_DIR" && stow -R local 2>/dev/null
 
 # Final Success Message
