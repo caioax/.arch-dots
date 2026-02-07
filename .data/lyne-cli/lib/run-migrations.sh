@@ -16,7 +16,8 @@ touch "$DONE_FILE"
 # Find and run pending migrations in order
 local has_pending=false
 
-for migration in "$MIGRATIONS_DIR"/*.sh(N); do
+for migration in "$MIGRATIONS_DIR"/*.sh; do
+    [[ -f "$migration" ]] || continue
     local name="$(basename "$migration")"
 
     # Skip if already executed

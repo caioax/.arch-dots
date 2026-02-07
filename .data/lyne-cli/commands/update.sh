@@ -28,6 +28,15 @@ source "$DOTS_DIR/.data/lyne-cli/lib/run-migrations.sh"
 echo -e "\e[1;34m:: Reloading Quickshell...\e[0m"
 source "$DOTS_DIR/.data/lyne-cli/commands/reload.sh"
 
+# Ensure lyne CLI is available in PATH
+local lyne_src="$DOTS_DIR/local/.local/bin/lyne"
+local lyne_bin="$HOME/.local/bin/lyne"
+if [[ -f "$lyne_src" && ! -e "$lyne_bin" ]]; then
+    mkdir -p "$HOME/.local/bin"
+    ln -sf "$lyne_src" "$lyne_bin"
+    echo -e "\e[1;34m:: Installed lyne CLI to PATH\e[0m"
+fi
+
 # Final Success Message
 echo ""
 echo -e "\e[1;32m✔ Lyne is up to date!\e[0m"

@@ -22,7 +22,8 @@ case "$subcmd" in
         local total=0
         local pending=0
 
-        for migration in "$MIGRATIONS_DIR"/*.sh(N); do
+        for migration in "$MIGRATIONS_DIR"/*.sh; do
+            [[ -f "$migration" ]] || continue
             local name="$(basename "$migration")"
             ((total++))
             if grep -qxF "$name" "$DONE_FILE" 2>/dev/null; then
@@ -42,7 +43,8 @@ case "$subcmd" in
         ;;
     done)
         local count=0
-        for migration in "$MIGRATIONS_DIR"/*.sh(N); do
+        for migration in "$MIGRATIONS_DIR"/*.sh; do
+            [[ -f "$migration" ]] || continue
             local name="$(basename "$migration")"
             if ! grep -qxF "$name" "$DONE_FILE" 2>/dev/null; then
                 echo "$name" >> "$DONE_FILE"

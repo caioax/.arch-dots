@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# lyne - Dotfiles management CLI
+
+DOTS_DIR="$HOME/.lyne-dots"
+CMD_DIR="$DOTS_DIR/.data/lyne-cli/commands"
+
+cmd="${1:-help}"
+[[ "$cmd" == "--help" || "$cmd" == "-h" ]] && cmd="help"
+shift 2>/dev/null || true
+
+cmd_file="$CMD_DIR/$cmd.sh"
+if [[ -f "$cmd_file" ]]; then
+    # Run inside a function so 'local' and 'return' work in sourced files
+    _lyne_run() {
+        source "$cmd_file" "$@"
+    }
+    _lyne_run "$@"
+else
+    echo "lyne: unknown command '$cmd'"
+    echo "Run 'lyne help' for usage information."
+    exit 1
+fi

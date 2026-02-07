@@ -53,24 +53,6 @@ function zvm_after_init() {
   zvm_bindkey viins '^V' edit-command-line
 }
 
-# === LYNE CLI ===
-lyne() {
-    local DOTS_DIR="$HOME/.lyne-dots"
-    local CMD_DIR="$DOTS_DIR/.data/lyne-cli/commands"
-
-    local cmd="${1:-help}"
-    [[ "$cmd" == "--help" || "$cmd" == "-h" ]] && cmd="help"
-    shift 2>/dev/null
-
-    local cmd_file="$CMD_DIR/$cmd.sh"
-    if [[ -f "$cmd_file" ]]; then
-        source "$cmd_file" "$@"
-    else
-        echo "lyne: unknown command '$cmd'"
-        echo "Run 'lyne help' for usage information."
-    fi
-}
-
 # === ALIASES ===
 all-update() {
     local STATE_FILE="$HOME/.config/quickshell/state.json"
