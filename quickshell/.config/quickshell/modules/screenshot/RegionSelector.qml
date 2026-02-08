@@ -29,18 +29,6 @@ Canvas {
         }
     }
 
-    // Track mouse position
-    MouseArea {
-        anchors.fill: parent
-        hoverEnabled: true
-        acceptedButtons: Qt.NoButton
-
-        onPositionChanged: mouse => {
-            root.guideMouseX = mouse.x;
-            root.guideMouseY = mouse.y;
-        }
-    }
-
     onPaint: {
         var ctx = getContext("2d");
         ctx.clearRect(0, 0, width, height);

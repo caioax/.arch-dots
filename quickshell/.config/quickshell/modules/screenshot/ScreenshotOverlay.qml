@@ -71,6 +71,7 @@ PanelWindow {
     // =================================================================
 
     RegionSelector {
+        id: regionSelector
         anchors.fill: parent
         visible: root.isActiveMonitor && root.screenshot.mode === "region"
         screenshot: root.screenshot
@@ -121,6 +122,8 @@ PanelWindow {
         }
 
         onPositionChanged: mouse => {
+            regionSelector.guideMouseX = mouse.x;
+            regionSelector.guideMouseY = mouse.y;
             if (root.screenshot.mode === "window" && !root.screenshot.hasSelection) {
                 root.screenshot.checkWindowAt(mouse.x, mouse.y, root.screen.name);
             }
@@ -169,7 +172,7 @@ PanelWindow {
     }
 
     // =================================================================
-    // SHORTCUT
+    // SHORTCUTS
     // =================================================================
 
     Shortcut {
