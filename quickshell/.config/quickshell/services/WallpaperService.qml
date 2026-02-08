@@ -251,6 +251,12 @@ Singleton {
         currentWallpaper = path;
 
         root.setState("wallpaper.current", path);
+
+        // In auto mode, regenerate colors from the new wallpaper
+        if (ThemeService.isAutoMode) {
+            ThemeService.runMatugen(path);
+        }
+
         hide();
     }
 

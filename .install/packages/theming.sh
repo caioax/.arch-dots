@@ -10,9 +10,13 @@ THEMING_PACKAGES=(
     "nwg-look" # GTK theme configuration for Wayland
 
     # Themes
-    "breeze"     # KDE Breeze theme
-    "breeze5"    # Breeze QT5 theme
-    "breeze-gtk" # Breeze GTK theme
+    "breeze"        # KDE Breeze theme
+    "breeze5"       # Breeze QT5 theme
+    "breeze-gtk"    # Breeze GTK theme
+    "adw-gtk-theme" # adw-gtk3 theme (GTK3 port of libadwaita, supports @define-color)
+
+    # Material You color generation
+    "matugen" # Generate Material You colors from wallpapers
 )
 
 # AUR packages
@@ -27,11 +31,18 @@ THEMING_AUR_PACKAGES=(
 # =============================================================================
 setup_theming() {
     echo "[>>] Applying GTK theme settings..."
-    gsettings set org.gnome.desktop.interface gtk-theme "Breeze-Dark"
+    gsettings set org.gnome.desktop.interface gtk-theme "adw-gtk3-dark"
     gsettings set org.gnome.desktop.interface icon-theme "Tela-blue-dark"
     gsettings set org.gnome.desktop.interface font-name "CaskaydiaCove Nerd Font 10"
     gsettings set org.gnome.desktop.interface cursor-theme "Bibata-Modern-Classic"
     gsettings set org.gnome.desktop.interface cursor-size 24
     gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
     echo "[OK] GTK theme applied!"
+
+    echo "[>>] Setting up matugen..."
+    mkdir -p "$HOME/.cache/matugen"
+    mkdir -p "$HOME/.local/share/color-schemes"
+    mkdir -p "$HOME/.config/matugen"
+    ln -sf "$HOME/.lyne-dots/.data/matugen/config.toml" "$HOME/.config/matugen/config.toml"
+    echo "[OK] Matugen configured!"
 }

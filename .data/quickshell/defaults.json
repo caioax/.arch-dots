@@ -4,7 +4,9 @@
     "aurHelper": "yay"
   },
   "theme": {
-    "name": "tokyonight"
+    "name": "tokyonight",
+    "mode": "preset",
+    "scheme": "dark"
   },
   "wallpaper": {
     "current": "~/.local/wallpapers/themes/tokyonight/theme-tokyonight.jpg",

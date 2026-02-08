@@ -16,7 +16,7 @@ Rectangle {
     implicitHeight: Config.barHeight - 10
     radius: height / 2
 
-    color: (active || hovered) ? Config.surface1Color : "transparent"
+    color: (active || hovered) ? Config.surface1Color : Qt.alpha(Config.surface1Color, 0)
 
     Behavior on color {
         ColorAnimation {
