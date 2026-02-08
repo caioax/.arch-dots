@@ -41,7 +41,8 @@
   "animations": {
     "short": 100,
     "normal": 200,
-    "long": 400
+    "long": 400,
+    "screenshot": false
   },
   "notifications": {
     "width": 350,

@@ -3,6 +3,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Io
+import qs.config
 
 Scope {
     id: root
@@ -49,24 +50,28 @@ Scope {
     // =========================================================================
 
     Behavior on selectionX {
+        enabled: Config.screenshotAnimations
         SpringAnimation {
             spring: 4
             damping: 0.4
         }
     }
     Behavior on selectionY {
+        enabled: Config.screenshotAnimations
         SpringAnimation {
             spring: 4
             damping: 0.4
         }
     }
     Behavior on selectionWidth {
+        enabled: Config.screenshotAnimations
         SpringAnimation {
             spring: 4
             damping: 0.4
         }
     }
     Behavior on selectionHeight {
+        enabled: Config.screenshotAnimations
         SpringAnimation {
             spring: 4
             damping: 0.4

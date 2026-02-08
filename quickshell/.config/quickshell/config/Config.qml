@@ -74,6 +74,8 @@ Singleton {
     readonly property int animDuration: getState("animations.normal", 200)
     readonly property int animDurationLong: getState("animations.long", 400)
 
+    readonly property bool screenshotAnimations: getState("animations.screenshot", true)
+
     // ========================================================================
     // NOTIFICATIONS
     // ========================================================================

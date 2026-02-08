@@ -23,3 +23,6 @@ local/.local/themes/*
 hyprland/.config/hypr/monitors.conf
 hyprland/.config/hypr/workspaces.conf
 
+# GTK colors.css (generated at runtime by ThemeService/matugen)
+theming/.config/gtk-3.0/colors.css
+theming/.config/gtk-4.0/colors.css
