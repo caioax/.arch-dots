@@ -16,6 +16,24 @@ Singleton {
 
     Component.onCompleted: loadState()
 
+    // Watch state.json for external changes (e.g. from lyne CLI)
+    FileView {
+        id: stateWatcher
+        path: root.statePath
+        watchChanges: true
+
+        onFileChanged: _reloadDebounce.restart()
+    }
+
+    Timer {
+        id: _reloadDebounce
+        interval: 150
+        onTriggered: {
+            if (!loadProc.running)
+                root.loadState();
+        }
+    }
+
     // --- Dot Notation Functions ---
     function get(path: string, defaultValue) {
         const keys = path.split('.');
@@ -67,14 +85,18 @@ Singleton {
 
         onExited: (exitCode, exitStatus) => {
             try {
-                root.state = JSON.parse(loadProc.buffer.trim());
+                const newState = JSON.parse(loadProc.buffer.trim());
+                const changed = JSON.stringify(root.state) !== JSON.stringify(newState);
+                root.state = newState;
+                root.isLoading = false;
+                loadProc.buffer = "";
+                if (changed)
+                    root.stateLoaded();
             } catch (e) {
                 console.error("[StateService] JSON Parse Error:", e);
-                root.state = {};
+                root.isLoading = false;
+                loadProc.buffer = "";
             }
-            root.isLoading = false;
-            loadProc.buffer = "";
-            root.stateLoaded();
         }
     }
 

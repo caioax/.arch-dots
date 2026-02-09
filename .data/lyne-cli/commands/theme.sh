@@ -66,14 +66,11 @@ case "$subcmd" in
         fi
         _theme_set_state "theme.mode" "preset"
         _theme_set_state "theme.name" "$theme_name"
-        echo "Switched to preset mode: $theme_name"
-        echo "Run 'lyne reload' to apply."
+        echo "Theme set: $theme_name"
         ;;
     auto)
         _theme_set_state "theme.mode" "auto"
         echo "Switched to auto (Material You) mode."
-        echo "Colors will be generated from your wallpaper."
-        echo "Run 'lyne reload' to apply."
         ;;
     mode)
         echo "$(_theme_get_mode)"
@@ -84,8 +81,24 @@ case "$subcmd" in
             echo "$(_theme_get_scheme)"
         elif [[ "$scheme_arg" == "dark" || "$scheme_arg" == "light" ]]; then
             _theme_set_state "theme.scheme" "$scheme_arg"
+
+            # Switch to pair theme in preset mode
+            local mode=$(_theme_get_mode)
+            if [[ "$mode" == "preset" ]]; then
+                local current_name=$(_theme_get_name)
+                local theme_file="$THEMES_DIR/$current_name.json"
+                if [[ -f "$theme_file" ]]; then
+                    local pair_key
+                    [[ "$scheme_arg" == "light" ]] && pair_key="lightPair" || pair_key="darkPair"
+                    local pair_name
+                    pair_name=$(jq -r ".$pair_key // empty" "$theme_file" 2>/dev/null)
+                    if [[ -n "$pair_name" && -f "$THEMES_DIR/$pair_name.json" ]]; then
+                        _theme_set_state "theme.name" "$pair_name"
+                    fi
+                fi
+            fi
+
             echo "Color scheme set to: $scheme_arg"
-            echo "Run 'lyne reload' to apply."
         else
             echo "lyne theme scheme: must be 'dark' or 'light'"
             return 1

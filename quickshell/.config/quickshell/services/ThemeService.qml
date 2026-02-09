@@ -105,6 +105,7 @@ Singleton {
         function onStateLoaded() {
             root.themeMode = root.getState("theme.mode", "preset");
             root.colorScheme = root.getState("theme.scheme", "dark");
+            root.currentThemeName = root.getState("theme.name", "tokyonight");
             if (root.isAutoMode) {
                 const wallpaper = root.getState("wallpaper.current", "");
                 if (wallpaper) {

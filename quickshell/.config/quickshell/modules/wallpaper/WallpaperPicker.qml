@@ -98,27 +98,25 @@ PanelWindow {
                     color: Config.textColor
                 }
 
-                Item {
-                    Layout.fillWidth: true
-                }
-
                 // Counter
                 Rectangle {
                     Layout.preferredWidth: countText.implicitWidth + 16
-                    Layout.preferredHeight: 26
-                    radius: height / 2
+                    Layout.preferredHeight: 36
+                    radius: Config.radius
                     color: Config.surface1Color
 
                     Text {
                         id: countText
                         anchors.centerIn: parent
-                        text: root.isThemesOverview
-                              ? WallpaperService.filteredWallpapers.length + " themes"
-                              : WallpaperService.filteredWallpapers.length + " images"
+                        text: root.isThemesOverview ? WallpaperService.filteredWallpapers.length + " themes" : WallpaperService.filteredWallpapers.length + " images"
                         font.family: Config.font
                         font.pixelSize: Config.fontSizeSmall
                         color: Config.subtextColor
                     }
+                }
+
+                Item {
+                    Layout.fillWidth: true
                 }
 
                 // Dynamic wallpaper toggle
@@ -262,64 +260,78 @@ PanelWindow {
                 }
             }
 
-            // ========== THEME CHIPS (scrollable) ==========
-            Flickable {
+            // ========== THEME CHIPS ==========
+            ListView {
+                id: themeList
                 Layout.fillWidth: true
                 Layout.preferredHeight: visible ? 34 : 0
                 visible: WallpaperService.currentCategory === "themes"
-                contentWidth: themeChipsRow.width
+
+                orientation: ListView.Horizontal
+                layoutDirection: Qt.LeftToRight
+                spacing: 6
                 clip: true
-                flickableDirection: Flickable.HorizontalFlick
-                boundsBehavior: Flickable.StopAtBounds
 
-                Row {
-                    id: themeChipsRow
-                    spacing: 6
-                    height: parent.height
+                model: ThemeService.availableThemes
 
-                    Repeater {
-                        model: ThemeService.availableThemes
+                MouseArea {
+                    anchors.fill: parent
+                    acceptedButtons: Qt.NoButton
 
-                        delegate: Rectangle {
-                            id: themeChip
-                            required property string modelData
+                    onWheel: wheel => {
+                        if (wheel.angleDelta.y !== 0) {
+                            var newPos = themeList.contentX - wheel.angleDelta.y;
 
-                            height: 28
-                            width: chipText.implicitWidth + 16
-                            radius: Config.radius
-                            color: {
-                                if (WallpaperService.themeFilter === modelData)
-                                    return Qt.alpha(Config.accentColor, 0.3);
-                                return chipMouse.containsMouse ? Config.surface2Color : Qt.alpha(Config.surface1Color, 0.6);
-                            }
+                            themeList.contentX = Math.max(0, Math.min(newPos, themeList.contentWidth - themeList.width));
+                        }
+                    }
+                }
 
-                            Behavior on color {
-                                ColorAnimation {
-                                    duration: Config.animDurationShort
-                                }
-                            }
+                Behavior on contentX {
+                    NumberAnimation {
+                        duration: 150
+                        easing.type: Easing.OutCubic
+                    }
+                }
 
-                            Text {
-                                id: chipText
-                                anchors.centerIn: parent
-                                text: themeChip.modelData
-                                font.family: Config.font
-                                font.pixelSize: Config.fontSizeSmall
-                                color: WallpaperService.themeFilter === themeChip.modelData ? Config.accentColor : Config.subtextColor
-                            }
+                delegate: Rectangle {
+                    id: themeChip
+                    required property string modelData
 
-                            MouseArea {
-                                id: chipMouse
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: {
-                                    if (WallpaperService.themeFilter === themeChip.modelData)
-                                        WallpaperService.themeFilter = "";
-                                    else
-                                        WallpaperService.themeFilter = themeChip.modelData;
-                                }
-                            }
+                    height: 28
+                    width: chipText.implicitWidth + 16
+                    radius: Config.radius
+                    color: {
+                        if (WallpaperService.themeFilter === modelData)
+                            return Qt.alpha(Config.accentColor, 0.3);
+                        return chipMouse.containsMouse ? Config.surface2Color : Qt.alpha(Config.surface1Color, 0.6);
+                    }
+
+                    Behavior on color {
+                        ColorAnimation {
+                            duration: Config.animDurationShort
+                        }
+                    }
+
+                    Text {
+                        id: chipText
+                        anchors.centerIn: parent
+                        text: themeChip.modelData
+                        font.family: Config.font
+                        font.pixelSize: Config.fontSizeSmall
+                        color: WallpaperService.themeFilter === themeChip.modelData ? Config.accentColor : Config.subtextColor
+                    }
+
+                    MouseArea {
+                        id: chipMouse
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            if (WallpaperService.themeFilter === themeChip.modelData)
+                                WallpaperService.themeFilter = "";
+                            else
+                                WallpaperService.themeFilter = themeChip.modelData;
                         }
                     }
                 }
@@ -339,7 +351,8 @@ PanelWindow {
                 Layout.fillHeight: true
 
                 clip: true
-                cellWidth: 200
+
+                cellWidth: 215
                 cellHeight: 150
 
                 cacheBuffer: 600
@@ -365,7 +378,8 @@ PanelWindow {
                     property bool isActiveForTheme: root.inThemePage && WallpaperService.isActiveThemeWallpaper(modelData, WallpaperService.themeFilter)
                     property string overviewThemeName: isOverview ? modelData : ""
                     property string displayName: {
-                        if (isOverview) return modelData;
+                        if (isOverview)
+                            return modelData;
                         const name = WallpaperService.fileName(modelData);
                         const dot = name.lastIndexOf(".");
                         return dot > 0 ? name.substring(0, dot) : name;

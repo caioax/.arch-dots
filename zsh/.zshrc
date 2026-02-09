@@ -42,6 +42,7 @@ export PATH="$PATH:$HOME/.spicetify"
 function zvm_vi_yank() {
     zvm_yank
     echo -n "${CUTBUFFER}" | wl-copy
+    zvm_exit_visual_mode
 }
 
 ZVM_CURSOR_STYLE_ENABLED=true
