@@ -1,4 +1,5 @@
 [General]
+ColorScheme=Lyne
 TerminalApplication=kitty
 TerminalService=kitty.desktop
 font=Caskaydia Cove Nerd Font,10,-1,5,50,0,0,0,0,0
