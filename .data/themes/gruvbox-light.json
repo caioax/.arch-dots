@@ -1,0 +1,68 @@
+{
+  "name": "Gruvbox Light",
+  "variant": "light",
+  "darkPair": "gruvbox",
+  "palette": {
+    "background": "#fbf1c7",
+    "surface0": "#ebdbb2",
+    "surface1": "#d5c4a1",
+    "surface2": "#bdae93",
+    "surface3": "#a89984",
+    "text": "#3c3836",
+    "textReverse": "#fbf1c7",
+    "subtext": "#504945",
+    "subtextReverse": "#a89984",
+    "accent": "#076678",
+    "success": "#79740e",
+    "warning": "#b57614",
+    "error": "#9d0006",
+    "muted": "#a89984",
+    "greyBlue": "#ebdbb2",
+    "blueDark": "#f2e5bc"
+  },
+  "opacity": {
+    "background": 0.95
+  },
+  "neovim": {
+    "colorscheme": "gruvbox"
+  },
+  "hyprland": {
+    "activeBorder": "076678ff",
+    "inactiveBorder": "bdae93aa",
+    "shadowColor": "d5c4a1ee"
+  },
+  "terminal": {
+    "background": "#fbf1c7",
+    "foreground": "#3c3836",
+    "selectionBackground": "#d5c4a1",
+    "selectionForeground": "#3c3836",
+    "urlColor": "#458588",
+    "cursor": "#3c3836",
+    "cursorTextColor": "#fbf1c7",
+    "activeTabBackground": "#d5c4a1",
+    "activeTabForeground": "#3c3836",
+    "inactiveTabBackground": "#ebdbb2",
+    "inactiveTabForeground": "#3c3836",
+    "activeBorderColor": "#076678",
+    "inactiveBorderColor": "#ebdbb2",
+    "color0": "#fbf1c7",
+    "color1": "#cc241d",
+    "color2": "#98971a",
+    "color3": "#d79921",
+    "color4": "#458588",
+    "color5": "#b16286",
+    "color6": "#689d6a",
+    "color7": "#7c6f64",
+    "color8": "#928374",
+    "color9": "#9d0006",
+    "color10": "#79740e",
+    "color11": "#b57614",
+    "color12": "#076678",
+    "color13": "#8f3f71",
+    "color14": "#427b58",
+    "color15": "#3c3836",
+    "color16": "#af3a03",
+    "color17": "#9d0006"
+  },
+  "wallpaper": "themes/gruvbox-light/theme-gruvbox-light.jpg"
+}

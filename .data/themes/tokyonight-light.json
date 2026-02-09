@@ -1,0 +1,68 @@
+{
+  "name": "Tokyo Night Day",
+  "variant": "light",
+  "darkPair": "tokyonight",
+  "palette": {
+    "background": "#e1e2e7",
+    "surface0": "#d0d5e3",
+    "surface1": "#c4c8da",
+    "surface2": "#b4b5b9",
+    "surface3": "#848cb5",
+    "text": "#3b4261",
+    "textReverse": "#e1e2e7",
+    "subtext": "#5a607d",
+    "subtextReverse": "#848cb5",
+    "accent": "#2e7de9",
+    "success": "#587539",
+    "warning": "#8c6c3e",
+    "error": "#f52a65",
+    "muted": "#848cb5",
+    "greyBlue": "#b7c1e3",
+    "blueDark": "#d0d5e3"
+  },
+  "opacity": {
+    "background": 0.95
+  },
+  "neovim": {
+    "colorscheme": "tokyonight-day"
+  },
+  "hyprland": {
+    "activeBorder": "2e7de9ff",
+    "inactiveBorder": "b4b5b9aa",
+    "shadowColor": "c4c8daee"
+  },
+  "terminal": {
+    "background": "#e1e2e7",
+    "foreground": "#3b4261",
+    "selectionBackground": "#b7c1e3",
+    "selectionForeground": "#3b4261",
+    "urlColor": "#387068",
+    "cursor": "#3b4261",
+    "cursorTextColor": "#e1e2e7",
+    "activeTabBackground": "#2e7de9",
+    "activeTabForeground": "#d0d5e3",
+    "inactiveTabBackground": "#c4c8da",
+    "inactiveTabForeground": "#8990b3",
+    "activeBorderColor": "#2e7de9",
+    "inactiveBorderColor": "#c4c8da",
+    "color0": "#b4b5b9",
+    "color1": "#f52a65",
+    "color2": "#587539",
+    "color3": "#8c6c3e",
+    "color4": "#2e7de9",
+    "color5": "#9854f1",
+    "color6": "#007197",
+    "color7": "#5a607d",
+    "color8": "#a1a6c5",
+    "color9": "#ff4774",
+    "color10": "#5c8524",
+    "color11": "#a27629",
+    "color12": "#358aff",
+    "color13": "#a463ff",
+    "color14": "#007ea8",
+    "color15": "#3b4261",
+    "color16": "#b15c00",
+    "color17": "#c64343"
+  },
+  "wallpaper": "themes/tokyonight-light/theme-tokyonight-light.jpg"
+}

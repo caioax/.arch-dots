@@ -2,8 +2,8 @@
 
 # Install packages if missing
 if ! command -v matugen &>/dev/null; then
-    echo "   Installing matugen-bin..."
-    pacman -S --noconfirm matugen 2>/dev/null || echo "   Warning: failed to install matugen-bin"
+    echo "   Installing matugen..."
+    pacman -S --noconfirm matugen 2>/dev/null || echo "   Warning: failed to install matugen"
 fi
 
 if [[ ! -d /usr/share/themes/adw-gtk3-dark ]]; then

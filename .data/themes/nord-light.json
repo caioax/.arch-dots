@@ -1,0 +1,68 @@
+{
+  "name": "Nord Light",
+  "variant": "light",
+  "darkPair": "nord",
+  "palette": {
+    "background": "#eceff4",
+    "surface0": "#e5e9f0",
+    "surface1": "#d8dee9",
+    "surface2": "#c2c8d4",
+    "surface3": "#a5acba",
+    "text": "#2e3440",
+    "textReverse": "#eceff4",
+    "subtext": "#3b4252",
+    "subtextReverse": "#a5acba",
+    "accent": "#5e81ac",
+    "success": "#5e8549",
+    "warning": "#b88a32",
+    "error": "#bf616a",
+    "muted": "#a5acba",
+    "greyBlue": "#d8dee9",
+    "blueDark": "#e5e9f0"
+  },
+  "opacity": {
+    "background": 0.95
+  },
+  "neovim": {
+    "colorscheme": "nord"
+  },
+  "hyprland": {
+    "activeBorder": "5e81acff",
+    "inactiveBorder": "c2c8d4aa",
+    "shadowColor": "d8dee9ee"
+  },
+  "terminal": {
+    "background": "#eceff4",
+    "foreground": "#2e3440",
+    "selectionBackground": "#d8dee9",
+    "selectionForeground": "#2e3440",
+    "urlColor": "#5e81ac",
+    "cursor": "#2e3440",
+    "cursorTextColor": "#eceff4",
+    "activeTabBackground": "#5e81ac",
+    "activeTabForeground": "#eceff4",
+    "inactiveTabBackground": "#e5e9f0",
+    "inactiveTabForeground": "#a5acba",
+    "activeBorderColor": "#5e81ac",
+    "inactiveBorderColor": "#e5e9f0",
+    "color0": "#e5e9f0",
+    "color1": "#bf616a",
+    "color2": "#5e8549",
+    "color3": "#b88a32",
+    "color4": "#4c7a9e",
+    "color5": "#8b5d83",
+    "color6": "#468ea2",
+    "color7": "#3b4252",
+    "color8": "#c2c8d4",
+    "color9": "#bf616a",
+    "color10": "#6e9459",
+    "color11": "#c89b42",
+    "color12": "#5e81ac",
+    "color13": "#9b6d93",
+    "color14": "#569dae",
+    "color15": "#2e3440",
+    "color16": "#d08770",
+    "color17": "#bf616a"
+  },
+  "wallpaper": "themes/nord-light/theme-nord-light.png"
+}

@@ -34,8 +34,9 @@
 
 - 🪟 **Hyprland** - Tiling Wayland compositor with modular configuration
 - 🖥️ **QuickShell** - Custom QML-based status bar, launcher, notifications, quick settings, and power menu
-- 🎨 **Dynamic Theming** - 6 themes (Tokyo Night, Catppuccin Mocha, Dracula, Gruvbox, Nord, Rose Pine) applied live across the entire system: shell, terminal, editor, and wallpaper
+- 🎨 **Dynamic Theming** - 11 themes (6 dark + 5 light variants) applied live across the entire system, plus a **Material You** auto mode that generates colors from your wallpaper
 - 🖼️ **Wallpaper Picker** - Built-in wallpaper manager with search, favorites, and per-theme wallpaper folders
+- 📸 **Screenshot Tool** - Multi-monitor region/fullscreen capture with annotation overlay
 - ✏️ **Neovim** - Lua-based configuration with LSP, Telescope, Smart Splits, and lazy.nvim
 - 📟 **Tmux** - Terminal multiplexer with seamless Neovim navigation (Smart Splits)
 - 🐱 **Kitty** - GPU-accelerated terminal with dynamic theme switching
@@ -44,7 +45,7 @@
 
 ### 🎨 Theme System
 
-Switching themes from the Quick Settings panel applies colors instantly to:
+Switching themes from the Quick Settings panel or CLI applies colors instantly to:
 
 | Component                                 | What changes                                |
 | ----------------------------------------- | ------------------------------------------- |
@@ -52,9 +53,23 @@ Switching themes from the Quick Settings panel applies colors instantly to:
 | Kitty                                     | Terminal colors, cursor, tabs, borders      |
 | Neovim                                    | Colorscheme (sent to all running instances) |
 | Hyprland                                  | Active/inactive border colors, shadow       |
+| GTK / Qt                                  | Application theme colors                    |
 | Wallpaper                                 | Theme-linked wallpaper applied via swww     |
 
 No restarts required.
+
+**Available presets:**
+
+| Dark              | Light             |
+| ----------------- | ----------------- |
+| Tokyo Night       | Tokyo Night Day   |
+| Catppuccin Mocha  | Catppuccin Latte  |
+| Dracula           | —                 |
+| Gruvbox Dark      | Gruvbox Light     |
+| Nord              | Nord Light        |
+| Rose Pine         | Rose Pine Dawn    |
+
+**Material You mode** generates a color palette from your current wallpaper using [matugen](https://github.com/InioX/matugen), supporting both dark and light schemes. Enable it from Quick Settings or with `lyne theme auto`.
 
 ---
 
@@ -114,6 +129,7 @@ lyne <command> [args...]
 
 | Command   | Description                                         |
 | --------- | --------------------------------------------------- |
+| `theme`   | Manage themes (set, list, auto, scheme)             |
 | `state`   | Manage `state.json` (edit, sync, rebuild)           |
 | `migrate` | Manage migrations (run, list, done)                 |
 | `update`  | Pull latest changes, sync state, and run migrations |
@@ -126,6 +142,21 @@ Run `lyne <command> --help` for details and subcommands.
 ### Examples
 
 ```bash
+# Show current theme info
+lyne theme
+
+# List all available themes (dark and light)
+lyne theme list
+
+# Switch to a specific theme preset
+lyne theme set catppuccin-mocha
+
+# Switch to Material You auto mode (colors from wallpaper)
+lyne theme auto
+
+# Toggle between dark and light scheme
+lyne theme scheme light
+
 # Pull the latest changes and apply migrations
 lyne update
 
@@ -245,6 +276,7 @@ Each top-level directory is a [GNU Stow](https://www.gnu.org/software/stow/) pac
 | Multiplexer     | Tmux            |
 | Editor          | Neovim          |
 | Wallpaper       | swww            |
+| Auto Theming    | matugen         |
 | File Manager    | Dolphin         |
 | Browser         | Zen Browser     |
 | AUR Helper      | yay             |
@@ -273,7 +305,7 @@ Wallpapers live in `~/.local/wallpapers/` (git-ignored, defaults copied on insta
 
 ### Adding Themes
 
-Themes are JSON files in `~/.local/themes/` (git-ignored, defaults copied from `.data/themes/` on install). Each theme defines colors for the palette, terminal, Hyprland, Neovim, and an optional wallpaper path. To create a new theme, copy an existing one and modify the values.
+Themes are JSON files in `~/.local/themes/` (git-ignored, defaults copied from `.data/themes/` on install). Each theme defines colors for the palette, terminal, Hyprland, Neovim, GTK/Qt, and a wallpaper path. Light themes include a `"variant": "light"` field and a `"darkPair"` field linking them to their dark counterpart. To create a new theme, copy an existing one and modify the values.
 
 ---
 

@@ -33,7 +33,7 @@ Singleton {
     // PUBLIC PROPERTIES - NIGHT LIGHT (HYPRSUNSET)
     // ========================================================================
 
-    property bool nightLightEnabled: false
+    property bool nightLightEnabled: StateService.get("nightLight.enabled", false)
 
     // Temperature in Kelvin (1000 = very warm/orange, 6500 = daylight)
     // Slider goes from 0.0 to 1.0, mapped to 2500K - 5500K
@@ -41,7 +41,7 @@ Singleton {
 
     // Intensity as a 0.0 - 1.0 value for the slider
     // 0.0 = warmer (2500K), 1.0 = cooler (5500K)
-    property real nightLightIntensity: 0.5
+    property real nightLightIntensity: StateService.get("nightLight.intensity", 0.5)
 
     // Night light icon
     readonly property string nightLightIcon: nightLightEnabled ? "󰌵" : "󰌶"
@@ -67,11 +67,8 @@ Singleton {
 
             console.log("[Brightness] Loaded state - enabled:", root.nightLightEnabled, "intensity:", root.nightLightIntensity);
 
-            // Apply the loaded state
-            if (root.nightLightEnabled) {
-                // Small delay to ensure hyprsunset is ready
-                applyStateTimer.restart();
-            }
+            // Always apply the loaded state (enable or disable)
+            applyStateTimer.restart();
         }
     }
 
@@ -81,7 +78,9 @@ Singleton {
         onTriggered: {
             if (root.nightLightEnabled) {
                 root.applyNightLight();
+                return;
             }
+            root.disableNightLight();
         }
     }
 
@@ -259,6 +258,12 @@ Singleton {
                 sleep 0.5
             fi
         `]
+        onExited: {
+            // hyprsunset is ready — apply state if already loaded
+            if (!StateService.isLoading && root.nightLightEnabled) {
+                root.applyNightLight();
+            }
+        }
     }
 
     Process {

@@ -1,0 +1,68 @@
+{
+  "name": "Catppuccin Latte",
+  "variant": "light",
+  "darkPair": "catppuccin-mocha",
+  "palette": {
+    "background": "#eff1f5",
+    "surface0": "#ccd0da",
+    "surface1": "#bcc0cc",
+    "surface2": "#acb0be",
+    "surface3": "#9ca0b0",
+    "text": "#4c4f69",
+    "textReverse": "#eff1f5",
+    "subtext": "#6c6f85",
+    "subtextReverse": "#9ca0b0",
+    "accent": "#1e66f5",
+    "success": "#40a02b",
+    "warning": "#df8e1d",
+    "error": "#d20f39",
+    "muted": "#9ca0b0",
+    "greyBlue": "#dce0e8",
+    "blueDark": "#e6e9ef"
+  },
+  "opacity": {
+    "background": 0.95
+  },
+  "neovim": {
+    "colorscheme": "catppuccin-latte"
+  },
+  "hyprland": {
+    "activeBorder": "1e66f5ff",
+    "inactiveBorder": "acb0beaa",
+    "shadowColor": "dce0e8ee"
+  },
+  "terminal": {
+    "background": "#eff1f5",
+    "foreground": "#4c4f69",
+    "selectionBackground": "#dc8a78",
+    "selectionForeground": "#eff1f5",
+    "urlColor": "#dc8a78",
+    "cursor": "#dc8a78",
+    "cursorTextColor": "#eff1f5",
+    "activeTabBackground": "#8839ef",
+    "activeTabForeground": "#eff1f5",
+    "inactiveTabBackground": "#9ca0b0",
+    "inactiveTabForeground": "#4c4f69",
+    "activeBorderColor": "#7287fd",
+    "inactiveBorderColor": "#9ca0b0",
+    "color0": "#5c5f77",
+    "color1": "#d20f39",
+    "color2": "#40a02b",
+    "color3": "#df8e1d",
+    "color4": "#1e66f5",
+    "color5": "#ea76cb",
+    "color6": "#179299",
+    "color7": "#acb0be",
+    "color8": "#6c6f85",
+    "color9": "#d20f39",
+    "color10": "#40a02b",
+    "color11": "#df8e1d",
+    "color12": "#1e66f5",
+    "color13": "#ea76cb",
+    "color14": "#179299",
+    "color15": "#bcc0cc",
+    "color16": "#fe640b",
+    "color17": "#dc8a78"
+  },
+  "wallpaper": "themes/catppuccin-latte/theme-catppuccin-latte.jpg"
+}

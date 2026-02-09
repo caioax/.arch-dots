@@ -30,6 +30,7 @@ PanelWindow {
 
     // Whether we're in a theme's wallpaper page
     readonly property bool inThemePage: WallpaperService.currentCategory === "themes" && WallpaperService.themeFilter !== ""
+    readonly property bool isThemesOverview: WallpaperService.currentCategory === "themes" && WallpaperService.themeFilter === ""
 
     // Click on background closes or clears selection
     MouseArea {
@@ -111,7 +112,9 @@ PanelWindow {
                     Text {
                         id: countText
                         anchors.centerIn: parent
-                        text: WallpaperService.filteredWallpapers.length + " images"
+                        text: root.isThemesOverview
+                              ? WallpaperService.filteredWallpapers.length + " themes"
+                              : WallpaperService.filteredWallpapers.length + " images"
                         font.family: Config.font
                         font.pixelSize: Config.fontSizeSmall
                         color: Config.subtextColor
@@ -254,55 +257,71 @@ PanelWindow {
                     }
                 }
 
-                // Theme sub-filter chips
-                Repeater {
-                    model: WallpaperService.currentCategory === "themes" ? ThemeService.availableThemes : []
+                Item {
+                    Layout.fillWidth: true
+                }
+            }
 
-                    delegate: Rectangle {
-                        id: themeChip
-                        required property string modelData
+            // ========== THEME CHIPS (scrollable) ==========
+            Flickable {
+                Layout.fillWidth: true
+                Layout.preferredHeight: visible ? 34 : 0
+                visible: WallpaperService.currentCategory === "themes"
+                contentWidth: themeChipsRow.width
+                clip: true
+                flickableDirection: Flickable.HorizontalFlick
+                boundsBehavior: Flickable.StopAtBounds
 
-                        Layout.preferredHeight: 28
-                        Layout.preferredWidth: chipText.implicitWidth + 16
-                        radius: Config.radius
-                        color: {
-                            if (WallpaperService.themeFilter === modelData)
-                                return Qt.alpha(Config.accentColor, 0.3);
-                            return chipMouse.containsMouse ? Config.surface2Color : Qt.alpha(Config.surface1Color, 0.6);
-                        }
+                Row {
+                    id: themeChipsRow
+                    spacing: 6
+                    height: parent.height
 
-                        Behavior on color {
-                            ColorAnimation {
-                                duration: Config.animDurationShort
+                    Repeater {
+                        model: ThemeService.availableThemes
+
+                        delegate: Rectangle {
+                            id: themeChip
+                            required property string modelData
+
+                            height: 28
+                            width: chipText.implicitWidth + 16
+                            radius: Config.radius
+                            color: {
+                                if (WallpaperService.themeFilter === modelData)
+                                    return Qt.alpha(Config.accentColor, 0.3);
+                                return chipMouse.containsMouse ? Config.surface2Color : Qt.alpha(Config.surface1Color, 0.6);
                             }
-                        }
 
-                        Text {
-                            id: chipText
-                            anchors.centerIn: parent
-                            text: themeChip.modelData
-                            font.family: Config.font
-                            font.pixelSize: Config.fontSizeSmall
-                            color: WallpaperService.themeFilter === themeChip.modelData ? Config.accentColor : Config.subtextColor
-                        }
+                            Behavior on color {
+                                ColorAnimation {
+                                    duration: Config.animDurationShort
+                                }
+                            }
 
-                        MouseArea {
-                            id: chipMouse
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: {
-                                if (WallpaperService.themeFilter === themeChip.modelData)
-                                    WallpaperService.themeFilter = "";
-                                else
-                                    WallpaperService.themeFilter = themeChip.modelData;
+                            Text {
+                                id: chipText
+                                anchors.centerIn: parent
+                                text: themeChip.modelData
+                                font.family: Config.font
+                                font.pixelSize: Config.fontSizeSmall
+                                color: WallpaperService.themeFilter === themeChip.modelData ? Config.accentColor : Config.subtextColor
+                            }
+
+                            MouseArea {
+                                id: chipMouse
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: {
+                                    if (WallpaperService.themeFilter === themeChip.modelData)
+                                        WallpaperService.themeFilter = "";
+                                    else
+                                        WallpaperService.themeFilter = themeChip.modelData;
+                                }
                             }
                         }
                     }
-                }
-
-                Item {
-                    Layout.fillWidth: true
                 }
             }
 
@@ -335,13 +354,18 @@ PanelWindow {
                     width: wallpaperGrid.cellWidth
                     height: wallpaperGrid.cellHeight
 
+                    // In themes overview, modelData is a theme name; otherwise a file path
+                    readonly property bool isOverview: root.isThemesOverview
+                    readonly property string wallpaperPath: isOverview ? WallpaperService.themeWallpaperPath(modelData) : modelData
+
                     property bool isHovered: itemMouse.containsMouse || fileNameMouse.containsMouse
-                    property bool isCurrent: modelData === WallpaperService.currentWallpaper
-                    property bool isSelected: WallpaperService.isSelected(modelData)
-                    property bool isFav: WallpaperService.isFavorite(modelData)
+                    property bool isCurrent: wallpaperPath === WallpaperService.currentWallpaper
+                    property bool isSelected: !isOverview && WallpaperService.isSelected(modelData)
+                    property bool isFav: WallpaperService.isFavorite(wallpaperPath)
                     property bool isActiveForTheme: root.inThemePage && WallpaperService.isActiveThemeWallpaper(modelData, WallpaperService.themeFilter)
-                    property string overviewThemeName: (!root.inThemePage && WallpaperService.currentCategory === "themes") ? WallpaperService.themeForActiveWallpaper(modelData) : ""
+                    property string overviewThemeName: isOverview ? modelData : ""
                     property string displayName: {
+                        if (isOverview) return modelData;
                         const name = WallpaperService.fileName(modelData);
                         const dot = name.lastIndexOf(".");
                         return dot > 0 ? name.substring(0, dot) : name;
@@ -378,6 +402,10 @@ PanelWindow {
                             acceptedButtons: Qt.LeftButton
 
                             onClicked: mouse => {
+                                if (wallpaperItem.isOverview) {
+                                    WallpaperService.themeFilter = wallpaperItem.modelData;
+                                    return;
+                                }
                                 if (mouse.modifiers & Qt.ControlModifier) {
                                     WallpaperService.toggleSelection(wallpaperItem.modelData);
                                 } else {
@@ -386,8 +414,9 @@ PanelWindow {
                             }
 
                             onDoubleClicked: {
-                                if (root.inThemePage) {
-                                    // Double-click in theme page sets this as the active wallpaper for the theme
+                                if (wallpaperItem.isOverview) {
+                                    WallpaperService.themeFilter = wallpaperItem.modelData;
+                                } else if (root.inThemePage) {
                                     WallpaperService.setActiveThemeWallpaper(wallpaperItem.modelData, WallpaperService.themeFilter);
                                 } else {
                                     WallpaperService.setWallpaper(wallpaperItem.modelData);
@@ -408,7 +437,7 @@ PanelWindow {
                                 Image {
                                     id: thumbnail
                                     anchors.fill: parent
-                                    source: "file://" + wallpaperItem.modelData
+                                    source: wallpaperItem.wallpaperPath ? ("file://" + wallpaperItem.wallpaperPath) : ""
                                     sourceSize: Qt.size(256, 144)
                                     fillMode: Image.PreserveAspectCrop
                                     asynchronous: true
@@ -522,7 +551,7 @@ PanelWindow {
                             MouseArea {
                                 anchors.fill: parent
                                 cursorShape: Qt.PointingHandCursor
-                                onClicked: WallpaperService.toggleFavorite(wallpaperItem.modelData)
+                                onClicked: WallpaperService.toggleFavorite(wallpaperItem.wallpaperPath)
                             }
                         }
 
@@ -580,6 +609,10 @@ PanelWindow {
                             acceptedButtons: Qt.LeftButton
 
                             onClicked: mouse => {
+                                if (wallpaperItem.isOverview) {
+                                    WallpaperService.themeFilter = wallpaperItem.modelData;
+                                    return;
+                                }
                                 if (mouse.modifiers & Qt.ControlModifier) {
                                     WallpaperService.toggleSelection(wallpaperItem.modelData);
                                 } else {
@@ -588,7 +621,9 @@ PanelWindow {
                             }
 
                             onDoubleClicked: {
-                                if (root.inThemePage) {
+                                if (wallpaperItem.isOverview) {
+                                    WallpaperService.themeFilter = wallpaperItem.modelData;
+                                } else if (root.inThemePage) {
                                     WallpaperService.setActiveThemeWallpaper(wallpaperItem.modelData, WallpaperService.themeFilter);
                                 } else {
                                     WallpaperService.setWallpaper(wallpaperItem.modelData);
@@ -919,7 +954,8 @@ PanelWindow {
                 WallpaperService.setRandomWallpaper();
                 event.accepted = true;
             } else if (event.key === Qt.Key_A && (event.modifiers & Qt.ControlModifier)) {
-                WallpaperService.selectedWallpapers = [...WallpaperService.filteredWallpapers];
+                if (!root.isThemesOverview)
+                    WallpaperService.selectedWallpapers = [...WallpaperService.filteredWallpapers];
                 event.accepted = true;
             } else if (event.key === Qt.Key_F && (event.modifiers & Qt.ControlModifier)) {
                 searchInput.forceActiveFocus();

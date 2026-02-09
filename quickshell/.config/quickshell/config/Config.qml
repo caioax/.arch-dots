@@ -41,7 +41,7 @@ Singleton {
     // ========================================================================
     // WALLPAPER
     // ========================================================================
-    readonly property bool dynamicWallpaper: getState("theme.dynamicWallpaper", true)
+    readonly property bool dynamicWallpaper: getState("wallpaper.dynamic", true)
 
     // ========================================================================
     // GEOMETRY & LAYOUT
