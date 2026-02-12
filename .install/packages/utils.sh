@@ -23,8 +23,7 @@ UTILS_PACKAGES=(
     "libnotify" # Notification library (notify-send)
 
     # Network
-    "networkmanager"         # Network management
-    "network-manager-applet" # NM applet (for quicksettings)
+    "networkmanager" # Network management
 
     # Bluetooth
     "bluez"       # Bluetooth stack

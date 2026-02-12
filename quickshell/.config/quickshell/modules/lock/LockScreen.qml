@@ -49,7 +49,7 @@ WlSessionLock {
                 property: "opacity"
                 from: 0
                 to: 1
-                duration: Config.animDuration
+                duration: Config.animDurationLong
                 easing.type: Easing.OutCubic
             }
 
