@@ -55,6 +55,7 @@
   "idle": {
     "caffeine": false,
     "dpmsEnabled": true,
+    "mediaInhibit": true,
     "lockTimeout": 600,
     "dpmsTimeout": 300
   }

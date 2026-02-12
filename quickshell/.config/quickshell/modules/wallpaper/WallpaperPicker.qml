@@ -96,28 +96,26 @@ PanelWindow {
                     color: Config.accentColor
                 }
 
-                Text {
-                    text: root.inThemePage ? WallpaperService.themeFilter : "Wallpapers"
-                    font.family: Config.font
-                    font.pixelSize: Config.fontSizeLarge
-                    font.weight: Font.DemiBold
-                    color: Config.textColor
-                }
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    spacing: 0
 
-                // Counter
-                Rectangle {
-                    Layout.preferredWidth: countText.implicitWidth + 16
-                    Layout.preferredHeight: 36
-                    radius: Config.radius
-                    color: Config.surface1Color
+                    // Title
+                    Text {
+                        text: root.inThemePage ? WallpaperService.themeFilter : "Wallpapers"
+                        font.family: Config.font
+                        font.pixelSize: Config.fontSizeLarge
+                        font.weight: Font.DemiBold
+                        color: Config.textColor
+                    }
 
+                    // Counter
                     Text {
                         id: countText
-                        anchors.centerIn: parent
                         text: root.isThemesOverview ? WallpaperService.filteredWallpapers.length + " themes" : WallpaperService.filteredWallpapers.length + " images"
                         font.family: Config.font
                         font.pixelSize: Config.fontSizeSmall
-                        color: Config.subtextColor
+                        color: Config.surface3Color
                     }
                 }
 

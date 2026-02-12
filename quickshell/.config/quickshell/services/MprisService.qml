@@ -18,6 +18,7 @@ Singleton {
     readonly property string artist: activePlayer?.metadata?.["xesam:artist"] ?? "Unknown"
     readonly property string artUrl: activePlayer?.metadata?.["mpris:artUrl"] ?? ""
     readonly property bool isPlaying: activePlayer?.isPlaying ?? false
+    property bool anyPlaying: false
 
     // The list the UI will use (Visual)
     property var orderedPlayers: []
@@ -57,6 +58,7 @@ Singleton {
     // --- DECISION LOGIC (The Brain) ---
     function updateActivePlayer() {
         const rawList = Mpris.players.values;
+        root.anyPlaying = rawList.some(p => p.isPlaying);
 
         if (rawList.length === 0) {
             root.activePlayer = null;

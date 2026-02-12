@@ -15,9 +15,11 @@ WlSessionLock {
     locked: true
 
     onLockStateChanged: {
-        // Protocol unlock complete → safe to tell LockService
+        // Protocol unlock complete → defer LockService.unlock() to the next
+        // event loop so surface destruction finishes cleanly before the Loader
+        // tries to destroy this component (avoids "invalid context" warning)
         if (!locked)
-            LockService.unlock();
+            Qt.callLater(LockService.unlock);
     }
 
     WlSessionLockSurface {
@@ -227,6 +229,7 @@ WlSessionLock {
         // ====================================================================
 
         Connections {
+            id: lockServiceConn
             target: LockService
 
             function onAuthSucceeded() {
@@ -255,7 +258,12 @@ WlSessionLock {
             }
 
             ScriptAction {
-                script: root.locked = false
+                script: {
+                    // Disconnect before unlocking to prevent signal handlers
+                    // from firing during surface destruction
+                    lockServiceConn.enabled = false;
+                    root.locked = false;
+                }
             }
         }
     }

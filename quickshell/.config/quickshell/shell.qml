@@ -25,7 +25,7 @@ ShellRoot {
     // Idle Monitors
     IdleMonitor {
         timeout: IdleService.lockTimeout
-        enabled: !IdleService.caffeineEnabled && !StateService.isLoading
+        enabled: !IdleService.caffeineEnabled && !IdleService.mediaPlaying && !IdleService.systemInhibited && !StateService.isLoading
         respectInhibitors: true
 
         onIsIdleChanged: {
@@ -38,7 +38,7 @@ ShellRoot {
 
     IdleMonitor {
         timeout: IdleService.dpmsTimeout
-        enabled: !IdleService.caffeineEnabled && IdleService.dpmsEnabled && !StateService.isLoading
+        enabled: !IdleService.caffeineEnabled && !IdleService.mediaPlaying && !IdleService.systemInhibited && IdleService.dpmsEnabled && !StateService.isLoading
         respectInhibitors: true
 
         onIsIdleChanged: {
